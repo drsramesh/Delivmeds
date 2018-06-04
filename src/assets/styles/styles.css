@@ -1,0 +1,170 @@
+/* You can add global styles to this file, and also import other style files */
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body,
+.ui-widget {
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+}
+
+body {
+    overflow-y: scroll;
+}
+
+.container {
+    width: 1240px;
+    margin: 0 auto;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+}
+
+.form-type {
+    height: 36px;
+    padding: 0 10px;
+}
+
+.btn-full {
+    width: 100%;
+    display: block
+}
+
+.ui-inputtext.ui-state-focus,
+.ui-inputtext:focus {
+    box-shadow: none;
+}
+
+.ui-button.btn-green {
+    background: #52b354;
+    border: none;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.ui-button.btn-green:enabled:hover {
+    background: #52b354;
+    border: none;
+}
+
+.clearfix {
+    clear: both;
+}
+
+.text-area {
+    overflow: hidden;
+}
+
+.half-width {
+    width: 50%;
+}
+
+img {
+    width: 100%;
+}
+
+
+/* loginpage----------------------- */
+
+.login {
+    width: 380px;
+    margin: auto;
+    border: 1px solid #ccc;
+    margin-top: 150px;
+    padding: 15px;
+}
+
+.login .login-logo img {
+    width: 100px;
+}
+
+.sign-form {
+    margin-top: 40px;
+}
+
+.sign-form .first {
+    text-align: left;
+    margin-bottom: 10px;
+    color: #848282;
+}
+
+.forgpt-pass {
+    padding-top: 5px;
+}
+
+.forgpt-pass a {
+    color: #625e5e;
+    display: inline-block;
+}
+
+.login-btn {
+    margin-top: 15px;
+}
+
+.sign-up-account {
+    padding: 15px 0;
+    color: #625e5e;
+}
+
+.sign-up-account a {
+    display: inline-block;
+    margin-left: 10px;
+    text-decoration: none;
+    color: #52b354;
+}
+
+
+/* registerpage----------------- */
+
+.primary-timeings {
+    display: inline-block;
+    width: 45%;
+}
+
+.primary-block .time-to {
+    width: 10%;
+    text-align: center;
+    display: inline-block;
+    line-height: 30px;
+}
+
+.primary-block .primary-timeings .ui-calendar {
+    display: block;
+}
+
+.primary-timeings .ui-inputtext {
+    height: 32px;
+    width: 100%;
+}
+
+.primary-timeings .ui-calendar .ui-datepicker.ui-widget {
+    width: 100%;
+    overflow: hidden;
+}
+
+.primary-timeings .ui-calendar .ui-datepicker.ui-widget .ui-timepicker.ui-widget-header {
+    background: #fff;
+}
+
+
+/* Headerpage--------------- */
+
+.header-logo .logo {
+    width: 120px;
+}
