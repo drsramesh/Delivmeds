@@ -1,24 +1,24 @@
-<div class="container">
-    <div class="login text-center">
-        <figure class="login-logo">
-            <img src="assets/images/logo.png" alt="">
-        </figure>
-        <div class="sign-form">
-            <form action="">
-                <div class="form-group">
-                    <h3 class="first">Username or Mobile Number</h3>
-                    <input id="input" class="form-control form-type" type="text" size="30" placeholder="Username or Mobile Number" pInputText>
-                </div>
-                <div class="sign-pass">
-                    <h3 class="first">Password</h3>
-                    <input id="input" class="form-control form-type" type="password" placeholder="Password" size="30" pPassword>
-                </div>
-                <p class="text-left forgpt-pass"><a href="">Forgot password?</a></p>
-                <p class="login-btn">
-                    <button pButton type="button" routerLink="/orders" class="btn-full form-type btn-green" label="LOGIN"></button>
-                </p>
-            </form>
-            <p class="sign-up-account">Don't have an account yet?<a routerLink="/register">Sign Up!</a></p>
-        </div>
+<div class="login text-center">
+    <figure class="logo">
+        <img src="assets/images/logo.png" alt="">
+    </figure>
+    <div class="sign-form">
+        <form action="">
+            <div class="sign-pass">
+                <span class="ui-float-label form-control">
+                    <input id="float-input" type="text" size="30" pInputText> 
+                    <label for="float-input" class="">Username or Mobile Number</label>
+                </span>
+                <span class="ui-float-label form-control">
+                    <input id="float-input" class="" type="password"  size="30" pPassword>
+                    <label for="float-input" class="">Password</label>
+                </span>
+            </div>
+            <p class="text-left forgpt-pass"><a href="">Forgot password?</a></p>
+            <p class="login-btn">
+                <button pButton type="button" routerLink="/orders" class="btn-full form-type btn-green" label="LOGIN"></button>
+            </p>
+        </form>
+        <p class="sign-up-account">Don't have an account yet?<a routerLink="/register">Sign Up!</a></p>
     </div>
 </div>

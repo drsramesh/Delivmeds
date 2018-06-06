@@ -13,7 +13,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.nav = [
       {
-        label: 'orders'
+        label: 'Orders'
       },{
         label: 'My Account'
       },
@@ -21,7 +21,8 @@ export class HeaderComponent implements OnInit {
         label: 'Notifications'
       },
       {
-        label: 'Logout'
+        label: 'Logout',
+        routerLink: '/login'
       }
     ]
   }

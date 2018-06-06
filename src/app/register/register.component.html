@@ -1,41 +1,88 @@
-<div class="container">
-    <div class="login text-center">
-        <figure class="logo">
-            <img src="assets/images/logo.png" alt="">
-        </figure>
-        <div class="sign-form">
-            <form action="">
-                <div class="form-group">
-                    <h3 class="first">Business name(Trade Name)</h3>
-                    <input id="input" class="form-control form-type" type="text" size="30" placeholder="Business name(Trade Name)" pInputText>
-                </div>
-                <div class="form-group">
-                    <h3 class="first">Phone Number</h3>
-                    <input id="input" class="form-control form-type" type="text" placeholder="Phone Number" size="30" pInputText>
-                </div>
-                <div class="form-group">
-                    <h3 class="first">Email Address</h3>
-                    <input id="input" class="form-control form-type" type="text" placeholder="Email Address" size="30" pInputText>
-                </div>
-                <div class="form-group">
-                    <h3 class="first">Password</h3>
-                    <input id="input" class="form-control form-type" type="text" placeholder="Password" size="30" pInputText>
-                </div>
-                <div class="form-group text-left primary-block">
-                    <h3 class="first">Pharmacy Timings</h3>
-                    <p-calendar class="primary-timeings pull-left" [timeOnly]="true"></p-calendar> <span class="pull-left time-to">To</span>
-                    <p-calendar class="primary-timeings text-right pull-right" [timeOnly]="true"></p-calendar>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="form-group text-left primary-block">
-                    <h3 class="first">Bio</h3>
-                    <textarea class="btn-full text-area" rows="5" cols="30" pInputTextarea></textarea>
-                </div>
-                <p class="login-btn">
-                    <button pButton type="button" class="btn-full form-type btn-green" label="Register"></button>
-                </p>
-            </form>
-            <p class="sign-up-account">Already have an account?<a routerLink="/login">LOGIN</a></p>
-        </div>
+<div class="login text-center">
+    <figure class="logo">
+        <img src="assets/images/logo.png" alt="">
+    </figure>
+    <div class="sign-form">
+        <form action="">
+            <div class="sign-pass">
+                <span class="ui-float-label form-control">
+                            <input id="float-input" type="text" size="30" pInputText> 
+                            <label for="float-input" class="">Business Name (Trade Name)</label>
+                        </span>
+                <span class="ui-float-label form-control">
+                                <input id="float-input" type="text" size="30" pInputText> 
+                                <label for="float-input" class="">Phone Number</label>
+                            </span>
+                <span class="ui-float-label form-control">
+                                    <input id="float-input" type="text" size="30" pInputText> 
+                                    <label for="float-input" class="">Email Address</label>
+                                </span>
+                <span class="ui-float-label form-control">
+                            <input id="float-input" class="" type="password"  size="30" pPassword>
+                            <label for="float-input" class="">Password</label>
+                        </span>
+            </div>
+            <div class="form-group text-left primary-block">
+                <h3 class="first">Pharmacy Timings</h3>
+                <p-calendar class="primary-timeings pull-left" placeholder="From Time" [timeOnly]="true" hourFormat="12"></p-calendar> <span class="pull-left time-to">To</span>
+                <p-calendar class="primary-timeings text-right pull-right" placeholder="To Time" [timeOnly]="true" hourFormat="12"></p-calendar>
+                <div class="clearfix"></div>
+            </div>
+            <div class="sign-pass">
+                <span class="ui-float-label form-control">
+                                <input id="float-input" type="text" size="30" pInputText> 
+                                <label for="float-input" class="">Address 1</label>
+                            </span>
+                <span class="ui-float-label form-control">
+                                    <input id="float-input" type="text" size="30" pInputText> 
+                                    <label for="float-input" class="">Address 2</label>
+                                </span>
+                <span class="ui-float-label form-control">
+                                        <input id="float-input" type="text" size="30" pInputText> 
+                                        <label for="float-input" class="">Zip Code</label>
+                                    </span>
+                <span class="ui-float-label form-control">
+                                <input id="float-input" class="" type="text"  size="30" pInputText>
+                                <label for="float-input" class="">City</label>
+                            </span>
+                <span class="ui-float-label form-control">
+                                    <input id="float-input" class="" type="text"  size="30" pInputText>
+                                    <label for="float-input" class="">State</label>
+                                </span>
+            </div>
+            <div class="primary-block">
+                <textarea class="btn-full text-area" rows="5" cols="30" placeholder="Enter About Pharmacy" pInputTextarea></textarea>
+            </div>
+            <!-- <div class="form-group">
+                <h3 class="first">Business name(Trade Name)</h3>
+                <input id="input" class="form-control form-type" type="text" size="30" placeholder="Business name(Trade Name)" pInputText>
+            </div>
+            <div class="form-group">
+                <h3 class="first">Phone Number</h3>
+                <input id="input" class="form-control form-type" type="text" placeholder="Phone Number" size="30" pInputText>
+            </div>
+            <div class="form-group">
+                <h3 class="first">Email Address</h3>
+                <input id="input" class="form-control form-type" type="text" placeholder="Email Address" size="30" pInputText>
+            </div>
+            <div class="form-group">
+                <h3 class="first">Password</h3>
+                <input id="input" class="form-control form-type" type="text" placeholder="Password" size="30" pInputText>
+            </div>
+            <div class="form-group text-left primary-block">
+                <h3 class="first">Pharmacy Timings</h3>
+                <p-calendar class="primary-timeings pull-left" [timeOnly]="true" hourFormat="12"></p-calendar> <span class="pull-left time-to">To</span>
+                <p-calendar class="primary-timeings text-right pull-right" [timeOnly]="true" hourFormat="12"></p-calendar>
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group text-left primary-block">
+                <h3 class="first">Bio</h3>
+                <textarea class="btn-full text-area" rows="5" cols="30" pInputTextarea></textarea>
+            </div> -->
+            <p class="login-btn">
+                <button pButton type="button" class="btn-full form-type btn-green" label="Register"></button>
+            </p>
+        </form>
+        <p class="sign-up-account">Already have an account?<a routerLink="/login">LOGIN</a></p>
     </div>
 </div>

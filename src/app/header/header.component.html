@@ -1,4 +1,4 @@
-<div class="header">
+<div class="header" *ngIf='!logIn'>
     <div class="container">
         <div class="header-logo pull-left half-width">
             <figure class="logo pull-left">
@@ -8,7 +8,7 @@
             <div class="clearfix"></div>
         </div>
         <div class="header-nav pull-right half-width">
-            <p-tabMenu class="pull-right" [model]="nav"></p-tabMenu>
+            <p-tabMenu class="head-nav pull-right" [model]="nav"></p-tabMenu>
             <div class="clearfix"></div>
         </div>
         <div class="clearfix"></div>
