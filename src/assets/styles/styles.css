@@ -7,7 +7,7 @@
 
 body,
 .ui-widget {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 13px;
 }
 
@@ -52,14 +52,15 @@ body {
 }
 
 .ui-button.btn-green {
-    background: #52b354;
+    background: #7bc466;
     border: none;
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 600;
+    height: 50px;
 }
 
 .ui-button.btn-green:enabled:hover {
-    background: #52b354;
+    background: #7bc466;
     border: none;
 }
 
@@ -67,9 +68,10 @@ body {
     clear: both;
 }
 
-.text-area {
+
+/* .text-area {
     overflow: hidden;
-}
+} */
 
 .half-width {
     width: 50%;
@@ -83,29 +85,64 @@ img {
 /* loginpage----------------------- */
 
 .login {
-    width: 380px;
+    width: 420px;
     margin: auto;
-    border: 1px solid #ccc;
-    margin-top: 150px;
+    margin-top: 30px;
     padding: 15px;
 }
 
-.login .login-logo img {
-    width: 100px;
+.sign-pass {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+}
+
+.sign-pass .ui-float-label:last-child .ui-inputtext {
+    border: none;
+}
+
+.sign-pass .ui-float-label .ui-inputtext {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    height: 62px;
+    padding: 25px 15px 0;
+    border-radius: 0;
+}
+
+.sign-pass .ui-float-label label {
+    font-size: 14px;
+    left: 1.25em;
+    top: 25%;
+    margin-top: 20px;
+    /* color: #e0e0e0; */
+}
+
+.sign-form .text-area {
+    border: 1px solid #e0e0e0;
+    padding: 10px 19px;
+    color: #222222;
+    border-radius: 2px;
+    font-size: 14px;
+}
+
+.login .logo img {
+    width: 250px;
 }
 
 .sign-form {
-    margin-top: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .sign-form .first {
     text-align: left;
     margin-bottom: 10px;
-    color: #848282;
+    color: #605b5b;
+    font-weight: 600;
 }
 
 .forgpt-pass {
-    padding-top: 5px;
+    padding-top: 8px;
 }
 
 .forgpt-pass a {
@@ -118,7 +155,7 @@ img {
 }
 
 .sign-up-account {
-    padding: 15px 0;
+    padding-top: 20px;
     color: #625e5e;
 }
 
@@ -126,7 +163,7 @@ img {
     display: inline-block;
     margin-left: 10px;
     text-decoration: none;
-    color: #52b354;
+    color: #7bc466;
 }
 
 
@@ -137,11 +174,15 @@ img {
     width: 45%;
 }
 
+.primary-block {
+    margin-top: 15px;
+}
+
 .primary-block .time-to {
     width: 10%;
     text-align: center;
     display: inline-block;
-    line-height: 30px;
+    line-height: 60px;
 }
 
 .primary-block .primary-timeings .ui-calendar {
@@ -149,8 +190,11 @@ img {
 }
 
 .primary-timeings .ui-inputtext {
-    height: 32px;
+    height: 62px;
     width: 100%;
+    font-size: 16px;
+    color: #222222;
+    padding-left: 20px;
 }
 
 .primary-timeings .ui-calendar .ui-datepicker.ui-widget {
@@ -167,4 +211,105 @@ img {
 
 .header-logo .logo {
     width: 120px;
+}
+
+.head-nav .ui-tabmenu-nav.ui-widget-header {
+    padding: 0;
+}
+
+.head-nav .ui-tabmenu-nav.ui-widget-header li {
+    background: #fff;
+    border: none;
+}
+
+.head-nav .ui-tabmenu-nav.ui-widget-header li a {
+    font-size: 16px;
+}
+
+
+/* orderspage--------------------- */
+
+.orders-table .ui-widget-header {
+    background: #fff;
+}
+
+.orders-table .ui-widget-header h3 {
+    width: 40%;
+    text-align: left;
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+.orders-table .ui-widget-header .order-filter {
+    text-align: right;
+    width: 60%;
+}
+
+.orders-table .ui-widget-header .order-filter .search {
+    width: 50%;
+    float: left;
+    margin-right: 10px;
+}
+
+.search {
+    position: relative;
+}
+
+.search i {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}
+
+.orders-table .ui-widget-header .order-filter .drop-down {
+    width: calc(50% - 10px);
+    float: left;
+    text-align: left;
+}
+
+.drop-down .ui-dropdown-label {
+    height: 34px;
+    padding: 9px 0 9px 5px;
+}
+
+.drop-down .ui-dropdown .ui-dropdown-trigger .fa {
+    margin-top: 0.8em;
+}
+
+.drop-down .ui-dropdown-panel .ui-dropdown-list {
+    padding: 0;
+}
+
+.drop-down .ui-dropdown-panel .ui-dropdown-item {
+    border-radius: 0;
+    padding: 5px;
+}
+
+.drop-down .ui-dropdown.ui-state-focus,
+.drop-down .ui-multiselect.ui-state-focus {
+    box-shadow: none;
+}
+
+.orders-table .order-cancel {
+    border: 1px solid #e0e0e0;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: #afabab;
+    border-radius: 50%;
+    cursor: pointer;
+    line-height: 23px;
+}
+
+.orders-table .ui-table .ui-table-thead>tr>th {
+    padding: 1.25em .5em;
+}
+
+.orders-table table tbody td {
+    text-align: center;
+    height: 55px;
+    cursor: pointer;
 }

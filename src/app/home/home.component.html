@@ -1,1 +1,74 @@
-
+<p-table class="orders-table" #dt [columns]="cols" [value]="cars">
+    <ng-template pTemplate="caption">
+        <h3 class="pull-left">All Orders</h3>
+        <div class="pull-right order-filter">
+            <span class="search"><i class="fa fa-search"></i>
+                    <input type="text" class="form-type" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:100%">
+                    </span>
+            <p-dropdown class="drop-down" [options]="brands" [style]="{'width':'100%'}" (onChange)="sample($event)" optionLabel="name"></p-dropdown>
+        </div>
+        <div class="clearfix"></div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <!-- <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th> -->
+            <th>
+                Order ID
+            </th>
+            <th>
+                Prescription ID
+            </th>
+            <th>
+                Patient Name
+            </th>
+            <th>
+                Order Date
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                &nbsp;
+            </th>
+            <th>
+                &nbsp;
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr routerLink='/order-view'>
+            <!-- <td *ngFor="let col of columns" class="text-center">
+                    {{rowData[col.field]}}
+                </td> -->
+            <td>
+                {{rowData.id}}
+            </td>
+            <td>
+                {{rowData.Prescription}}
+            </td>
+            <td>
+                {{rowData.PatientName}}
+            </td>
+            <td>
+                {{rowData.OrderDate}}
+            </td>
+            <td>
+                {{rowData.status}}
+            </td>
+            <td>
+                <p *ngIf="rowData['status'] == 'wating for customer pick up'">{{rowData.time}}</p>
+            </td>
+            <td class="text-center">
+                <p *ngIf="rowData['status'] == 'New'" class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></p>
+                <p *ngIf="rowData['status']  =='Wating for Delevery'"><button pButton type="button" (click)="count()" label="Ready to Delivered"></button></p>
+                <p *ngIf="rowData['status']  =='wating for customer pick up'"><button pButton type="button" (click)="count()" label="Delivered" class="ui-button-success"></button></p>
+            </td>
+        </tr>
+    </ng-template>
+    <!-- <ng-template pTemplate="body" let-rowData let-columns="columns" [hidden]="rowData.field == 'null'">
+            <p>No Orders</p>
+        </ng-template> -->
+</p-table>

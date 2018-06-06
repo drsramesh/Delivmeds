@@ -16,13 +16,17 @@ import {ButtonModule} from 'primeng/button';
 import {CalendarModule} from 'primeng/calendar';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {TabMenuModule} from 'primeng/tabmenu';
+import {TableModule} from 'primeng/table';
+import {DropdownModule} from 'primeng/dropdown';
+import { OrderViewComponent } from './order-view/order-view.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    HeaderComponent
+    HeaderComponent,
+    OrderViewComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,9 @@ import {TabMenuModule} from 'primeng/tabmenu';
     ButtonModule,
     CalendarModule,
     InputTextareaModule,
-    TabMenuModule
+    TabMenuModule,
+    TableModule,
+    DropdownModule
   ],
   providers: [],
   bootstrap: [AppComponent]
