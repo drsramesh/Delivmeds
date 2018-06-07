@@ -13,16 +13,13 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.nav = [
       {
-        label: 'Orders'
+        label: 'Orders',
+        routerLink: '/orders',
       },{
-        label: 'My Account'
+        label: 'My Account',
       },
       {
         label: 'Notifications'
-      },
-      {
-        label: 'Logout',
-        routerLink: '/login'
       }
     ]
   }

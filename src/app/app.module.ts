@@ -8,6 +8,8 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
+import { OrderViewComponent } from './order-view/order-view.component';
+
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {InputTextModule} from 'primeng/inputtext';
@@ -18,7 +20,8 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
 import {TabMenuModule} from 'primeng/tabmenu';
 import {TableModule} from 'primeng/table';
 import {DropdownModule} from 'primeng/dropdown';
-import { OrderViewComponent } from './order-view/order-view.component';
+import {BreadcrumbModule} from 'primeng/breadcrumb';
+import {LightboxModule} from 'primeng/lightbox';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +42,9 @@ import { OrderViewComponent } from './order-view/order-view.component';
     InputTextareaModule,
     TabMenuModule,
     TableModule,
-    DropdownModule
+    DropdownModule,
+    BreadcrumbModule,
+    LightboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]

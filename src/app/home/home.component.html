@@ -3,9 +3,9 @@
         <h3 class="pull-left">All Orders</h3>
         <div class="pull-right order-filter">
             <span class="search"><i class="fa fa-search"></i>
-                    <input type="text" class="form-type" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:100%">
+                    <input type="text" class="order-search" pInputText size="50" placeholder="Search" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:100%">
                     </span>
-            <p-dropdown class="drop-down" [options]="brands" [style]="{'width':'100%'}" (onChange)="sample($event)" optionLabel="name"></p-dropdown>
+            <p-dropdown class="drop-down order-dropdown" [options]="brands" [style]="{'width':'100%'}" (onChange)="sample($event)" optionLabel="name"></p-dropdown>
         </div>
         <div class="clearfix"></div>
     </ng-template>
@@ -59,12 +59,12 @@
                 {{rowData.status}}
             </td>
             <td>
-                <p *ngIf="rowData['status'] == 'wating for customer pick up'">{{rowData.time}}</p>
+                <p class="pickup-time" *ngIf="rowData['status'] == 'wating for customer pick up'">{{rowData.time}}</p>
             </td>
-            <td class="text-center">
+            <td>
                 <p *ngIf="rowData['status'] == 'New'" class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></p>
-                <p *ngIf="rowData['status']  =='Wating for Delevery'"><button pButton type="button" (click)="count()" label="Ready to Delivered"></button></p>
-                <p *ngIf="rowData['status']  =='wating for customer pick up'"><button pButton type="button" (click)="count()" label="Delivered" class="ui-button-success"></button></p>
+                <p *ngIf="rowData['status']  =='Wating for Delevery'"><button pButton type="button" (click)="count()" label="Ready to Delivered" class="ui-button-secondary btn-secondary-green"></button></p>
+                <p *ngIf="rowData['status']  =='wating for customer pick up'"><button pButton type="button" (click)="count()" label="Delivered" class="ui-button-secondary btn-secondary-green"></button></p>
             </td>
         </tr>
     </ng-template>

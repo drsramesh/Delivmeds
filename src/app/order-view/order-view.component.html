@@ -1,3 +1,102 @@
-<p>
-  order-view works!
-</p>
+<div class="order-view">
+    <div class="panel-heading">
+        <h3 class="pull-left panel-head">All Orders</h3>
+        <div class="bread-crumb pull-right">
+            <p-breadcrumb [model]="items"></p-breadcrumb>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="view-left">
+        <div class="price-details">
+            <!-- <img src="assets/images/default.png" alt=""> -->
+            <p-lightbox class="light-box" [images]="images"></p-lightbox>
+            <div class="price-value">
+                <p>Cost Details</p>
+                <span>
+            Cost (2 Medication): $10.00
+          </span>
+            </div>
+            <div class="payable text-center">
+                <p>Payable Amount</p>
+                <span class="payble-green">$ 8.00</span>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="prescription">
+            <p class="pull-left prescription-left">prescription id: #46456 (refill)</p>
+            <span class="pull-left prescription-right">
+        <p-dropdown class="drop-down order-dropdown" [options]="brands" [style]="{'width':'60%'}" (onChange)="sample($event)" optionLabel="name"></p-dropdown>
+        <button pButton type="button" (click)="count()" label="Add" icon="fa fa-plus" class="ui-button-secondary btn-secondary-green"></button>
+      </span>
+            <div class="clearfix"></div>
+        </div>
+        <div class="medication-list">
+            <div class="form-group" *ngFor="let prescription of prescriptions ">
+                <div class="form-name">
+                    <h3 class="first">Medication Name</h3>
+                    <input id="input" type="text" size="30" pInputText>
+                </div>
+                <div class="form-dos">
+                    <h3 class="first">Dosage</h3>
+                    <input id="input" type="text" size="30" pInputText>
+                </div>
+                <div class="form-dos">
+                    <h3 class="first">Quantity</h3>
+                    <input id="input" type="text" size="30" pInputText>
+                </div>
+                <div class="form-dos">
+                    <h3 class="first">Cost</h3>
+                    <span class="dolor-icon">
+                    <input id="input" type="text" size="30" pInputText>
+                    <i class="fa fa-usd" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <button pButton type="button" (click)="count()" label="Update" class="btn-group-green"></button>
+        </div>
+    </div>
+    <div class="view-right">
+        <div class="orders">
+            <h3 class="panel-head pull-left">Order ID: 2359598 <span class="new">New</span></h3>
+            <button pButton type="button" (click)="count()" label="Reject Order" class="ui-button-secondary btn-secondary-green pull-right"></button>
+            <div class="clearfix"></div>
+        </div>
+        <div class="patient-details">
+            <p>Patient Name: jessy Graen</p>
+            <p>DOB: 12/05/1990</p>
+            <p>Contact: +91 93495 93475</p>
+        </div>
+        <div class="patient-details">
+            <p>User: jessy Graen</p>
+            <p>Contact: +91 93495 93475</p>
+        </div>
+        <div class="patient-details">
+            <p>Docter: jessy Graen</p>
+            <p>Contact: +91 93495 93475</p>
+        </div>
+        <div class="insurance-details ui-g">
+            <div class="ui-g-7">
+                <h4>Insurance Details</h4>
+                <ul>
+                    <li>United Health Group (UHG)</li>
+                    <li>Patient ID: #123456789</li>
+                    <li>PCN Number: 38457</li>
+                    <li>Provider Contact: 9856321457</li>
+                    <li>BIN: 57934875</li>
+                </ul>
+            </div>
+            <div class="ui-g-5">
+                <!-- <img src="assets/images/default.png" alt=""> -->
+                <p-lightbox class="light-box" [images]="images"></p-lightbox>
+            </div>
+        </div>
+        <div class="delevery-address">
+            <h4 class="">Delevery Address <span class="pull-right"><i class="fa fa-print" aria-hidden="true"></i>
+          </span></h4>
+            <div class="clearfix"></div>
+            <p>Flat No: 354, Revenue Layout, Madhurawada, Visakhapatnam-500040, Andhra pradesh, INDIA.</p>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
