@@ -1,24 +1,38 @@
+<!-- <p-growl [(value)]="msgs"></p-growl> -->
+
 <div class="login text-center">
     <figure class="logo">
         <img src="assets/images/logo.png" alt="">
     </figure>
-    <div class="sign-form">
-        <form action="">
+    <div class="form-group">
+        <form action="" [formGroup]="signInForm" (ngSubmit)="onSubmit(userform.value)">
             <div class="sign-pass">
                 <span class="ui-float-label form-control">
-                    <input id="float-input" type="text" size="30" pInputText> 
-                    <label for="float-input" class="">Username or Mobile Number</label>
+                    <input id="email" name="signinEmail" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  type="email" class="" size="30" [(ngModel)] = "data.email" pInputText  formControlName="signinEmail" required="required"
+                    data-error="Email is required."> 
+                    <span *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('required', 'signinEmail')" style="color:red"> 
+                            Email is required</span>
+                    <span *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('pattern', 'signinEmail')" style="color:red">Valid email is required</span>
+                    <label for="float-input" class="">Email Address</label>
                 </span>
                 <span class="ui-float-label form-control">
-                    <input id="float-input" class="" type="password"  size="30" pPassword>
-                    <label for="float-input" class="">Password</label>
-                </span>
+                        <input  id="password" name="signinPassword" class="" type="password" size="30" pInputText [(ngModel)] = "data.password"  formControlName="signinPassword" required= "required" 
+                        data-error="Password is required.">
+                        <span *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched" style="color:red"> 
+                                <span *ngIf="signInForm.hasError('required', 'signinPassword')"> Password Required</span>
+                        </span>
+                        <label for="float-input" class="">Password</label>
+                    </span>
+                
             </div>
             <p class="text-left forgpt-pass"><a href="">Forgot password?</a></p>
+            <div class = "form-group">
             <p class="login-btn">
-                <button pButton type="button" routerLink="/orders" class="btn-full form-type btn-green" label="LOGIN"></button>
+                <button [disabled] pButton type="button" routerLink="/orders" class="btn-full form-type btn-green" label="LOGIN"></button>
             </p>
+        </div>
         </form>
-        <p class="sign-up-account">Don't have an account yet?<a routerLink="/register">Sign Up!</a></p>
-    </div>
+    
 </div>
+        <p class="sign-up-account">Don't have an account yet?<a routerLink="/register">Sign Up!</a></p>
+  

@@ -1,5 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -8,6 +11,9 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
+
+//Tthird party frameworks
+import { TextMaskModule } from 'angular2-text-mask';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {InputTextModule} from 'primeng/inputtext';
@@ -19,6 +25,9 @@ import {TabMenuModule} from 'primeng/tabmenu';
 import {TableModule} from 'primeng/table';
 import {DropdownModule} from 'primeng/dropdown';
 import { OrderViewComponent } from './order-view/order-view.component';
+import { GrowlModule } from 'primeng/primeng';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,8 +47,14 @@ import { OrderViewComponent } from './order-view/order-view.component';
     CalendarModule,
     InputTextareaModule,
     TabMenuModule,
+    TextMaskModule,
     TableModule,
-    DropdownModule
+    DropdownModule,
+    FormsModule,
+    ReactiveFormsModule,
+    GrowlModule,
+    HttpClientModule,
+    Ng4LoadingSpinnerModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

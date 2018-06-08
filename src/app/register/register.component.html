@@ -3,55 +3,100 @@
         <img src="assets/images/logo.png" alt="">
     </figure>
     <div class="sign-form">
-        <form action="">
+        <form action="" [formGroup]="signInForm" (ngSubmit)="onSubmit(userform.value)">
             <div class="sign-pass">
                 <span class="ui-float-label form-control">
-                            <input id="float-input" type="text" size="30" pInputText> 
+                            <input id="username" type="text" size="30" [(ngModel)] = "createuser.businessname" pInputText formControlName= "username" required = "required"
+                            data-error="state is required.">
+                             <span *ngIf="signInForm.get('username').touched  && signInForm.hasError('required', 'username')" style="color:red"> businessname is Required</span>
                             <label for="float-input" class="">Business Name (Trade Name)</label>
                         </span>
+
                 <span class="ui-float-label form-control">
-                                <input id="float-input" type="text" size="30" pInputText> 
-                                <label for="float-input" class="">Phone Number</label>
+                 <input id="phonenumber"  type="tel" size="30" pInputText [(ngModel)] = "createuser.phonenumber" formControlName= "phonenumber" required = "required"
+                 data-error="phonenumber is required."
+                 [textMask]="{mask: mask}" >
+      <span *ngIf=" !signInForm.get('phonenumber').valid && signInForm.get('phonenumber').touched" style="color:red"> phonenumber is required</span>
+    <!-- <span *ngIf="!signInForm.get('phonenumber').valid && signInForm.get('phonenumber').touched  && signInForm.hasError('maxLength','required')" style="color:red">
+                Phonenumber must be 10 digits
+            </span>
+            <span *ngIf=" signInForm.hasError('maxLength','required')" style="color:red"> phonenumber is max</span> -->
+    <label for="float-input" class="">Phone Number</label>
                             </span>
-                <span class="ui-float-label form-control">
-                                    <input id="float-input" type="text" size="30" pInputText> 
+
+                            <span class="ui-float-label form-control">
+                                    <input id="email" name="signinEmail" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  type="email" class="" size="30" [(ngModel)] = "createuser.email" pInputText  formControlName="signinEmail" required="required"
+                                    data-error="Email is required."> 
+                                    <span *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('required', 'signinEmail')" style="color:red"> 
+                                            Email is required</span>
+                                    <span *ngIf=" signInForm.get('signinEmail').touched && signInForm.hasError('pattern', 'signinEmail')" style="color:red">Valid email is required</span>
                                     <label for="float-input" class="">Email Address</label>
                                 </span>
-                <span class="ui-float-label form-control">
-                            <input id="float-input" class="" type="password"  size="30" pPassword>
-                            <label for="float-input" class="">Password</label>
-                        </span>
+
+                                <span class="ui-float-label form-control">
+                                        <input id="password" name="inPassword" pattern="/^(?=.[A-Za-z])(?=.\d)[A-Za-z\d]{4,8}/"  type="password" class="" size="30" [(ngModel)] = "createuser.password" pInputText  formControlName="inPassword" required="required"
+                                        data-error="password is required."
+                                        maxlength="10"> 
+                                        <span *ngIf=" !signInForm.get('inPassword').valid && signInForm.get('inPassword').touched && signInForm.hasError('required', 'inPassword')" style="color:red"> 
+                                                password is required</span>
+                                        <span *ngIf=" signInForm.get('inPassword').touched && signInForm.hasError('pattern', 'inPassword')" style="color:red">Password Must Contain(8) 1-char! 1-number!</span>
+                                        <label for="float-input" class="">Password</label>
+                                    </span>
+
+                                <!-- <span class="ui-float-label form-control">
+                                        <input  id="password" name="signinPassword" class="" type="password" size="30" pInputText [(ngModel)] = "createuser.password"  formControlName="signinPassword" required= "required" 
+                                        data-error="Password is required."
+                                        maxlength="10"> 
+                                                <span *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched && signInForm.hasError('required', 'signinPassword')" style="color:red"> 
+                                                        password is required</span>
+                                                        <span *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched && signInForm.hasError('required', 'maxlength')" style="color:red">Password must be atleast 8 characters</span>
+                                                        <span *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched && signInForm.hasError('pattern', 'signinPassword')" style="color:red">Password must contain atleat 1 number, 1 uppercase,1 lowercase</span>
+                                                        <span *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched && signInForm.hasError('maxlength')" style="color:red">Password mxlength is 8</span>
+                                        <label for="float-input" class="">Password</label>
+                                    </span> -->
             </div>
             <div class="form-group text-left primary-block">
                 <h3 class="first">Pharmacy Timings</h3>
-                <p-calendar class="primary-timeings pull-left" placeholder="From Time" [timeOnly]="true" hourFormat="12"></p-calendar> <span class="pull-left time-to">To</span>
-                <p-calendar class="primary-timeings text-right pull-right" placeholder="To Time" [timeOnly]="true" hourFormat="12"></p-calendar>
+                <p-calendar class="primary-timeings pull-left" placeholder="From Time" [timeOnly]="true" [(ngModel)] = "createuser.fromtime" formControlName="signinPassword" hourFormat="12" aria-required="true" data-error="Fromtime is required."></p-calendar> <span class="pull-left time-to">To</span>
+                <p-calendar class="primary-timeings text-right pull-right" placeholder="To Time"  formControlName="signinPassword" [(ngModel)] = "createuser.totime" [timeOnly]="true" hourFormat="12" aria-required="true" data-error="Totime is required."></p-calendar>
                 <div class="clearfix"></div>
             </div>
             <div class="sign-pass">
                 <span class="ui-float-label form-control">
-                                <input id="float-input" type="text" size="30" pInputText> 
+                                <input id="address1" type="text" size="30"  [(ngModel)] = "createuser.address1" formControlName="address" pInputText required = "required"
+                                data-error="Address is required."> 
+                                <span *ngIf="signInForm.get('address').touched  && signInForm.hasError('required', 'address')" style="color:red"> Address is Required</span>
                                 <label for="float-input" class="">Address 1</label>
                             </span>
                 <span class="ui-float-label form-control">
-                                    <input id="float-input" type="text" size="30" pInputText> 
+                                    <input id="address2" type="text" size="30" [(ngModel)] = "createuser.address2" formControlName="address1"  pInputText required= "required"
+                                    data-error="Address is required."> 
+                                    <span *ngIf="signInForm.get('address1').touched  && signInForm.hasError('required', 'address1')" style="color:red"> Address is Required</span>
                                     <label for="float-input" class="">Address 2</label>
                                 </span>
                 <span class="ui-float-label form-control">
-                                        <input id="float-input" type="text" size="30" pInputText> 
+                                        <input id="zipcode" type="text" pattern="[0-9]" maxlength="6"  size="30"   [(ngModel)] = "createuser.zipcode" formControlName="zipcode"  required = "required" pInputText data-error="zipcode is required"  > 
+                                        <span *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('required', 'zipcode')" style="color:red">zipcodedf is required</span>
+                                        <span *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('pattern', 'zipcode')" style="color:red">zipcode has</span>
+                                        <span *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched && signInForm.hasError('maxlength')" style="color:red">zipcode must be  is 6 characters</span>
                                         <label for="float-input" class="">Zip Code</label>
                                     </span>
                 <span class="ui-float-label form-control">
-                                <input id="float-input" class="" type="text"  size="30" pInputText>
+                                <input id="city" class="" type="text"  size="30"  [(ngModel)] = "createuser.city" formControlName="city" pInputText required = "required"
+                                data-error="city is required.">
+                                <span *ngIf="signInForm.get('city').touched  && signInForm.hasError('required', 'city')" style="color:red"> City is Required</span>
                                 <label for="float-input" class="">City</label>
                             </span>
                 <span class="ui-float-label form-control">
-                                    <input id="float-input" class="" type="text"  size="30" pInputText>
+                                    <input id="state" class="" type="text"  size="30" [(ngModel)] = "createuser.state" formControlName="state" pInputText required
+                                    data-error="state is required.">
+                                    <span *ngIf="signInForm.get('state').touched  && signInForm.hasError('required', 'state')" style="color:red"> State is Required</span>
                                     <label for="float-input" class="">State</label>
                                 </span>
             </div>
             <div class="primary-block">
-                <textarea class="btn-full text-area" rows="5" cols="30" placeholder="Enter About Pharmacy" pInputTextarea></textarea>
+                <textarea id="aboutpharmacy" class="btn-full text-area" rows="5" cols="30" placeholder="Enter About Pharmacy"  [(ngModel)] = "createuser.aboutPharmacy"formControlName="signinPassword"  maxlength= "250" pInputTextarea required
+                ></textarea>
             </div>
             <!-- <div class="form-group">
                 <h3 class="first">Business name(Trade Name)</h3>
