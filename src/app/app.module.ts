@@ -9,7 +9,8 @@ import { RegisterComponent } from './register/register.component';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { OrderViewComponent } from './order-view/order-view.component';
-
+import { NotificationsComponent } from './notifications/notifications.component';
+import { NotificationDetailsComponent } from './notification-details/notification-details.component';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {InputTextModule} from 'primeng/inputtext';
@@ -22,6 +23,9 @@ import {TableModule} from 'primeng/table';
 import {DropdownModule} from 'primeng/dropdown';
 import {BreadcrumbModule} from 'primeng/breadcrumb';
 import {LightboxModule} from 'primeng/lightbox';
+import {CheckboxModule} from 'primeng/checkbox';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +33,9 @@ import {LightboxModule} from 'primeng/lightbox';
     RegisterComponent,
     HomeComponent,
     HeaderComponent,
-    OrderViewComponent
+    OrderViewComponent,
+    NotificationsComponent,
+    NotificationDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +50,8 @@ import {LightboxModule} from 'primeng/lightbox';
     TableModule,
     DropdownModule,
     BreadcrumbModule,
-    LightboxModule
+    LightboxModule,
+    CheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]

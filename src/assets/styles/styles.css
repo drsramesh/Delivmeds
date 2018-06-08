@@ -45,9 +45,17 @@ ul li {
     padding: 0 10px;
 }
 
+.pad-top-bot {
+    padding: 10px 0;
+}
+
 .btn-full {
     width: 100%;
     display: block
+}
+
+.border-btm {
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .ui-inputtext.ui-state-focus,
@@ -79,7 +87,7 @@ ul li {
 .ui-button.btn-group-green:enabled:hover {
     background: #fff;
     color: #7bc466;
-    border: 1px solid #ccc;
+    border: 1px solid #e0e0e0;
 }
 
 .orders-table .ui-table .ui-table-tbody>tr>td:last-child {
@@ -405,7 +413,8 @@ img {
     font-weight: 300;
 }
 
-.orders-table .ui-widget-header .order-filter {
+.orders-table .ui-widget-header .order-filter,
+.order-filter {
     text-align: right;
     width: 60%;
 }
@@ -437,7 +446,8 @@ img {
     top: 2px;
 }
 
-.orders-table .ui-widget-header .order-filter .search {
+.orders-table .ui-widget-header .order-filter .search,
+.order-filter .search {
     width: 50%;
     float: left;
     margin-right: 10px;
@@ -461,7 +471,8 @@ img {
     color: #7bc466;
 }
 
-.orders-table .ui-widget-header .order-filter .drop-down {
+.orders-table .ui-widget-header .order-filter .drop-down,
+.order-filter .drop-down {
     width: calc(50% - 10px);
     float: left;
     text-align: left;
@@ -524,6 +535,7 @@ img {
 .panel-head {
     font-weight: 500;
     font-size: 16px;
+    padding-top: 8px;
 }
 
 .bread-crumb {
@@ -557,11 +569,11 @@ img {
 }
 
 .price-details {
-    border: 1px solid #ccc;
+    border: 1px solid #e0e0e0;
 }
 
 .price-details img {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .price-details .price-value {
@@ -643,7 +655,7 @@ img {
 }
 
 .medication-list .dolor-icon {
-    border: 1px solid #ccc;
+    border: 1px solid #e0e0e0;
     height: 34px;
     display: inline-flex;
     align-items: center;
@@ -653,12 +665,13 @@ img {
 .medication-list .dolor-icon .ui-inputtext {
     width: 70%;
     border: none;
-    border-right: 1px solid #ccc;
+    border-right: 1px solid #e0e0e0;
 }
 
 .medication-list .dolor-icon i {
     font-size: 20px;
     padding: 0px 8px 0px 8px;
+    color: #aca6a6;
 }
 
 .view-right {
@@ -680,7 +693,7 @@ img {
 
 .patient-details {
     padding: 10px 0;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .patient-details p,
@@ -694,12 +707,12 @@ img {
 }
 
 .delevery-address {
-    border: 1px solid #ccc;
+    border: 1px solid #e0e0e0;
     padding: 15px 0;
 }
 
 .delevery-address h4 {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #e0e0e0;
     padding: 0px 15px 10px 15px;
 }
 
@@ -711,6 +724,7 @@ img {
 .delevery-address h4 i {
     font-size: 20px;
     color: #8c8888;
+    cursor: pointer;
 }
 
 .order-view .panel-heading {
@@ -723,4 +737,71 @@ img {
 
 .light-box .ui-lightbox .ui-lightbox-content {
     width: 800px !important;
+}
+
+
+/* notification------------ */
+
+.trash {
+    font-size: 22px;
+    display: inline-block;
+    padding-left: 10px;
+    color: #aca6a6;
+    cursor: pointer;
+}
+
+.notification .panel-heading {
+    padding-bottom: 15px;
+}
+
+.notifi-list .notifi-check {
+    display: inline-block;
+    width: 20%;
+    font-size: 14px;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.notifi-list .notifi-text {
+    display: inline-block;
+    padding-left: 20px;
+    width: 77%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.list-block {
+    padding: 10px 0;
+}
+
+.notifi-check .ui-chkbox-box.ui-state-active {
+    border-color: #7bc466;
+    background: #7bc466;
+}
+
+.notifi-check .ui-chkbox-box.ui-state-focus {
+    box-shadow: none;
+}
+
+.notification-details .panel-heading {
+    padding-bottom: 10px;
+}
+
+.notification-details .panel-heading .panel-head {
+    padding-top: 0;
+}
+
+.notification-details .panel-heading .details-time {
+    display: inline-block;
+    line-height: 30px;
+}
+
+.pre-icon {
+    font-size: 18px;
+    padding-right: 10px;
+    display: inline-block;
+    cursor: pointer;
 }
