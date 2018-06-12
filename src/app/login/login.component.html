@@ -5,22 +5,24 @@
         <img src="assets/images/logo.png" alt="">
     </figure>
     <div class="form-group">
-        <form action="" [formGroup]="signInForm" (ngSubmit)="onSubmit(userform.value)">
+        <form action="" [formGroup]="signInForm" (ngSubmit)="signIn(signInForm)">
             <div class="sign-pass">
                 <span class="ui-float-label form-control">
-                    <input id="email" name="signinEmail" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  type="email" class="" size="30" [(ngModel)] = "data.email" pInputText  formControlName="signinEmail" required="required"
-                    data-error="Email is required."> 
-                    <span *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('required', 'signinEmail')" style="color:red"> 
+                    <input id="email" name="signinEmail" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  type="email" class="" size="30"  pInputText  formControlName="signinEmail" required> 
+                    <span class="error" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('required', 'signinEmail')" style="color:red"> 
                             Email is required</span>
-                    <span *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('pattern', 'signinEmail')" style="color:red">Valid email is required</span>
+                    <span class="error" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('pattern', 'signinEmail')" style="color:red">Valid email is required</span>
                     <label for="float-input" class="">Email Address</label>
                 </span>
                 <span class="ui-float-label form-control">
-                        <input  id="password" name="signinPassword" class="" type="password" size="30" pInputText [(ngModel)] = "data.password"  formControlName="signinPassword" required= "required" 
-                        data-error="Password is required.">
-                        <span *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched" style="color:red"> 
-                                <span *ngIf="signInForm.hasError('required', 'signinPassword')"> Password Required</span>
+                        <input id="password" name="signinPassword" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}" maxlength="8" type="password" class="" size="30"  pInputText  formControlName="signinPassword" required="required"
+                        > 
+                        <span class="error" *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched && signInForm.hasError('required', 'signinPassword')" style="color:red"> 
+                                password is required</span>
+                        <span class="error" *ngIf=" signInForm.get('signinPassword').touched && signInForm.hasError('pattern', 'signinPassword')" style="color:red">Password is invalid   
+                        <p pTooltip="Password must contain one lowercase, one uppercase, one special character 1 number and total 8 charcters" tooltipPosition="top"> !</p>
                         </span>
+                        <span class= "error" *ngIf= "signInForm.hasError('minlength')" style="color:red">Password must have 8 digits</span>
                         <label for="float-input" class="">Password</label>
                     </span>
                 
@@ -28,7 +30,8 @@
             <p class="text-left forgpt-pass"><a href="">Forgot password?</a></p>
             <div class = "form-group">
             <p class="login-btn">
-                <button [disabled] pButton type="button" routerLink="/orders" class="btn-full form-type btn-green" label="LOGIN"></button>
+                    <!-- routerLink="/orders"  -->
+                <button  pButton type="submit"  class="btn-full form-type btn-green" label="LOGIN"></button>
             </p>
         </div>
         </form>
