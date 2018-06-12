@@ -18,6 +18,7 @@ import { OrderViewComponent } from './order-view/order-view.component';
 // Third party frameworks
 import { TextMaskModule } from 'angular2-text-mask';
 
+
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {InputTextModule} from 'primeng/inputtext';
 import {PasswordModule} from 'primeng/password';

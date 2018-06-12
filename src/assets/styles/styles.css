@@ -9,7 +9,6 @@ body,
 .ui-widget {
     font-family: 'Poppins', sans-serif;
     font-size: 13px;
-    width : 100%
 }
 
 body {
@@ -172,7 +171,9 @@ display: inline-block;
 /* .sign-pass .ui-float-label .auto-complete .ui-inputtext.ui-autocomplete-multiple-container{
     padding: 0;
 } */
-
+.auto-complete .ui-autocomplete{
+    width: 100%
+}
 
 /* loginpage----------------------- */
 
