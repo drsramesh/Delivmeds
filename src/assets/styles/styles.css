@@ -49,6 +49,14 @@ ul li {
     padding: 10px 0;
 }
 
+.mg-tp {
+    margin-top: 20px;
+}
+
+.full-width {
+    width: 100%;
+}
+
 .btn-full {
     width: 100%;
     display: block
@@ -87,7 +95,7 @@ ul li {
 .ui-button.btn-group-green:enabled:hover {
     background: #fff;
     color: #7bc466;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #7bc466;
 }
 
 .orders-table .ui-table .ui-table-tbody>tr>td:last-child {
@@ -257,7 +265,7 @@ img {
     width: 10%;
     text-align: center;
     display: inline-block;
-    line-height: 60px;
+    line-height: 35px;
 }
 
 .primary-block .primary-timeings .ui-calendar {
@@ -265,11 +273,12 @@ img {
 }
 
 .primary-timeings .ui-inputtext {
-    height: 62px;
+    height: 36px;
     width: 100%;
     font-size: 16px;
     color: #222222;
     padding-left: 20px;
+    border-radius: 0;
 }
 
 .primary-timeings .ui-calendar .ui-datepicker.ui-widget {
@@ -431,6 +440,10 @@ img {
 
 .drop-down .ui-dropdown-panel .ui-dropdown-item.ui-state-highlight {
     background: #7bc466;
+}
+
+.drop-down .ui-dropdown .ui-dropdown-trigger {
+    border-left: none;
 }
 
 .order-dropdown .ui-dropdown label.ui-dropdown-label {
@@ -757,7 +770,7 @@ img {
 .notifi-list .notifi-check {
     display: inline-block;
     width: 20%;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -804,4 +817,108 @@ img {
     padding-right: 10px;
     display: inline-block;
     cursor: pointer;
+}
+
+.notification .ntf-head {
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    padding-top: 4px;
+}
+
+
+/* my-account page------------------- */
+
+.account-icons {
+    display: inline-block;
+    padding-right: 20px;
+}
+
+.account-address {
+    padding: 20px 0;
+}
+
+.multi-add {
+    border: 1px solid #ccc;
+    display: inline-block;
+    height: 32px;
+}
+
+.multi-add input {
+    border: none;
+    height: 32px;
+}
+
+.multi-add .ui-button {
+    border: none;
+    border-left: 1px solid #ccc;
+    border-radius: 0;
+    height: 32px;
+}
+
+.multi-add .ui-button:enabled:hover {
+    border: none;
+    border-left: 1px solid #ccc;
+}
+
+.preferences {
+    padding: 25px 0;
+}
+
+.my-account .first {
+    padding-bottom: 10px;
+    font-weight: 500;
+}
+
+.choose-chips {
+    border: 1px solid #ccc;
+    margin: 10px 5px;
+    display: inline-block;
+    padding: 4px 15px;
+    border-radius: 25px;
+    font-size: 14px;
+}
+
+.choose-chips .close-icon {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 18px;
+    color: #9d9999;
+    cursor: pointer;
+}
+
+.week-dropdown .ui-dropdown {
+    width: 100% !important;
+}
+
+.pharmacy-timings .ui-button {
+    height: 36px;
+}
+
+.primary-block .text-area {
+    border: 1px solid #e0e0e0;
+    padding: 10px 19px;
+    color: #222222;
+    border-radius: 2px;
+}
+
+.about-pharmacy {
+    padding-bottom: 30px;
+}
+
+.delevery-type .notifi-check {
+    margin-right: 30px;
+}
+
+.notifi-check .ui-chkbox .ui-chkbox-box {
+    width: 1.325em;
+    height: 1.325em;
+}
+
+.notifi-check .ui-chkbox .ui-chkbox-icon {
+    padding-top: 1px;
+}
+
+.my-account {
+    padding-bottom: 25px;
 }

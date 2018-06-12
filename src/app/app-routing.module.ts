@@ -7,6 +7,7 @@ import { HeaderComponent } from './header/header.component';
 import { OrderViewComponent } from './order-view/order-view.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { NotificationDetailsComponent } from './notification-details/notification-details.component';
+import { MyAccountComponent } from './my-account/my-account.component';
 
 const routes: Routes = [
       { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -16,7 +17,9 @@ const routes: Routes = [
       { path: 'orders', component: HomeComponent },
       {path: 'order-view', component: OrderViewComponent},
       {path: 'notifications', component: NotificationsComponent},
-      {path:'notification-details', component: NotificationDetailsComponent}
+      {path:'notification-details', component: NotificationDetailsComponent},
+      {path:'my-account', component: MyAccountComponent},
+
 ];
 
 @NgModule({

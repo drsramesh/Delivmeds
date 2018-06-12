@@ -17,6 +17,7 @@ export class HeaderComponent implements OnInit {
         routerLink: '/orders',
       },{
         label: 'My Account',
+        routerLink: '/my-account'
       },
       {
         label: 'Notifications',

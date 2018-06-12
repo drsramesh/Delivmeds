@@ -11,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { OrderViewComponent } from './order-view/order-view.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { NotificationDetailsComponent } from './notification-details/notification-details.component';
+import { MyAccountComponent } from './my-account/my-account.component';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {InputTextModule} from 'primeng/inputtext';
@@ -26,6 +27,7 @@ import {LightboxModule} from 'primeng/lightbox';
 import {CheckboxModule} from 'primeng/checkbox';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +37,8 @@ import {CheckboxModule} from 'primeng/checkbox';
     HeaderComponent,
     OrderViewComponent,
     NotificationsComponent,
-    NotificationDetailsComponent
+    NotificationDetailsComponent,
+    MyAccountComponent
   ],
   imports: [
     BrowserModule,
