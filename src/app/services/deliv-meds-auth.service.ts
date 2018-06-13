@@ -74,7 +74,7 @@ emailAvailability(params) {
 }
  // Signup method
  signUp(signup_credentials) {
-  return this._http.post(environment.host + 'users/sign_up', signup_credentials);
+  return this._http.post(environment.host + 'pharmacy/register', signup_credentials);
 }
 
 // forgot password call

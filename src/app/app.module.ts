@@ -12,7 +12,9 @@ import { RegisterComponent } from './register/register.component';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { OrderViewComponent } from './order-view/order-view.component';
-
+import { NotificationsComponent } from './notifications/notifications.component';
+import { NotificationDetailsComponent } from './notification-details/notification-details.component';
+import { MyAccountComponent } from './my-account/my-account.component';
 
 
 // Third party frameworks
@@ -36,6 +38,8 @@ import {TooltipModule} from 'primeng/tooltip';
 import {BreadcrumbModule} from 'primeng/breadcrumb';
 import {LightboxModule} from 'primeng/lightbox';
 
+import { ToastModule } from 'ng2-toastr';
+
 // services
 import { StateService } from './services/state.service';
 import { DelivMedsAuthService } from './services/deliv-meds-auth.service';
@@ -44,6 +48,8 @@ import { UserService } from './services/user.service';
 import { RegisterService } from './services/register.service';
 import { HomeService } from './services/home.service';
 import { EmailRegistrationService } from './services/email-registration.service';
+import {CheckboxModule} from 'primeng/checkbox';
+
 
 
 @NgModule({
@@ -53,7 +59,10 @@ import { EmailRegistrationService } from './services/email-registration.service'
     RegisterComponent,
     HomeComponent,
     HeaderComponent,
-    OrderViewComponent
+    OrderViewComponent,
+    NotificationsComponent,
+    NotificationDetailsComponent,
+    MyAccountComponent
   ],
   imports: [
     BrowserModule,
@@ -73,11 +82,13 @@ import { EmailRegistrationService } from './services/email-registration.service'
     GrowlModule,
     HttpClientModule,
     HttpModule ,
+    ToastModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot(),
     BreadcrumbModule,
     LightboxModule,
     AutoCompleteModule,
-    TooltipModule
+    TooltipModule,
+    CheckboxModule
   ],
   providers: [ StateService,
     DelivMedsAuthService,

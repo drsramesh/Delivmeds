@@ -3,6 +3,9 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { FormBuilder, FormControl, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 
 
+//third party
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+
 // Model
 
 import { User } from '../Interface/createUser';
@@ -13,6 +16,8 @@ import { promise } from 'protractor';
 import { DelivMedsAuthService } from '../services/deliv-meds-auth.service';
 import { TokenService } from '../services/token.service';
 import { Router, RouterModule } from '@angular/router';
+import { UserService } from '../services/user.service';
+
 
 
 @Component({
@@ -40,7 +45,9 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private toasts: ToastsManager,
     private StateService: StateService,
+    private user: UserService,
     private emailService: EmailRegistrationService,
     private auth: DelivMedsAuthService,
     private tokenService: TokenService,
@@ -112,79 +119,80 @@ filterCountries(event) {
 }
 
 
-signIn(signInForm) {
-  console.log('register');
+// signIn(signInForm) {
+//   console.log('register');
 
-  if (signInForm.valid) {
-   const params = {
-           username: signInForm.value.username,
-           phonenumber: signInForm.value.phonenumber,
-           email: signInForm.value.signinEmail,
-           password: signInForm.value.inPassword,
-           address: signInForm.value.address,
-           address1: signInForm.value.address1,
-           zipcode: signInForm.value.zipcode,
-           city: signInForm.value.city
-          //  state: signInForm.value.state
+//   if (signInForm.valid) {
+//    const params = {
+//            username: signInForm.value.username,
+//            phonenumber: signInForm.value.phonenumber,
+//            email: signInForm.value.signinEmail,
+//            password: signInForm.value.inPassword,
+//            address: signInForm.value.address,
+//            address1: signInForm.value.address1,
+//            zipcode: signInForm.value.zipcode,
+//            city: signInForm.value.city
+//           //  state: signInForm.value.state
 
-         };
-         console.log('Registration  successfull');
-         // this._router.navigate(['/orders']);
-        } else {
-         this.setFormTouched(this.signInForm);
-          console.log('Registration unsuccessfull');
-        }
-      }
-// function for validate all form fields
+//          };
+//          console.log('Registration  successfull');
+//          // this._router.navigate(['/orders']);
+//         } else {
+//          this.setFormTouched(this.signInForm);
+//           console.log('Registration unsuccessfull');
+//         }
+//       }
+// // function for validate all form fields
 
-      setFormTouched(form_obj: any) {
-        Object.keys(form_obj.controls).forEach(field => {
-          const control = form_obj.get(field);
-          control.markAsTouched({ onlySelf: true });
-        });
-      
-      }
-    }
     
- // sign in functionality
-  //  signUp(signInForm) {
-  //   if (signInForm.valid) {
-  //     const params = {
-  //       username: signInForm.value.username,
-  //       phonenumber: signInForm.value.phonenumber,
-  //       email: signInForm.value.signinEmail,
-  //       password: signInForm.value.inPassword,
-  //       address: signInForm.value.address,
-  //       address1: signInForm.value.address1,
-  //       zipcode: signInForm.value.zipcode,
-  //       city: signInForm.value.city
-  //     };
-  //     // this._preLoader.open();
-  //     this.auth.signUp(params).subscribe((res: any) => {
-  //       if (res['success']) {
-  //         this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
-  //         // this._preLoader.close();
-  //         this.tokenService.storeTokens(
-  //           res['authentication_token'],
-  //           res['refresh_token'],
-  //         );
-  //       //  this._userService.setUser(res['user']);
-  //         this.router.navigate(['']);
+    
+// sign in functionality
+   signUp(signInForm) {
+    if (signInForm.valid) {
+      const params = {
+        username: signInForm.value.username,
+        phonenumber: signInForm.value.phonenumber,
+        email: signInForm.value.signinEmail,
+        password: signInForm.value.inPassword,
+        address: signInForm.value.address,
+        address1: signInForm.value.address1,
+        zipcode: signInForm.value.zipcode,
+        city: signInForm.value.city
+      };
+      // this._preLoader.open();
+      this.auth.signUp(params).subscribe((res: any) => {
+        if (res['success']) {
+          this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully Registered.'});
+          // this._preLoader.close();
+          this.tokenService.storeTokens(
+            res['authentication_token'],
+            res['refresh_token'],
+          );
+          this.user.createUser(res['user']);
+          this.router.navigate(['']);
           
-  //         // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
-  //       } else {
-  //         this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again'});
-  //         this.loginFailed = true;
-  //        // this._toastr.error(res["message"], "Oops!", { 'showCloseButton': true });
-  //        // this._preLoader.close();
-  //       }
-  //     }, (err) => {
-  //       // this._preLoader.close();
-  //       // this._toastr.error('Server Error', 'Oops!', { 'showCloseButton': true });
-  //     }
-  //     );
-  //   } else {
-  //     this.setFormTouched(this.signInForm);
-  //   }
-  // }
+          // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
+        } else {
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again'});
+          this.loginFailed = true;
+          this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
+         // this._preLoader.close();
+        }
+      }, (err) => {
+        // this._preLoader.close();
+         this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
+      }
+      );
+    } else {
+      this.setFormTouched(this.signInForm);
+    }
+  }
 
+  setFormTouched(form_obj: any) {
+    Object.keys(form_obj.controls).forEach(field => {
+      const control = form_obj.get(field);
+      control.markAsTouched({ onlySelf: true });
+    });
+  
+  }
+}

@@ -91,18 +91,33 @@
                                                     <span class="error" *ngIf="signInForm.get('state').touched  && signInForm.hasError('required', 'minlength')" style="color:red"> City is Required</span>
                                                 </p-autoComplete>
                                             </span> -->
+
                                             <span class="ui-float-label form-control">
 
-                                                    <p-autoComplete class="auto-complete"  formControlName="city" [(ngModel)]="country" [suggestions]="filteredCountries" (completeMethod)="filterCountries($event)" 
+                                                <p-autoComplete class="auto-complete"  formControlName="state" [suggestions]="filteredCountries" (completeMethod)="filterCountries($event)" 
+                                                    [minLength]="1" placeholder="State" field="name" required>
+                                                    <ng-template  class="auto-complete" let-country pTemplate="item"><!-- <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5"> </div> -->
+                                                            <div>{{country}}</div>
+                                                        </ng-template>
+                                                </p-autoComplete>
+                                                <span *ngIf="!signInForm.get('state').valid && signInForm.get('state').touched" style="color:red">
+                                                    <span class="error" *ngIf="signInForm.hasError('required', 'state')">State is required</span>
+                                                    </span>
+                                                </span>
+
+                                    
+                                            <span class="ui-float-label form-control">
+
+                                                    <p-autoComplete class="auto-complete"  formControlName="city" [suggestions]="filteredCountries" (completeMethod)="filterCountries($event)" 
                                                         [minLength]="1" placeholder="City" field="name" required>
-                                                        <span class="error" *ngIf="!signInForm.get('zipcode').valid && signInForm.get('city').touched  && signInForm.hasError('required')" style="color:red"> City is Required</span>
-                                                        <ng-template  class="auto-complete" let-country pTemplate="item">
-                                                                <span class="error" *ngIf="!signInForm.get('zipcode').valid && signInForm.get('city').touched  && signInForm.hasError('required')" style="color:red"> City is Required</span>
-                                                                <!-- <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5"> </div> -->
+                                                        <ng-template  class="auto-complete" let-country pTemplate="item"><!-- <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5"> </div> -->
                                                                 <div>{{country}}</div>
                                                             </ng-template>
                                                     </p-autoComplete>
-                                                </span>
+                                                    <span *ngIf="!signInForm.get('city').valid && signInForm.get('city').touched" style="color:red">
+                                                        <span class="error" *ngIf="signInForm.hasError('required', 'city')">City is required</span>
+                                                        </span>
+                                                    </span>
 
                                         <!-- <span class="ui-float-label form-control">
                                             <p-autoComplete class="auto-complete"  formControlName="state" [(ngModel)]="countries" [suggestions]="filteredCountriesMultiple" (completeMethod)="filterCountryMultiple($event)" pInputText

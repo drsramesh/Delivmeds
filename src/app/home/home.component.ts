@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
   brands: any[];
   columns: any[];
   yearFilter: number;
-
+  filterableCars = [];
   yearTimeout: any;
 
   constructor( ) { }
@@ -33,10 +33,10 @@ export class HomeComponent implements OnInit {
     // this.carService.getCarsMedium().then(cars => this.cars = cars);
 
         this.brands = [
-            { name: 'All Orders', value: null },
-            { name: 'Active Orders', value: 'Audi' },
-            { name: 'Rejected Orders', value: 'BMW' },
-            { name: 'Completed Orders', value: 'Fiat' }
+            { name: 'All Orders', value: 'AllOrders' },
+            { name: 'Active Orders', value: 'Active' },
+            { name: 'Rejected Orders', value: 'Rejected' },
+            { name: 'Completed Orders', value: 'Delivered' }
         ];
 
         this.cars = [
@@ -97,7 +97,7 @@ export class HomeComponent implements OnInit {
   'time': '3:00pm to 8:00pm'
 },
         ];
-
+        this.filterableCars = [].concat(this.cars);
         this.cols = [
             { field: 'id', header: 'Order ID' },
             { field: 'Prescription', header: 'Prescription ID' },
@@ -121,16 +121,54 @@ export class HomeComponent implements OnInit {
 
 
 sample(event) {
-  switch (event.name) {
-    case 'Active Orders':
-    // this.cols['status']
-    console.log('All orders');
+  this.cars = [];
+
+  switch (event.value.value) {
+    case "Active":
+       console.log(this.filterableCars.length);
+      for(let i = 0;i < this.filterableCars.length;i++)
+      {
+        console.log(this.filterableCars[i].status)
+        if ((this.filterableCars[i].status !="Rejected") && (this.filterableCars[i].status !="Delivered") )
+        {
+          this.cars.push(this.filterableCars[i]);
+        }
+      }
+      console.log(this.cars);
     break;
-    case 2:
-    console.log('case2');
+
+    case "Rejected" :
+   
+    for(let i = 0;i < this.filterableCars.length;i++)
+      {
+        console.log(this.filterableCars[i].status)
+        if ((this.filterableCars[i].status =="Rejected") )
+        {
+          this.cars.push(this.filterableCars[i]);
+        }
+  }
+  break;
+
+  case "Delivered" :
+    for(let i = 0;i < this.filterableCars.length;i++)
+      {
+        console.log(this.filterableCars[i].status)
+        if ((this.filterableCars[i].status =="Delivered") )
+        {
+          this.cars.push(this.filterableCars[i]);
+        }
+  }
+  break;
+
+  case "AllOrders" :
+    for(let i = 0;i < this.filterableCars.length;i++)
+      {
+        this.cars.push(this.filterableCars[i]);
+    }
     break;
   }
-  console.log(event.value);
+
+  console.log(event.value.value);
 }
 customSort(event: SortEvent) {
   event.data.sort((data1, data2) => {
@@ -152,6 +190,10 @@ customSort(event: SortEvent) {
 
       return (event.order * result);
   });
+}
+
+deleteOrder() {
+  console.log('button clicked');
 }
 
 }
