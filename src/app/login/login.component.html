@@ -5,7 +5,7 @@
         <img src="assets/images/logo.png" alt="">
     </figure>
     <div class="form-group">
-        <form action="" [formGroup]="signInForm" (ngSubmit)="signIn(signInForm)">
+        <form action="" [formGroup]="signInForm" (ngSubmit)=" signIn(signInForm)">
             <div class="sign-pass">
                 <span class="ui-float-label form-control">
                     <input id="email" name="signinEmail" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  type="email" class="" size="30"  pInputText  formControlName="signinEmail" required> 

@@ -1,9 +1,10 @@
+<p-growl [(value)]="msgs"></p-growl>
 <div class="login text-center">
     <figure class="logo">
         <img src="assets/images/logo.png" alt="">
     </figure>
     <div class="sign-form">
-        <form  [formGroup]="signInForm" (ngSubmit)="signIn(signInForm)">
+        <form  [formGroup]="signInForm" (ngSubmit)="signUp(signInForm)">
             <div class="sign-pass">
                 <span class="ui-float-label form-control">
                             <input id="username" type="text" size="30" pInputText formControlName= "username" required = "required"
@@ -11,12 +12,13 @@
                              <span class="error" *ngIf="signInForm.get('username').touched  && signInForm.hasError('required', 'username')" style="color:red"> businessname is Required</span>
                             <label for="float-input" class="">Business Name (Trade Name)</label>
                         </span>
-
+                        <!-- pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" -->
                 <span class="ui-float-label form-control">
-                 <input id="phonenumber"  pattern="^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$" name="phonenumber"  type="tel" size="30" pInputText  formControlName= "phonenumber"      
-                  [textMask] = "{mask: mask}"> 
+                 <input id="phonenumber"   name="phonenumber"  type="tel" size="30" pInputText  formControlName= "phonenumber"      
+                  [textMask] = "{mask: mask}"
+                  > 
                 <span class="error" *ngIf=" !signInForm.get('phonenumber').valid && signInForm.get('phonenumber').touched &&  signInForm.hasError('required','phonenumber')" style="color:red"> phonenumber is required</span> 
-                <span class="error" *ngIf=" !signInForm.get('phonenumber').valid && signInForm.get('phonenumber').touched &&  signInForm.hasError('pattern','phonenumber')" style="color:red"> phonenumber  required 10 digits</span>
+                <span class="error" *ngIf=" !signInForm.get('phonenumber').valid && signInForm.get('phonenumber').touched &&  signInForm.hasError('maxlength')" style="color:red"> phonenumber  required 10 digits</span>
                 <label for="float-input" class="">Phone Number</label>
                             </span>
 
@@ -32,7 +34,7 @@
                                     <label for="float-input" class="">Email Address</label>
                                 </span>
 
-                                <span class="ui-float-label form-control">
+                                <!-- <span class="ui-float-label form-control">
                                     <input id="emailValidation" name="inemail" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  type="email" class="" size="30"  pInputText  formControlName="inemail" required="required"
                                     > 
                     
@@ -42,7 +44,7 @@
                                         This email has been registered already</span>
                                     <span class="error" *ngIf=" signInForm.get('inemail').touched && signInForm.hasError('pattern', 'inemail')" style="color:red">Valid email is required</span>
                                     <label for="float-input" class="">Email Address with validations</label>
-                                </span>
+                                </span> -->
 
                                 <span class="ui-float-label form-control">
                                         <input id="password" name="inPassword" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}" maxlength="8" type="password" class="" size="30"  pInputText  formControlName="inPassword" required="required"

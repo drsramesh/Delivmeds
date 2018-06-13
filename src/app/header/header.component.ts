@@ -19,14 +19,13 @@ export class HeaderComponent implements OnInit {
     this.router.events.subscribe( (e) => {
      
       if(e instanceof NavigationEnd) {
+        console.log(e.url == '/')
         console.log(e.url.split('/')[1])
-        console.log(e.url.split('/')[1])
-        {{e.url.split('/')[1] != 'login'}}
         console.log( e.url.split('/')[1] == 'login')
          console.log(e.url.split('/')[1] == 'register')
-        // console.log((e.url.split('/')[1] != 'login' ) && (e.url.split('/')[1] != 'register'))
+         console.log((e.url.split('')[1] == ''))
         
-        if ((e.url.split('/')[1] == 'login') || (e.url.split('/')[1] == 'register') ) {
+        if ((e.url.split('/')[1] == 'login') || (e.url.split('/')[1] == 'register')  || (e.url == '/')) {
           this.nav = [];
           this.showButton = false;
           console.log(this.showButton)

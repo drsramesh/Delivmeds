@@ -41,70 +41,71 @@ submitted: boolean;
 
   ngOnInit() {
       console.log('login');
-      // this._userService.destroyUser();
+      this.user.destroyUser();
     }
-  signIn(signInForm) {
-   if (signInForm.valid) {
-    const params = {
-            email: signInForm.value.signinEmail,
-            password: signInForm.value.signinPassword,
-          };
-          console.log('login success');
+//   signIn(signInForm) {
+//    if (signInForm.valid) {
+//     const params = {
+//             email: signInForm.value.signinEmail,
+//             password: signInForm.value.signinPassword,
+//           };
+//           console.log('login success');
+//           this.router.navigate(['/orders']);
+//          } else {
+//           this.setFormTouched(this.signInForm);
+//            console.log('login unsuccessfull');
+//          }
+// }
+//   // function for validate all form fields
+//    setFormTouched(form_obj: any) {
+//     Object.keys(form_obj.controls).forEach(field => {
+//       const control = form_obj.get(field);
+//       control.markAsTouched({ onlySelf: true });
+//     });
+//   }
+
+  // sign in functionality
+   signIn(signInForm) {
+     console.log(this.signInForm)
+    if (signInForm.valid) {
+      const params = {
+        email: signInForm.value.signinEmail,
+        password: signInForm.value.signinPassword
+      };
+      // this._preLoader.open();
+      this.auth.signIn(params).subscribe((res: any) => {
+        if (res['success']) {
+          this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
+          // this._preLoader.close();
+          this.tokenService.storeTokens(
+            res['authentication_token'],
+            res['refresh_token'],
+          );
+        //  this._userService.setUser(res['user']);
           this.router.navigate(['/orders']);
-         } else {
-          this.setFormTouched(this.signInForm);
-           console.log('login unsuccessfull');
-         }
-}
-  // function for validate all form fields
+          // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
+        } else {
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again'});
+          this.loginFailed = true;
+          this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
+         // this._preLoader.close();
+        }
+      }, (err) => {
+        // this._preLoader.close();
+         this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
+      }
+      );
+    } else {
+      this.setFormTouched(this.signInForm);
+    }
+  }
+
+
+   // function for validate all form fields
    setFormTouched(form_obj: any) {
     Object.keys(form_obj.controls).forEach(field => {
       const control = form_obj.get(field);
       control.markAsTouched({ onlySelf: true });
     });
   }
-
-  // sign in functionality
-  //  signIn(signInForm) {
-  //   if (signInForm.valid) {
-  //     const params = {
-  //       email: signInForm.value.signinEmail,
-  //       password: signInForm.value.signinPassword
-  //     };
-  //     // this._preLoader.open();
-  //     this.auth.signIn(params).subscribe((res: any) => {
-  //       if (res['success']) {
-  //         this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
-  //         // this._preLoader.close();
-  //         this.tokenService.storeTokens(
-  //           res['authentication_token'],
-  //           res['refresh_token'],
-  //         );
-  //       //  this._userService.setUser(res['user']);
-  //         this.router.navigate(['/orders']);
-  //         // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
-  //       } else {
-  //         this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again'});
-  //         this.loginFailed = true;
-  //         this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
-  //        // this._preLoader.close();
-  //       }
-  //     }, (err) => {
-  //       // this._preLoader.close();
-  //        this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
-  //     }
-  //     );
-  //   } else {
-  //     this.setFormTouched(this.signInForm);
-  //   }
-  // }
-
-
-  //  // function for validate all form fields
-  //  setFormTouched(form_obj: any) {
-  //   Object.keys(form_obj.controls).forEach(field => {
-  //     const control = form_obj.get(field);
-  //     control.markAsTouched({ onlySelf: true });
-  //   });
-  // }
 }

@@ -30,7 +30,8 @@ export class RegisterComponent implements OnInit {
   createuser: any = {};
   msgs = [];
   loginFailed = false;
-  mask: any[] = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  //mask: any[] = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  mask: any[] = [ /[1-9]/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   // countries: any [];
   filteredCountriesMultiple: any[];
   brands: string[] = ['Audi', 'BMW', 'Fiat', 'Ford', 'Honda', 'Jaguar', 'Mercedes', 'Renault', 'Volvo', 'VW'];
@@ -62,10 +63,10 @@ export class RegisterComponent implements OnInit {
       address1: new FormControl(null, Validators.required),
       zipcode: new FormControl(null, Validators.required),
       city: new FormControl(null, Validators.required),
-      inemail: ["", [
-        Validators.required],
-      this.isEmailUnique.bind(this) // async Validator passed as 3rd parameter 
- ],
+//       inemail: ["", [
+//         Validators.required],
+//       this.isEmailUnique.bind(this) // async Validator passed as 3rd parameter 
+//  ],
       state: new FormControl(null, Validators.required)
        });
   }
@@ -148,6 +149,9 @@ filterCountries(event) {
     
 // sign in functionality
    signUp(signInForm) {
+     this.msgs = [];
+     console.log(this.signInForm.value);
+     
     if (signInForm.valid) {
       const params = {
         username: signInForm.value.username,
@@ -161,15 +165,18 @@ filterCountries(event) {
       };
       // this._preLoader.open();
       this.auth.signUp(params).subscribe((res: any) => {
+        console.log(res);
+        
         if (res['success']) {
+          console.log(res);
           this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully Registered.'});
           // this._preLoader.close();
           this.tokenService.storeTokens(
             res['authentication_token'],
             res['refresh_token'],
           );
-          this.user.createUser(res['user']);
-          this.router.navigate(['']);
+          // this.user.createUser(res['user']);
+          this.router.navigate(['/']);
           
           // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
         } else {

@@ -8,18 +8,19 @@
         <p><span class="account-icons"><i class="fa fa-envelope" aria-hidden="true"></i></span>abcd@mailinator.com</p>
         <p><span class="account-icons"><i class="fa fa-clock-o" aria-hidden="true"></i></span>9:00 am to 10:00 pm</p>
         <p><span class="account-icons"><i class="fa fa-map-marker" aria-hidden="true"></i></span>Polt No: 365, RL Street, Visakhapatnam, Andhrapradesh</p>
-        <button pButton type="button" (click)="count()" label="Add User" class="btn-group-green mg-tp"></button>
+        <button pButton type="button" (click)="count1()" label="Add User" class="btn-group-green mg-tp"></button>
     </div>
     <div class="preferences">
         <div class="form-group">
             <h3 for="first" class="first">Services offer</h3>
             <div class="multi-add">
-                <input id="input" class="" type="text" size="30" pInputText>
-                <button pButton type="button" (click)="count()" icon="fa fa-plus" label="Add User" class="ui-button-secondary"></button>
+                <input id="input" class="" type="text"  #adduser>
+                <button pButton type="button" (click)="count(adduser.value)" icon="fa fa-plus" label="Add User" class="ui-button-secondary"></button>
+                
             </div>
             <div class="des-chips">
                 <span class="choose-chips">
-                    AIDs Medication <a class="close-icon"><i class="fa fa-times" aria-hidden="true"></i></a>
+                   {{adduser.name}} <a class="close-icon"><i class="fa fa-times" aria-hidden="true"></i></a>
                   </span>
                 <span class="choose-chips">
                       AIDs Medication <a class="close-icon"><i class="fa fa-times" aria-hidden="true"></i></a>

@@ -6,8 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./my-account.component.css']
 })
 export class MyAccountComponent implements OnInit {
+ 
   weekdays : any[];
+  array = [];
+    
   constructor() { }
+  
 
   ngOnInit() {
     this.weekdays= [
@@ -24,6 +28,11 @@ export class MyAccountComponent implements OnInit {
         'name':'Sunday',
       }
     ]
+  }
+
+  count(name: string){
+    console.log(name);
+
   }
 
 }

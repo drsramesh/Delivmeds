@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewContainerRef} from '@angular/core';
 import { Router } from '@angular/router';
 import { Route } from '@angular/compiler/src/core';
+import { ToastsManager } from 'ng2-toastr/src/toast-manager';
+import 'rxjs/add/operator/pairwise';
+
 
 @Component({
   selector: 'app-root',
@@ -9,9 +12,13 @@ import { Route } from '@angular/compiler/src/core';
 })
 export class AppComponent {
   title = 'app';
-//   constructor( private router: Router) {
-//     this.router.events.pairwise().subscribe((event) => {
-// //console.log(event);
-//     });
-//   }
+  constructor(
+    private vcr: ViewContainerRef,
+    private toastr: ToastsManager,
+    private router: Router) {
+      this.toastr.setRootViewContainerRef(vcr);
+      this.router.events.pairwise().subscribe((event) => {
+        // console.log(event);
+      });
+}
 }

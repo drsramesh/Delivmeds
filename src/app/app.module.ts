@@ -90,11 +90,12 @@ import {CheckboxModule} from 'primeng/checkbox';
     TooltipModule,
     CheckboxModule
   ],
-  providers: [ StateService,
+  providers: [ 
+    StateService,
     DelivMedsAuthService,
     EmailRegistrationService,
     UserService,
-    TokenService,DelivMedsAuthService,
+    TokenService,
     RegisterService
    ],
   bootstrap: [AppComponent]
