@@ -8,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class MyAccountComponent implements OnInit {
   weekdays : any[];
   constructor() { }
-
+  user: boolean = false;
+  accouEdit:  boolean = false;
+  
   ngOnInit() {
     this.weekdays= [
       {
@@ -25,5 +27,10 @@ export class MyAccountComponent implements OnInit {
       }
     ]
   }
-
+  addUser(){
+    this.user= true
+  }
+  accountEdit(){
+    this.accouEdit = true
+  }
 }

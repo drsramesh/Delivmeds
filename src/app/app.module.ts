@@ -25,7 +25,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import {BreadcrumbModule} from 'primeng/breadcrumb';
 import {LightboxModule} from 'primeng/lightbox';
 import {CheckboxModule} from 'primeng/checkbox';
-
+import {DialogModule} from 'primeng/dialog';
 
 
 @NgModule({
@@ -54,7 +54,8 @@ import {CheckboxModule} from 'primeng/checkbox';
     DropdownModule,
     BreadcrumbModule,
     LightboxModule,
-    CheckboxModule
+    CheckboxModule,
+    DialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
