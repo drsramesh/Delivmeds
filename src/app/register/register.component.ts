@@ -55,57 +55,37 @@ export class RegisterComponent implements OnInit {
     private router: Router
   ) {
     this.signInForm = this.fb.group({
-      username: new FormControl(null, Validators.required),
-      phonenumber: new FormControl(null, Validators.required),
-      signinEmail: new FormControl(null, Validators.required),
-      inPassword: new FormControl(null, Validators.required),
+      pharmacyName: new FormControl(null, Validators.required),
+      phoneNo: new FormControl(null, Validators.required),
+      email: new FormControl(null, Validators.required),
+      password: new FormControl(null, Validators.required),
       address: new FormControl(null, Validators.required),
-      address1: new FormControl(null, Validators.required),
+      street: new FormControl(null, Validators.required),
       zipcode: new FormControl(null, Validators.required),
       city: new FormControl(null, Validators.required),
 //       inemail: ["", [
 //         Validators.required],
 //       this.isEmailUnique.bind(this) // async Validator passed as 3rd parameter 
 //  ],
-      state: new FormControl(null, Validators.required)
+       state: new FormControl(null, Validators.required)
        });
   }
 
 
-  isEmailUnique(control: FormControl) {
-    const email = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        this.emailService.isEmailRegisterd(control.value).subscribe(() => {
-          resolve(null);
-        }, () => { resolve({ 'isEmailUnique': true }); });
-      }, 1000);
-    });
-    return email;
-  }
+  // isEmailUnique(control: FormControl) {
+  //   const email = new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       this.emailService.isEmailRegisterd(control.value).subscribe(() => {
+  //         resolve(null);
+  //       }, () => { resolve({ 'isEmailUnique': true }); });
+  //     }, 1000);
+  //   });
+  //   return email;
+  // }
 
   ngOnInit() {
    console.log('login');
   }
-
-//   filterCountryMultiple(event) {
-//     this.filtercountry = [];
-//     const query = event.query;
-//     this.StateService.getCountries().then(countries => {
-//         this.filteredCountriesMultiple = this.filterCountry(query, countries);
-//     });
-// }
-
-// filterCountry(query, countries: any[]): any[] {
-//   // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
-//   const filtered: any[] = [];
-//   for (let i = 0; i < countries.length; i++) {
-//       const country = countries[i];
-//       if (country.name.toLowerCase().indexOf(query.toLowerCase()) === 0) {
-//           filtered.push(country);
-//       }
-//   }
-//   return filtered;
-// }
 
 
 filterCountries(event) {
@@ -154,40 +134,53 @@ filterCountries(event) {
      
     if (signInForm.valid) {
       const params = {
-        username: signInForm.value.username,
-        phonenumber: signInForm.value.phonenumber,
-        email: signInForm.value.signinEmail,
-        password: signInForm.value.inPassword,
+        pharmacyName: signInForm.value.pharmacyName,
+        phoneNo: signInForm.value.phoneNo,
+        email: signInForm.value.email,
+        password: signInForm.value.password,
         address: signInForm.value.address,
-        address1: signInForm.value.address1,
-        zipcode: signInForm.value.zipcode,
-        city: signInForm.value.city
+        street: signInForm.value.street,
+        zipcode: signInForm.value.zipcode
+        // city: signInForm.value.city
       };
       // this._preLoader.open();
       this.auth.signUp(params).subscribe((res: any) => {
         console.log(res);
-        
-        if (res['success']) {
+        // console.log(res.statusCode);
+        // console.log(res['statusCode']);
+        // console.log(res);
+        if (res.statusCode == 200) {
           console.log(res);
           this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully Registered.'});
+          alert("success");
           // this._preLoader.close();
-          this.tokenService.storeTokens(
-            res['authentication_token'],
-            res['refresh_token'],
-          );
-          // this.user.createUser(res['user']);
-          this.router.navigate(['/']);
+          //  this.tokenService.storeTokens(
+          //    res['authentication_token'],
+          //    res['refresh_token'],
+          //  );
+           this.user.createUser(res['user']);
+          this.router.navigate(['/login']);
           
           // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
-        } else {
-          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again'});
+        } else if(res.statusCode == 401){
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'already registered '});
           this.loginFailed = true;
           this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
+          alert("failure");
+         // this._preLoader.close();
+        }
+        else {
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'registration unsuccesfull'});
+          this.loginFailed = true;
+          this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
+          alert("failure");
          // this._preLoader.close();
         }
       }, (err) => {
         // this._preLoader.close();
+        this.msgs.push({severity: 'error', summary: 'Error', detail: 'server error'});
          this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
+         alert("server error");
       }
       );
     } else {

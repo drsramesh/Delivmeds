@@ -66,6 +66,7 @@ import {DialogModule} from 'primeng/dialog';
   ],
   imports: [
     BrowserModule,
+    AutoCompleteModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     InputTextModule,

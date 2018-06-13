@@ -30,6 +30,11 @@ export class MyAccountComponent implements OnInit {
       }
     ]
   }
+
+  count11(value: string){
+    console.log('print')
+
+  }
   addUser(){
     this.user= true
   }

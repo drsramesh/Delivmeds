@@ -10,18 +10,19 @@ export class NotificationsComponent implements OnInit {
   brands: any[];
   notifications= [];
   trashNotifi: any[];
+  filteredNotifications = [];
   constructor(private router:Router) { }
 
   ngOnInit() {
     this.brands = [
-      { name: '--All--', value: null },
-      { name: 'Active Orders', value: 'Audi' },
-      { name: 'Rejected Orders', value: 'BMW' },
-      { name: 'Completed Orders', value: 'Fiat' }
+      { name: '--All--', value: 'AllOrders' },
+      { name: 'Active Orders', value: 'Active' },
+      { name: 'Rejected Orders', value: 'Rejected' },
+      { name: 'Completed Orders', value: 'Delivered' }
   ];
   this.notifications = [
     {
-      "label":'Wating for Delevery',
+      "label":'Waiting for Delevery',
       "id": 1
     },
     {
@@ -29,14 +30,23 @@ export class NotificationsComponent implements OnInit {
       "id": 2
     },
     {
-      "label":'Tansit',
+      "label":'Transit',
       "id": 3
     },
     {
-      "label":'Wating for Delevery',
+      "label":'New',
       "id": 4
+    },
+    {
+      "label":'Rejected',
+      "id": 5
+    },
+    {
+      "label":'Delivered',
+      "id": 6
     }
   ];
+  this.filteredNotifications = [].concat(this.notifications);
   this.trashNotifi = [];
   }
   notification(){
@@ -53,11 +63,59 @@ export class NotificationsComponent implements OnInit {
   }
 
   delete(id){
-    console.log(this.trashNotifi)
-    let i = this.notifications.indexOf(id)
-    // this.notifications.reduce(id)
-    this.notifications.splice(id);
-
-   console.log(this.notifications.splice(id))
+    let i=this.trashNotifi.indexOf(id)
+    this.trashNotifi.splice(i,1)
+ console.log(this.notifications.splice(i,1))
   }
-}
+
+  sample(event) {
+    this.notifications = [];
+    switch(event.value.value) {
+      case "Active":
+      console.log(this.filteredNotifications.length);
+     for(let i = 0;i < this.filteredNotifications.length;i++)
+     {
+       console.log(this.filteredNotifications[i].label)
+       if ((this.filteredNotifications[i].label !="Rejected") && (this.filteredNotifications[i].label !="Delivered") )
+       {
+         this.notifications.push(this.filteredNotifications[i]);
+       }
+     }
+     console.log(this.notifications);
+   break;
+
+   case "Rejected" :
+  
+   for(let i = 0;i < this.filteredNotifications.length;i++)
+     {
+       console.log(this.filteredNotifications[i].label)
+       if ((this.filteredNotifications[i].label =="Rejected") )
+       {
+         this.notifications.push(this.filteredNotifications[i]);
+       }
+ }
+ break;
+
+ case "Delivered" :
+   for(let i = 0;i < this.filteredNotifications.length;i++)
+     {
+       console.log(this.filteredNotifications[i].label)
+       if ((this.filteredNotifications[i].label =="Delivered") )
+       {
+         this.notifications.push(this.filteredNotifications[i]);
+       }
+ }
+ break;
+
+ case "AllOrders" :
+   for(let i = 0;i < this.filteredNotifications.length;i++)
+     {
+       this.notifications.push(this.filteredNotifications[i]);
+   }
+   break;
+ }
+
+ console.log(event.value.value);
+    }
+
+  }

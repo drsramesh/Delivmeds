@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit {
     'Prescription': '#xyz 123456',
     'PatientName': 1987,
     'OrderDate': '5/20/2018 11:43',
-    'status': 'Waiting for cudtomer pickup',
+    'status': 'Waiting for customer pickup',
     'time': '3:00pm to 8:00pm'
 },
 {
