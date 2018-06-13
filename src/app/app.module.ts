@@ -86,14 +86,8 @@ import {DialogModule} from 'primeng/dialog';
     Ng4LoadingSpinnerModule.forRoot(),
     BreadcrumbModule,
     LightboxModule,
-<<<<<<< HEAD
-    AutoCompleteModule,
-    TooltipModule,
-    CheckboxModule
-=======
-    CheckboxModule,
+        CheckboxModule,
     DialogModule
->>>>>>> 19204b79499784cbcfcf669cfda94c84dcfe7950
   ],
   providers: [ 
     StateService,
