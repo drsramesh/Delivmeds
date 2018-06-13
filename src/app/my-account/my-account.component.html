@@ -1,14 +1,22 @@
 <div class="my-account">
-    <h3 class="panel-head">ABCD Pharmacy LTD <a class="pull-right"><i class="fa fa-pencil" aria-hidden="true"></i>
+    <h3 class="panel-head">ABCD Pharmacy LTD <a class="pull-right" (click)=accountEdit()><i class="fa fa-pencil" aria-hidden="true"></i>
     </a>
         <div class="clearfix"></div>
     </h3>
     <div class="account-address border-btm">
         <p><span class="account-icons"><i class="fa fa-phone" aria-hidden="true"></i></span>+919983487443</p>
         <p><span class="account-icons"><i class="fa fa-envelope" aria-hidden="true"></i></span>abcd@mailinator.com</p>
-        <p><span class="account-icons"><i class="fa fa-clock-o" aria-hidden="true"></i></span>9:00 am to 10:00 pm</p>
+        <!-- <p><span class="account-icons"><i class="fa fa-clock-o" aria-hidden="true"></i></span>9:00 am to 10:00 pm</p> -->
         <p><span class="account-icons"><i class="fa fa-map-marker" aria-hidden="true"></i></span>Polt No: 365, RL Street, Visakhapatnam, Andhrapradesh</p>
-        <button pButton type="button" (click)="count1()" label="Add User" class="btn-group-green mg-tp"></button>
+        <button pButton type="button" (click)="addUser()" label="Add User" class="btn-group-green mg-tp"></button>
+        <div class="des-chips">
+            <span class="choose-chips">
+                Balaji Guttula  <a class="close-icon"><i class="fa fa-times" aria-hidden="true"></i></a>
+              </span>
+            <span class="choose-chips">
+                Balaji Guttula <a class="close-icon"><i class="fa fa-times" aria-hidden="true"></i></a>
+                </span>
+        </div>
     </div>
     <div class="preferences">
         <div class="form-group">
@@ -87,3 +95,72 @@
     </div>
 
 </div>
+
+
+<!-- model--------- -->
+<p-dialog header="Add User" class="medication-list" [(visible)]="user" [modal]="true" [responsive]="true" [width]="350" [minWidth]="200" [minY]="70">
+    <div class="form-group">
+        <h3 class="first">First Name</h3>
+        <input id="input" type="text" size="30" pInputText>
+    </div>
+    <div class="form-group">
+        <h3 class="first">Last Name</h3>
+        <input id="input" type="text" size="30" pInputText>
+    </div>
+    <div class="form-group">
+        <h3 class="first">Email</h3>
+        <input id="input" type="text" size="30" pInputText>
+    </div>
+    <div class="form-group">
+        <h3 class="first">Password</h3>
+        <input id="input" type="password" size="30" pPassword>
+    </div>
+    <div class="pull-right">
+        <button type="button" class="btn-group-green" pButton (click)="display=false" label="ADD"></button>
+        <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="display=false" label="Cancel"></button>
+    </div>
+    <div class="clearfix"></div>
+</p-dialog>
+
+
+<p-dialog header="" class="medication-list" [(visible)]="accouEdit" [modal]="true" [responsive]="true" [width]="768">
+    <div class="ui-g">
+        <div class="form-group ui-g-6">
+            <h3 class="first">Business Name(Trade Name)</h3>
+            <input id="input" type="text" size="30" pInputText>
+        </div>
+        <div class="form-group ui-g-6">
+            <h3 class="first">Phone Number</h3>
+            <input id="input" type="text" size="30" pInputText>
+        </div>
+        <div class="form-group ui-g-6">
+            <h3 class="first">Email</h3>
+            <input id="input" type="text" size="30" pInputText>
+        </div>
+        <div class="form-group ui-g-6">
+            <h3 class="first">Address 1</h3>
+            <input id="input" type="text" size="30" pInputText>
+        </div>
+        <div class="form-group ui-g-6">
+            <h3 class="first">Address 2</h3>
+            <input id="input" type="text" size="30" pInputText>
+        </div>
+        <div class="form-group ui-g-6">
+            <h3 class="first">Zip code</h3>
+            <input id="input" type="text" size="30" pInputText>
+        </div>
+        <div class="form-group ui-g-6">
+            <h3 class="first">City</h3>
+            <input id="input" type="text" size="30" pInputText>
+        </div>
+        <div class="form-group ui-g-6">
+            <h3 class="first">State</h3>
+            <input id="input" type="text" size="30" pInputText>
+        </div>
+    </div>
+    <div class="pull-right">
+        <button type="button" class="btn-group-green" pButton (click)="display=false" label="ADD"></button>
+        <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="display=false" label="Cancel"></button>
+    </div>
+    <div class="clearfix"></div>
+</p-dialog>

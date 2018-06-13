@@ -49,7 +49,7 @@ import { RegisterService } from './services/register.service';
 import { HomeService } from './services/home.service';
 import { EmailRegistrationService } from './services/email-registration.service';
 import {CheckboxModule} from 'primeng/checkbox';
-
+import {DialogModule} from 'primeng/dialog';
 
 
 @NgModule({
@@ -86,9 +86,14 @@ import {CheckboxModule} from 'primeng/checkbox';
     Ng4LoadingSpinnerModule.forRoot(),
     BreadcrumbModule,
     LightboxModule,
+<<<<<<< HEAD
     AutoCompleteModule,
     TooltipModule,
     CheckboxModule
+=======
+    CheckboxModule,
+    DialogModule
+>>>>>>> 19204b79499784cbcfcf669cfda94c84dcfe7950
   ],
   providers: [ 
     StateService,

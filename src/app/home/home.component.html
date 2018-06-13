@@ -62,10 +62,16 @@
                 <p class="pickup-time" *ngIf="rowData['status'] == 'wating for customer pick up'">{{rowData.time}}</p>
             </td>
             <td>
+<<<<<<< HEAD
                 <p *ngIf="rowData['status'] == 'New'" class="order-cancel"><i class="fa fa-times"  aria-hidden="true"></i></p>
                 
                 <p *ngIf="rowData['status']  =='Waiting For Delivery'"><button pButton type="button" (click)="count()" label="Ready to Delivered" class="ui-button-secondary btn-secondary-green"></button></p>
                 <p *ngIf="rowData['status']  =='Waiting for cudtomer pickup'"><button pButton type="button" (click)="count()" label="Delivered" class="ui-button-secondary btn-secondary-green"></button></p>
+=======
+                <p *ngIf="rowData['status'] == 'New'" class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></p>
+                <p *ngIf="rowData['status']  =='Wating for Delevery'"><button pButton type="button" (click)="count()" label="Ready to Deliv" class="ui-button-secondary btn-secondary-green"></button></p>
+                <p *ngIf="rowData['status']  =='wating for customer pick up'"><button pButton type="button" (click)="count()" label="Delivered" class="ui-button-secondary btn-secondary-green"></button></p>
+>>>>>>> 19204b79499784cbcfcf669cfda94c84dcfe7950
             </td>
         </tr>
     </ng-template>

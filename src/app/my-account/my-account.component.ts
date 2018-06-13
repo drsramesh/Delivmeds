@@ -11,8 +11,9 @@ export class MyAccountComponent implements OnInit {
   array = [];
     
   constructor() { }
+  user: boolean = false;
+  accouEdit:  boolean = false;
   
-
   ngOnInit() {
     this.weekdays= [
       {
@@ -29,10 +30,10 @@ export class MyAccountComponent implements OnInit {
       }
     ]
   }
-
-  count(name: string){
-    console.log(name);
-
+  addUser(){
+    this.user= true
   }
-
+  accountEdit(){
+    this.accouEdit = true
+  }
 }

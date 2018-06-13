@@ -99,9 +99,11 @@ ul li {
     border: 1px solid #7bc466;
 }
 
-.ui-button.btn-group-green:enabled:hover {
-    background: #fff;
-    color: #7bc466;
+.ui-button.btn-group-green:enabled:hover,
+.ui-button.btn-group-green:enabled:active,
+.ui-button.btn-group-green:enabled:focus {
+    background: #7bc466;
+    color: #fff;
     border: 1px solid #7bc466;
 }
 
@@ -565,7 +567,7 @@ display: inline-block;
 }
 
 .orders-table table tbody td .pickup-time {
-    color: #892323;
+    color: #d9772d;
 }
 
 
@@ -575,6 +577,10 @@ display: inline-block;
     font-weight: 500;
     font-size: 16px;
     padding-top: 8px;
+}
+
+.panel-head a {
+    cursor: pointer;
 }
 
 .bread-crumb {
@@ -600,6 +606,10 @@ display: inline-block;
 .bread-crumb .ui-breadcrumb ul li a.ui-state-active {
     background: #fff;
     border: none;
+}
+
+.order-view {
+    margin-bottom: 20px;
 }
 
 .order-view .view-left {
@@ -664,6 +674,10 @@ display: inline-block;
 .prescription .prescription-right .ui-button.ui-button-secondary.ui-state-default.btn-secondary-green {
     margin-left: 12px;
     height: 34px;
+}
+
+.prescription .prescription-right .ui-button.ui-button-secondary.ui-state-default.btn-secondary-green .ui-button-icon-left {
+    padding-left: 13px;
 }
 
 .prescription .prescription-right .order-dropdown .ui-dropdown .ui-dropdown-trigger {
