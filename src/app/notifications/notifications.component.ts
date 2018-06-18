@@ -16,6 +16,7 @@ export class NotificationsComponent implements OnInit {
   ngOnInit() {
     this.brands = [
       { name: '--All--', value: 'AllOrders' },
+      { name: 'New Orders', value: 'New' },
       { name: 'Active Orders', value: 'Active' },
       { name: 'Rejected Orders', value: 'Rejected' },
       { name: 'Completed Orders', value: 'Delivered' }
@@ -76,7 +77,7 @@ export class NotificationsComponent implements OnInit {
      for(let i = 0;i < this.filteredNotifications.length;i++)
      {
        console.log(this.filteredNotifications[i].label)
-       if ((this.filteredNotifications[i].label !="Rejected") && (this.filteredNotifications[i].label !="Delivered") )
+       if ((this.filteredNotifications[i].label !="Rejected") && (this.filteredNotifications[i].label !="Delivered") && (this.filteredNotifications[i].label !="New") )
        {
          this.notifications.push(this.filteredNotifications[i]);
        }
@@ -104,8 +105,22 @@ export class NotificationsComponent implements OnInit {
        {
          this.notifications.push(this.filteredNotifications[i]);
        }
+       
  }
  break;
+
+ case "New" :
+   for(let i = 0;i < this.filteredNotifications.length;i++)
+     {
+       console.log(this.filteredNotifications[i].label)
+       if ((this.filteredNotifications[i].label =="New") )
+       {
+         this.notifications.push(this.filteredNotifications[i]);
+       }
+       
+ }
+ break;
+ 
 
  case "AllOrders" :
    for(let i = 0;i < this.filteredNotifications.length;i++)

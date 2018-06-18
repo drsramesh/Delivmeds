@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit {
 
         this.brands = [
             { name: 'All Orders', value: 'AllOrders' },
+            { name: 'New Orders', value: 'New' },
             { name: 'Active Orders', value: 'Active' },
             { name: 'Rejected Orders', value: 'Rejected' },
             { name: 'Completed Orders', value: 'Delivered' }
@@ -129,7 +130,7 @@ sample(event) {
       for(let i = 0;i < this.filterableCars.length;i++)
       {
         console.log(this.filterableCars[i].status)
-        if ((this.filterableCars[i].status !="Rejected") && (this.filterableCars[i].status !="Delivered") )
+        if ((this.filterableCars[i].status !="Rejected") && (this.filterableCars[i].status !="Delivered")  && ((this.filterableCars[i].status !="New")))
         {
           this.cars.push(this.filterableCars[i]);
         }
@@ -154,6 +155,17 @@ sample(event) {
       {
         console.log(this.filterableCars[i].status)
         if ((this.filterableCars[i].status =="Delivered") )
+        {
+          this.cars.push(this.filterableCars[i]);
+        }
+  }
+  break;
+
+  case "New" :
+    for(let i = 0;i < this.filterableCars.length;i++)
+      {
+        console.log(this.filterableCars[i].status)
+        if ((this.filterableCars[i].status =="New") )
         {
           this.cars.push(this.filterableCars[i]);
         }

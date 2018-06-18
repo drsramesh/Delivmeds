@@ -68,57 +68,57 @@
                                             <label for="float-input" class="">street</label>
                                         </span>
                         <span class="ui-float-label form-control">
-                                                <input id="zipcode" type="tel" pattern=\d{3}(-\d{4})? formControlName="zipcode"  minlength="3" maxlength="10" required pInputText> 
+                                                <input id="zipcode" type="tel" pattern=\d{3}(-\d{4})? formControlName="zipcode"  (blur) = "zipcodeServicesForTest()" minlength="3" maxlength="10" required pInputText> 
                                                 <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('required', 'zipcode')" style="color:red">zipcode is required</span>
                                                 <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('minLength', 'zipcode')" style="color:red">Please enter a valid 5 digit zip code</span>
                                                 <!-- <span *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('maxlength', 'zipcode')" style="color:red">zipcode must be 5 digits </span> -->
-                                                <!-- <" pattern (\d{5}([\-]\d{4})?)" span *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched && signInForm.hasError('maxlength')" style="color:red">zipcode must be  is 6 characters</span> -->
+                                                <!-- [disabled]="isDisabled()" <" pattern (\d{5}([\-]\d{4})?)" span *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched && signInForm.hasError('maxlength')" style="color:red">zipcode must be  is 6 characters</span> -->
                                                 <label for="float-input" class="">Zip Code</label>
                                             </span>
-                        <!-- <span class="ui-float-label form-control">
-                                        <input id="city" class="" type="text"  size="30"  formControlName="city" pInputText required >
+                        <span class="ui-float-label form-control">
+                                        <input  id="city" class="" type="text"  size="30"  formControlName="city" pInputText required >
                                         <span class="error" *ngIf="signInForm.get('city').touched  && signInForm.hasError('required', 'city')" style="color:red"> City is Required</span>
                                         <label for="float-input" class="">City</label>
-                                    </span> -->
-                        <!-- <span class="ui-float-label form-control">
+                                    </span>
+                        <span class="ui-float-label form-control">
                                             <input id="state" class="" type="text"  size="30"  formControlName="state" pInputText required>
-                                            <span *ngIf="signInForm.get('state').touched  && signInForm.hasError('required', 'state')" style="color:red"> State is Required</span>
+                                            <span class="error" *ngIf="signInForm.get('state').touched  && signInForm.hasError('required', 'state')" style="color:red"> State is Required</span>
                                             <label for="float-input" class="">State</label>
-                                        </span>class="auto-complete"
-                                         -->
-                                         <!-- <span class="ui-float-label form-control">
-                                                <p-autoComplete class="auto-complete"  formControlName="city" [(ngModel)]="countries" [suggestions]="filteredCountriesMultiple" (completeMethod)="filterCountryMultiple($event)" pInputText
-                                                    [minLength]="1" placeholder="City" field="name" [multiple]="true" required>
-                                                    <span class="error" *ngIf="signInForm.get('state').touched  && signInForm.hasError('required', 'minlength')" style="color:red"> City is Required</span>
-                                                </p-autoComplete>
-                                            </span> -->
+                                        </span>
+                                        
+ <span class="ui-float-label form-control">
+ <p-autoComplete class="auto-complete"  formControlName="city" [(ngModel)]="countries" [suggestions]="filteredCountriesMultiple" (completeMethod)="filterCountryMultiple($event)" pInputText
+ [minLength]="1" placeholder="cityzipcodes" field="name" [multiple]="true" required>
+ <span class="error" *ngIf="signInForm.get('state').touched  && signInForm.hasError('required', 'minlength')" style="color:red"> City is Required</span>
+  </p-autoComplete>
+                                            </span>   
+  <!-- <span class="ui-float-label form-control"> -->
 
-                                            <span class="ui-float-label form-control">
-
-                                                <p-autoComplete class="auto-complete"  formControlName="state" [suggestions]="filteredCountries" (completeMethod)="filterCountries($event)" 
-                                                    [minLength]="1" placeholder="State" field="name" required>
-                                                    <ng-template  class="auto-complete" let-country pTemplate="item"><!-- <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5"> </div> -->
-                                                            <div>{{country}}</div>
-                                                        </ng-template>
-                                                </p-autoComplete>
+ <!-- <p-autoComplete class="auto-complete" [(ngModel)] = "countries"  formControlName="state" [suggestions]="filteredCountries" (completeMethod)="filterCountries($event)" 
+ [minLength]="1" placeholder="State"  [multiple] = "true" field="name" required>
+ <ng-template  class="auto-complete" *ngFor = "let zipcodes of zipcodeServices ">
+     <!-- <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5"> </div> -->
+  <!-- <div>{{zipcodes.zipCode}}</div> -->
+                                                        <!-- </ng-template> -->
+<!-- </p-autoComplete>
                                                 <span *ngIf="!signInForm.get('state').valid && signInForm.get('state').touched" style="color:red">
                                                     <span class="error" *ngIf="signInForm.hasError('required', 'state')">State is required</span>
                                                     </span>
-                                                </span>
+                                                </span> --> 
 
+ <!-- <input id="emailValidation" name="inemail"  type="text" class="" size="30"  pInputText  formControlName="inemail" required="required"
+                                                > -->
                                     
-                                            <span class="ui-float-label form-control">
-
-                                                    <p-autoComplete class="auto-complete"  formControlName="city" [suggestions]="filteredCountries" (completeMethod)="filterCountries($event)" 
-                                                        [minLength]="1" placeholder="City" field="name" required>
-                                                        <ng-template  class="auto-complete" let-country pTemplate="item"><!-- <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5"> </div> -->
-                                                                <div>{{country}}</div>
-                                                            </ng-template>
-                                                    </p-autoComplete>
-                                                    <span *ngIf="!signInForm.get('city').valid && signInForm.get('city').touched" style="color:red">
+ <!-- <span class="ui-float-label form-control"> -->
+ <!-- <p-autoComplete class="auto-complete"  formControlName="city" [suggestions]="filteredCountries"  *ngFor = "let zipcodes of zipcodeService " placeholder="City" field="name" required> -->
+ <!-- <ng-template  class="auto-complete" let-country pTemplate="item"><!-- <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5"> </div> -->
+  <!-- <div>{{zipcodes.state}}</div> -->
+                                                            <!-- </ng-template> -->
+  <!-- </p-autoComplete> -->
+                                                    <!-- <span *ngIf="!signInForm.get('city').valid && signInForm.get('city').touched" style="color:red">
                                                         <span class="error" *ngIf="signInForm.hasError('required', 'city')">City is required</span>
                                                         </span>
-                                                    </span>
+                                                    </span> -->
 
                                         <!-- <span class="ui-float-label form-control">
                                             <p-autoComplete class="auto-complete"  formControlName="state" [(ngModel)]="countries" [suggestions]="filteredCountriesMultiple" (completeMethod)="filterCountryMultiple($event)" pInputText

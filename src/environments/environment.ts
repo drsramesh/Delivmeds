@@ -5,7 +5,9 @@
 
 export const environment = {
   production: false,
-   host: 'http://35.153.176.128/'
+  // host: 'http://35.153.176.128/'
+   host: 'http://34.227.89.75/'
+
    //host: 'http://172.16.19.148:8080/deliv-meds-api/'
   
 };

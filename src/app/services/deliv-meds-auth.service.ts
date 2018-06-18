@@ -79,6 +79,12 @@ emailAvailability(params) {
   return this._http.post(environment.host + 'pharmacy/register', params);
 }
 
+//for updateddetails
+updateDetails(profilepageObj) {
+  console.log(profilepageObj);   
+ return this._http.post(environment.host + 'pharmacy/profile', profilepageObj);
+}
+
 // forgot password call
 forgotPassword(params) {
   return this._http.post(environment.host + 'users/forgot_password', params);
@@ -94,7 +100,7 @@ resetPassword(params) {
   this._http.post(environment.host + 'users/sign_out', { headers: header}).subscribe((res) => {
     this._tokenService.removeTokens();
     this._userService.destroyUser();
-    // this._router.navigate(['auth']);
+     this._router.navigate(['/login']);
   });
 }
 

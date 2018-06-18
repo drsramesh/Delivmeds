@@ -34,6 +34,7 @@ import { GrowlModule } from 'primeng/primeng';
 import {AutoCompleteModule} from 'primeng/autocomplete';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import {TooltipModule} from 'primeng/tooltip';
+import {MultiSelectModule} from 'primeng/multiselect';
 
 import {BreadcrumbModule} from 'primeng/breadcrumb';
 import {LightboxModule} from 'primeng/lightbox';
@@ -48,6 +49,7 @@ import { UserService } from './services/user.service';
 import { RegisterService } from './services/register.service';
 import { HomeService } from './services/home.service';
 import { EmailRegistrationService } from './services/email-registration.service';
+import { PreloadService } from './services/preload.service'
 import {CheckboxModule} from 'primeng/checkbox';
 import {DialogModule} from 'primeng/dialog';
 
@@ -82,13 +84,15 @@ import {DialogModule} from 'primeng/dialog';
     ReactiveFormsModule,
     GrowlModule,
     HttpClientModule,
+    MultiSelectModule,
     HttpModule ,
     ToastModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot(),
     BreadcrumbModule,
     LightboxModule,
         CheckboxModule,
-    DialogModule
+    DialogModule,
+    
   ],
   providers: [ 
     StateService,
@@ -96,7 +100,8 @@ import {DialogModule} from 'primeng/dialog';
     EmailRegistrationService,
     UserService,
     TokenService,
-    RegisterService
+    RegisterService,
+    PreloadService
    ],
   bootstrap: [AppComponent]
 })

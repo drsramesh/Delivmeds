@@ -10,7 +10,8 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { UserService } from '../services/user.service';
 import { DelivMedsAuthService } from '../services/deliv-meds-auth.service';
 import { TokenService } from '../services/token.service';
-
+import { finalize } from 'rxjs/operators';
+import { PreloadService } from '../services/preload.service'
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,8 @@ submitted: boolean;
      private tokenService: TokenService,
       private auth: DelivMedsAuthService,
      private user: UserService,
-     private http: Http
+     private http: Http,
+     private loader: PreloadService
   )  {
       this.signInForm = this.fb.group({
         signinEmail: new FormControl(null, Validators.required),
@@ -66,34 +68,52 @@ submitted: boolean;
 
   // sign in functionality
    signIn(signInForm) {
+     this.loading = true
+    this.msgs = [];
      console.log(this.signInForm)
     if (signInForm.valid) {
       const params = {
         email: signInForm.value.signinEmail,
         password: signInForm.value.signinPassword
       };
-      // this._preLoader.open();
+       this.loader.open();
       this.auth.signIn(params).subscribe((res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == 200 ) {
           this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
           //alert('success')
-          // this._preLoader.close();
+           this.loader.close();
           this.tokenService.storeTokens(
-            res['auth_TOKEN']
+            res['authentication_token']
            // res['refresh_token'],
           );
         
-        //  this._userService.setUser(res['user']);
+        // this.user.setUser(res['user']);
           this.router.navigate(['/orders']);
           // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
+        }
+        else if(res.statusCode == 200 && res.profileCompleted == "false") {
+          //alert('faliure');
+          this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
+          alert('success')
+           this.loader.close();
+          this.tokenService.storeTokens(
+            res['authentication_token']
+           // res['refresh_token'],
+          );
+        
+        // this.user.setUser(res['user']);
+          this.router.navigate(['/my-account']);
         } else {
+          //alert('faliure');
           this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again'});
           this.loginFailed = true;
+          this.loading = false;
           this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
-         // this._preLoader.close();
+          this.loader.close();
         }
       }, (err) => {
-        // this._preLoader.close();
+        this.loader.close();
+        this.loading = false;
          this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
       }
       );

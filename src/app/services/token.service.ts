@@ -8,9 +8,11 @@ export class TokenService {
   constructor() {}
 
   // store tokens once sign in
-  storeTokens(auth_token) {
-      localStorage.setItem('auth_TOKEN', auth_token);
-      console.log(auth_token);
+  storeTokens(authentication_token) {
+      localStorage.setItem('authentication_token', authentication_token);
+      console.log(authentication_token);
+    //  var auth =  auth_token as string;
+    //   console.log(auth)
      //  localStorage.setItem('refresh_token', refresh_token);
   }
 
