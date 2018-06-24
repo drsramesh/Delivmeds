@@ -50,10 +50,14 @@ import { RegisterService } from './services/register.service';
 import { HomeService } from './services/home.service';
 import { EmailRegistrationService } from './services/email-registration.service';
 import { PreloadService } from './services/preload.service'
+import { TokenInterceptor } from '././services/token.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthLoginGuardService } from './services/auth-login-guard.service';
 import {CheckboxModule} from 'primeng/checkbox';
 import {DialogModule} from 'primeng/dialog';
 
-
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+// import {Ng4SpinnerModule} from 'ng4-spinner';
 @NgModule({
   declarations: [
     AppComponent,
@@ -86,22 +90,33 @@ import {DialogModule} from 'primeng/dialog';
     HttpClientModule,
     MultiSelectModule,
     HttpModule ,
+    HttpClientModule,
     ToastModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot(),
     BreadcrumbModule,
     LightboxModule,
         CheckboxModule,
     DialogModule,
+    TooltipModule,
+    ProgressSpinnerModule
+    // Ng4SpinnerModule// add it to the imports
     
   ],
   providers: [ 
     StateService,
     DelivMedsAuthService,
     EmailRegistrationService,
+    AuthLoginGuardService,
     UserService,
     TokenService,
     RegisterService,
-    PreloadService
+    TokenInterceptor,
+    PreloadService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
    ],
   bootstrap: [AppComponent]
 })

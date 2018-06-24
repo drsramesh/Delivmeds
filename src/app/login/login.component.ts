@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators, AbstractControl, Valid
 import { Router } from '@angular/router';
 import { Http } from '@angular/http';
 
+
 //third party
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
@@ -78,7 +79,14 @@ submitted: boolean;
       };
        this.loader.open();
       this.auth.signIn(params).subscribe((res: any) => {
-        if (res.statusCode == 200 ) {
+        console.log(res);
+        console.log(res.statusCode == 200);
+        console.log(res.profileCompleted == false);
+        console.log( (res.statusCode == 200 ) && (res.profileCompleted == false));
+        
+        console.log(res.profileCompleted)
+        if (res.statusCode === 200  && res.profileCompleted === true) {
+          console.log(res.profileCompleted)
           this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
           //alert('success')
            this.loader.close();
@@ -86,15 +94,13 @@ submitted: boolean;
             res['authentication_token']
            // res['refresh_token'],
           );
-        
-        // this.user.setUser(res['user']);
           this.router.navigate(['/orders']);
+          console.log('orders')
           // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
         }
-        else if(res.statusCode == 200 && res.profileCompleted == "false") {
+        else if(res.statusCode === 200  && res.profileCompleted === false) {
           //alert('faliure');
           this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
-          alert('success')
            this.loader.close();
           this.tokenService.storeTokens(
             res['authentication_token']
@@ -108,13 +114,13 @@ submitted: boolean;
           this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again'});
           this.loginFailed = true;
           this.loading = false;
-          this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
+         // this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
           this.loader.close();
         }
       }, (err) => {
         this.loader.close();
         this.loading = false;
-         this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
+        // this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
       }
       );
     } else {

@@ -66,7 +66,7 @@ export class HeaderComponent implements OnInit {
     console.log("auth" + localStorage.getItem ('authentication_token'));
     
 
-    this.http.get(environment.host + '/pharmacy/profile', { headers: header} ).subscribe(data =>
+    this.http.get(environment.host + '/pharmacy/profile' ).subscribe(data =>
     {
       console.log(JSON.stringify(data));
    this.userInformation = data;

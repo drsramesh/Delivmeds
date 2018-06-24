@@ -1,4 +1,5 @@
 <div class="order-view">
+    <div *ngIf= "orderDetails">
     <div class="panel-heading">
         <h3 class="pull-left panel-head">All Orders</h3>
         <div class="bread-crumb pull-right">
@@ -13,77 +14,99 @@
             <div class="price-value">
                 <p>Cost Details</p>
                 <span>
-            Cost (2 Medication): $10.00
+            Cost (2 Medication): ${{sum}}
           </span>
             </div>
             <div class="payable text-center">
                 <p>Payable Amount</p>
-                <span class="payble-green">$ 8.00</span>
+                <span class="payble-green">$ {{week.value*sum}}</span>
             </div>
             <div class="clearfix"></div>
         </div>
         <div class="prescription">
             <p class="pull-left prescription-left">prescription id: #46456 (refill)</p>
             <span class="pull-left prescription-right">
-        <p-dropdown class="drop-down order-dropdown" [options]="brands" [style]="{'width':'60%'}" (onChange)="sample($event)" optionLabel="name"></p-dropdown>
-        <button pButton type="button" (click)="count()" label="Add" icon="fa fa-plus" class="ui-button-secondary btn-secondary-green"></button>
+        <p-dropdown class="drop-down order-dropdown" [options]="brands" [(ngModel)]= "week"  [style]="{'width':'60%'}" (onChange)="sample($event.value)" optionLabel="name"></p-dropdown>
+        <button pButton type="button" (click)=" addNewRow()" label="Add" icon="fa fa-plus" class="ui-button-secondary btn-secondary-green"></button>
       </span>
             <div class="clearfix"></div>
         </div>
         <div class="medication-list">
-            <div class="form-group" *ngFor="let prescription of prescriptions ">
+    
+    <form [formGroup]="invoiceForm">
+            <div formArrayName="itemRows">
+             <div class="form-group"  *ngFor="let itemrow of invoiceForm.controls.itemRows.controls; let i=index"  [formGroupName]="i">
+                 
                 <div class="form-name">
                     <h3 class="first">Medication Name</h3>
-                    <input id="input" type="text" size="30" pInputText>
+                    <input formControlName="medicalName" class="form-control" pInputText> 
                 </div>
                 <div class="form-dos">
                     <h3 class="first">Dosage</h3>
-                    <input id="input" type="text" size="30" pInputText>
+                    <input formControlName="dosage" class="form-control" pInputText>
                 </div>
                 <div class="form-dos">
                     <h3 class="first">Quantity</h3>
-                    <input id="input" type="text" size="30" pInputText>
+                    <input formControlName="quantity" class="form-control" size="30" pInputText>
                 </div>
                 <div class="form-dos">
                     <h3 class="first">Cost</h3>
                     <span class="dolor-icon">
-                    <input id="input" type="text" size="30" pInputText>
+                    <input formControlName="cost" class="form-control"  size="30" pInputText>
+                   
                     <i class="fa fa-usd" aria-hidden="true"></i>
                     </span>
                 </div>
+                <!-- <button *ngIf="invoiceForm.controls.itemRows.controls.length > 1" (click)="deleteRow(i)" class="btn btn-danger"> x</button> -->
+                <p *ngIf="invoiceForm.controls.itemRows.controls.length > 0" (click)="deleteRow(i)" class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></p>
                 <div class="clearfix"></div>
+                
             </div>
-            <button pButton type="button" (click)="count()" label="Update" class="btn-group-green"></button>
+            </div>
+        </form>
+            <button pButton type="button" (click)="updateButtonClicked()" label="Update" class="btn-group-green"></button>
         </div>
     </div>
     <div class="view-right">
         <div class="orders">
-            <h3 class="panel-head pull-left">Order ID: 2359598 <span class="new">New</span></h3>
-            <button pButton type="button" (click)="count()" label="Reject Order" class="ui-button-secondary btn-secondary-green pull-right"></button>
+            <h3 class="panel-head pull-left">{{orderDetails.id}} <span class="new">New</span></h3>
+            <button pButton type="button" (click)= "showDialog()" label="Reject Order"  class="ui-button-secondary btn-secondary-green pull-right"></button>
+            <p-dialog header="Reject Order" class="medication-list" [(visible)]="display"  [modal]="true"  [responsive]="true" [width]="350" [minWidth]="200" [minY]="70">
+             <textarea class="btn-full text-area"   [(ngModel)] = "value" rows="5" cols="30" placeholder="Enter Reason" pInputTextarea maxlength="250"></textarea> 
+             <p-footer>
+                            <button type="button" pButton (click)="addReason()" label="Submit"></button>
+                            <button type="button" pButton  (click)="display=false" label="Cancel"></button>
+                        </p-footer>
+                </p-dialog>
             <div class="clearfix"></div>
         </div>
         <div class="patient-details">
-            <p>Patient Name: jessy Graen</p>
-            <p>DOB: 12/05/1990</p>
-            <p>Contact: +91 93495 93475</p>
+            <p>Patient Name: {{orderDetails.customerResponse.firstName}} {{orderDetails.customerResponse.lastName}} </p>
+            <p>DOB: {{orderDetails.customerResponse.birthDate}}</p>
+            <p>Contact: {{orderDetails.customerResponse.phone}}</p>
         </div>
         <div class="patient-details">
             <p>User: jessy Graen</p>
             <p>Contact: +91 93495 93475</p>
         </div>
-        <div class="patient-details">
-            <p>Docter: jessy Graen</p>
-            <p>Contact: +91 93495 93475</p>
+        <div class="patient-details"  > 
+            <!-- {{orderDetails.customerResponse.customerDoctors[0].doctorName}} -->
+            <div *ngFor = "let doctor of customerResponses.customerMembers">
+                <p>Doctor: {{doctor.doctorName}} </p>
+                <p>Contact: {{doctor.doctorPhone}}</p>
+            </div>
         </div>
-        <div class="insurance-details ui-g">
-            <div class="ui-g-7">
+        <div class="insurance-details ui-g" *ngIf = "orderDetails.customerResponse.customerMembers && orderDetails.customerResponse.customerMembers.length > 0 && orderDetails.customerResponse.customerMembers[0].insurances.length>0">
+            <div  >
+                    <!-- class="ui-g-7"        -->
                 <h4>Insurance Details</h4>
-                <ul>
-                    <li>United Health Group (UHG)</li>
-                    <li>Patient ID: #123456789</li>
-                    <li>PCN Number: 38457</li>
+                <ul >
+                <p>{{orderDetails.customerResponse.customerMembers[0].insurances[0].insuranceProviderName}}</p>
+                    <!-- <li>{{insurance.insuranceProviderName}}</li> -->
+                    <li>Patient ID: {{ orderDetails.customerResponse.customerMembers[0].insurances[0].insuranceProviderId}}</li>
+                    <li>PCN Number: {{orderDetails.customerResponse.customerMembers[0].insurances[0].pcnNo}}</li>
                     <li>Provider Contact: 9856321457</li>
-                    <li>BIN: 57934875</li>
+                    <li>Bin No: {{orderDetails.customerResponse.customerMembers[0].insurances[0].binNo}}</li>
                 </ul>
             </div>
             <div class="ui-g-5">
@@ -92,11 +115,17 @@
             </div>
         </div>
         <div class="delevery-address">
-            <h4 class="">Delevery Address <span class="pull-right"><i class="fa fa-print" aria-hidden="true"></i>
+            <h4 class="">Delivery Address <span class="pull-right"><i class="fa fa-print" aria-hidden="true"></i>
           </span></h4>
             <div class="clearfix"></div>
-            <p>Flat No: 354, Revenue Layout, Madhurawada, Visakhapatnam-500040, Andhra pradesh, INDIA.</p>
+            <!-- <p>Flat No: 354, Revenue Layout, Madhurawada, Visakhapatnam-500040, Andhra pradesh, INDIA.</p> -->
+            <!-- <div *ngIf = "orderDetails"> -->
+                    <div *ngIf = "orderDetails">
+         <p>{{orderDetails.customerResponse.customerAddresses[0].address}} {{orderDetails.customerResponse.customerAddresses[0].zipCode}}</p>           
+         </div>
+            
         </div>
     </div>
     <div class="clearfix"></div>
+</div>
 </div>

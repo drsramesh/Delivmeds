@@ -32,6 +32,9 @@ ul li {
     text-align: left;
 }
 
+.error-test {
+    display: inline-block;
+}
 .form-group {
     margin-bottom: 15px;
 }

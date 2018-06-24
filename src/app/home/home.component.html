@@ -1,4 +1,4 @@
-<p-table class="orders-table" #dt [columns]="cols" [value]="cars" [paginator]="false" [rows]="10">
+<p-table class="orders-table" #dt [columns]="cols" [value]="cars" [paginator]="true" [rows]="10">
     <ng-template pTemplate="caption">
         <h3 class="pull-left">All Orders</h3>
         <div class="pull-right order-filter">
@@ -8,14 +8,14 @@
             <p-dropdown class="drop-down order-dropdown" [options]="brands" [style]="{'width':'100%'}" (onChange)="sample($event)" optionLabel="name"></p-dropdown>
         </div>
         <div class="clearfix"></div>
-    </ng-template>
-    <ng-template pTemplate="header" let-columns>
+     </ng-template> 
+     <ng-template pTemplate="header"  let-columns>
         <tr>
             <!-- <th *ngFor="let col of columns" [pSortableColumn]="col.field">
                     {{col.header}}
                     <p-sortIcon [field]="col.field"></p-sortIcon>
                 </th> -->
-            <th>
+             <th>
                 Order ID
             </th>
             <th>
@@ -37,35 +37,31 @@
                 &nbsp;
             </th>
         </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr routerLink='/order-view'>
-            <!-- <td *ngFor="let col of columns" class="text-center">
-                    {{rowData[col.field]}}
-                </td> -->
-            <td>
-                {{rowData.id}}
+    </ng-template> 
+    <ng-template pTemplate="body"  let-i="index" let-car let-columns="columns">
+        <tr >
+            <td  (click)="viewDetail(car.id)">
+                {{car.id}}
             </td>
-            <td>
-                {{rowData.Prescription}}
+            <td routerLink='/order-view'>
+                {{car.customerResponse.id}}
             </td>
-            <td>
-                {{rowData.PatientName}}
-            </td>
-            <td>
-                {{rowData.OrderDate}}
-            </td>
-            <td>
-                {{rowData.status}}
-            </td>
-            <td>
-                <p class="pickup-time" *ngIf="rowData['status'] == 'wating for customer pick up'">{{rowData.time}}</p>
-            </td>
-            <td>
-                <p *ngIf="rowData['status'] == 'New'" class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></p>
-                <p *ngIf="rowData['status']  =='Waiting For Delivery'"><button pButton type="button" (click)="count()" label="Ready to Deliv" class="ui-button-secondary btn-secondary-green"></button></p>
-                <p *ngIf="rowData['status']  =='Waiting for customer pickup'"><button pButton type="button" (click)="count()" label="Delivered" class="ui-button-secondary btn-secondary-green"></button></p>
-            </td>
+            <td routerLink='/order-view'>
+                    {{car.customerResponse.firstName}}{{car.customerResponse.lastName}}
+                </td>
+                <td>
+                    {{car.lastModifiedOn}}
+                </td>
+                <td>
+                    {{car.status}}
+                </td>
+                <td> 
+                     &nbsp; 
+
+                </td>
+                <td> 
+                    &nbsp;
+                </td>
         </tr>
     </ng-template>
      <ng-template pTemplate="emptymessage" >No Data Found

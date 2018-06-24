@@ -1,14 +1,15 @@
-<div class="my-account">
+<p-growl [(value)]="msgs"></p-growl><div class="my-account">
+    
     <h3 class="panel-head">{{userInformation.pharmacyName }} <a class="pull-right" (click)=accountEdit()><i class="fa fa-pencil" aria-hidden="true"></i>
     </a>
         <div class="clearfix"></div>
     </h3>
     <div class="account-address border-btm">
-        <!-- <form action = "" [formGroup] = "signInForm" (ngSubmit) = "addUser(signInForm)"></form> -->
+        <!-- <form action = "" [formGroup] = "editForm" (ngSubmit) = "addUser(editForm)"></form> -->
         <p><span class="account-icons"><i class="fa fa-phone" aria-hidden="true"></i></span>{{userInformation.phoneNo}}</p>
         <p><span class="account-icons"><i class="fa fa-envelope" aria-hidden="true"></i></span>{{userInformation.email}}</p>
         <!-- <p><span class="account-icons"><i class="fa fa-clock-o" aria-hidden="true"></i></span>9:00 am to 10:00 pm</p> -->
-        <p><span class="account-icons"><i class="fa fa-map-marker" aria-hidden="true"></i></span>{{userInformation.address}}</p>
+        <p><span class="account-icons"><i class="fa fa-map-marker" aria-hidden="true"></i></span>{{userInformation.address}} {{userInformation.street}} {{userInformation.state}} {{userInformation.city}} </p>
         <button pButton type="submit" (click)="addUser()" label="Add User" class="btn-group-green mg-tp"></button>
         <div class="des-chips" >
             <span class="choose-chips" *ngFor = "let users of addNewUser; let i = index"> {{users}}
@@ -21,13 +22,13 @@
             <!-- <form action="" [formGroup] = "serviceForm"></form> -->
             <h3 for="first" class="first">Services offer</h3>
             <!-- <div class="multi-add" > -->
-                    <p-multiSelect [options]="servicesOffer" [(ngModel)]="selectedServices" defaultLabel="chooseServices" [maxSelectedLabels] = 0 [resetFilterOnHide] = true [displaySelectedLabel] = "false" ></p-multiSelect>
+                    <p-multiSelect [options]="servicesOffer" [(ngModel)]="selectedServices" defaultLabel="choose Services" [maxSelectedLabels] = 0 [resetFilterOnHide] = true [displaySelectedLabel] = "false" ></p-multiSelect>
                    
                 <!-- <input   id="serviceOffer" (click)="addServices()"class="" type="text" size="30" pInputText>  -->
                 <!-- <button pButton type="button"  icon="fa fa-plus" label="Add" class="ui-button-secondary"></button> -->
             <!-- </div> -->
             <div class="des-chips"  >
-                <span class="choose-chips" *ngFor = "let services of selectedServices; let i = index" > {{services}}
+                <span class="choose-chips" *ngFor = "let service of selectedServices; let i = index" > {{service.name}}
                    <a class="close-icon" (click)= "deleteService(i)"><i class="fa fa-times" aria-hidden="true"></i></a>
                   </span>
 
@@ -37,29 +38,29 @@
     <div class="ui-g">
     <div class="ui-g-3">
 
-    <p-calendar class="primary-timeings pull-left"  [(ngModel)] = value placeholder="From Time" #newPharmacy
+    <p-calendar class="primary-timeings pull-left"  placeholder="From Time" #newPharmacy
     (keyup.enter)="addPharmacy(newPharmacy.value)"
     (blur)="addPharmacy(newPharmacy.value); newPharmacy.value=''"
-    [showTime]="true" [timeOnly]="true" hourFormat="12"></p-calendar>  
+    [timeOnly]="true" hourFormat="24"></p-calendar>  
    
     <span class="pull-left time-to">To</span>
 
     <p-calendar class="primary-timeings text-right pull-left" placeholder="To Time" #newPharmacy1
     (keyup.enter)="addPharmacy(newPharmacy1.value)"
     (blur)="addPharmacy(newPharmacy1.value); newPharmacy1.value='' " 
-    [showTime]="true" [timeOnly]="true" hourFormat="12"></p-calendar>
+     [timeOnly]="true" hourFormat="24"></p-calendar>
     <div class="clearfix"></div>
     </div>
     <div class="ui-g-2">
-    <p-dropdown  class="drop-down week-dropdown"  [options]="weekdays" [(ngModel)]= "week"  (ngModelChange) = "onSelectType($event)" placeholder="Weekdays" optionLabel="name" [showClear]="true"></p-dropdown>
+    <p-dropdown  class="drop-down week-dropdown"  [options]="weekdays" [(ngModel)]= "week" (onChange)="onSelectType($event.value)"  placeholder="Weekdays" optionLabel="name" [showClear]="true"></p-dropdown>
     
-    
+    <input type="text" name="someData"  [(ngModel)]= "weekdata" style="display: none;"/>
 </div>
 
                 <!-- (click)= {{fromdate}} addPharmacy(newPharmacy.value, newPharmacy1.value)-->
               
                 <div class="ui-g-1">
-                    <button pButton type="button" icon="fa fa-plus"  label="Update" (click)="addPharmacy(newPharmacy.value, newPharmacy1.value)"  class="ui-button-secondary fill-width"></button>
+                    <button  pButton type="button" icon="fa fa-plus"  label="Update" (click)="addPharmacy(newPharmacy.value, newPharmacy1.value, newPharmacy2)"  class="ui-button-secondary fill-width"></button>
                 </div>
                 
             </div>
@@ -68,7 +69,7 @@
 
                 <span class="choose-chips" *ngFor = " let pharmacy of updatePharmacy; let i=index">
                         {{pharmacy}} 
-                         {{week ? week.name : ''}}  <a class="close-icon"><i class="fa fa-times" (click)= "deletePharmacyTimings(i)" aria-hidden="true"></i></a>
+                          <a class="close-icon"><i class="fa fa-times" (click)= "deletePharmacyTimings(i)" aria-hidden="true"></i></a>
                   </span>
             </div>
         </div>
@@ -77,22 +78,21 @@
         <div class="form-group text-left primary-block">
             <h3 class="first">About Pharmacy</h3>
             <div class="primary-block">
-                <textarea class="btn-full text-area" rows="5" cols="30" placeholder="Enter About Pharmacy" pInputTextarea></textarea>
+                <textarea class="btn-full text-area" rows="5" cols="30" placeholder="Enter About Pharmacy" pInputTextarea maxlength="250"></textarea>
             </div>
         </div>
     </div>
     <div class="delevery-type">
         <div class="form-group text-left primary-block">
             <h3 class="first">Delivery-type</h3>
-            <p-checkbox  class="notifi-check" name="group" value = "true" label="Customr Pickup" ></p-checkbox>
-            <p-checkbox class="notifi-check" name="groupname"  value = "false" label="Door Delevery"></p-checkbox>
+            <p-checkbox  class="notifi-check" [(ngModel)] = "checkboxvalue"  label="Customr Pickup" binary="false" ></p-checkbox>
+            <p-checkbox class="notifi-check"  [(ngModel)] = "checkboxvalue1" label="Door Delevery" binary="false"></p-checkbox>
         </div>
-        <div class="form-group"  >
                 
             <!-- <form action="" [formGroup] = "serviceForm"></form> -->
             <h3 for="first" class="first">Insurance Provider</h3>
             <!-- <div class="multi-add" > -->
-               <p-multiSelect  [options]="insuranceProviders" [(ngModel)]="selectedInsuranceProviders" defaultLabel="chooseProviders" [displaySelectedLabel] = "false"  [resetFilterOnHide] = true></p-multiSelect >
+               <p-multiSelect  [options]="insuranceProviders" [(ngModel)]="selectedInsuranceProviders" defaultLabel="choose Providers" [displaySelectedLabel] = "false"  [resetFilterOnHide] = true></p-multiSelect >
                 <!-- <button pButton type="button" (click)="addProviders()" icon="fa fa-plus" label="Add Provider" class="ui-button-secondary"></button> -->
             <!-- </div> -->
             <div class="des-chips"  >
@@ -128,7 +128,7 @@
     </div>
     <div class="form-group">
         <h3 class="first">Email</h3>
-        <input id="email" name="signinEmail" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  type="email" class="" size="30"  pInputText  formControlName="signinEmail" required> 
+        <input id="email"  name="signinEmail" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  type="email" class="" size="30"  pInputText  formControlName="signinEmail" required> 
 
         <span class="error" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('required', 'signinEmail')" style="color:red"> 
                 Email is required</span>
@@ -161,51 +161,60 @@
 
 <p-dialog header="" class="medication-list" [(visible)]="accouEdit" [modal]="true" [responsive]="true" [width]="768">
     <div class="ui-g">
-        <div class="form-group ui-g-6">
+            <form action = "" [formGroup] = "editForm">
+        <div class="form-group ui-g-6"> 
             <h3 class="first">Business Name(Trade Name)</h3>
-            <input id="businessname" type="text" size="30" pInputText  [(ngModel)]="editdetails.pharmacyName" name="pharmacyName" 
-            #pharmacyName = "ngModel" value = {{userInformation.pharmacyName}}>
+            <input  id="businessname" type="text" size="30" formControlName="businessName" pInputText  [value] ="userInformation.pharmacyName"  >
+            <!-- <span class="error" *ngIf=" !editForm.get('businessName').valid && editForm.get('businessName').touched && editForm.hasError('required', 'businessName')" style="color:red">  -->
+                    <!-- BusinessName is required</span> -->
         </div>
         <div class="form-group ui-g-6">
             <h3 class="first">Phone Number</h3>
             
-            <input id="phonenumber" type="text" size="30" pInputText  [(ngModel)]="editdetails.phoneNo" name="phoneNo" 
-            #phoneNo = "ngModel" value = {{userInformation.phoneNo}}  >
+            <input id="phonenumber" type="text" size="30"  formControlName="phoneNo1" pInputText   minLength="10" [value] = "userInformation.phoneNo"
+             >
+            <!-- <span class="error" *ngIf=" !editForm.get('phoneNo1').valid && editForm.get('phoneNo1').touched &&  editForm.hasError('required','phoneNo1')" style="color:red"> phonenumber is required</span> 
+            <span class="error" *ngIf=" !editForm.get('phoneNo1').valid && editForm.get('phoneNo1').touched &&  editForm.hasError('minLength')" style="color:red"> phonenumber  required 10 digits</span> -->
         </div>
         <div class="form-group ui-g-6">
             <h3 class="first">Email</h3>
-            <input id="emailid" type="text" size="30" pInputText  [(ngModel)]="editdetails.email" name="email" 
-            #email = "ngModel" value = {{userInformation.email}} >
+            <input  [readonly]="true" id="emailid" type="text" size="30" pInputText   [value] = "userInformation.email" >
         </div>
         <div class="form-group ui-g-6">
-            <h3 class="first">Address 1</h3>
-            <input id="address1" type="text" size="30" pInputText [(ngModel)]="editdetails.address" name="address" 
-            #address = "ngModel" value = {{userInformation.email}} >
+            <h3 class="first">Address</h3>
+            <input id="address1" type="text" size="30" formControlName="address" pInputText  name="address"  [value] = "userInformation.address"
+            >
+            <!-- <span class="error" *ngIf="editForm.get('address').touched  && editForm.hasError('required', 'address')" style="color:red"> Address is Required</span> -->
         </div>
         <div class="form-group ui-g-6">
                 <!-- type="text"  [(ngModel)]="editdetails.street" name="street"  -->
                 <!-- #street = "ngModel" pInputText value = {{userInformation.street}} -->
-            <h3 class="first">Address 2</h3>
-            <input id="address2" type="text" size="30" pInputText   [(ngModel)]="editdetails.street" name="street" 
-            #street = "ngModel" value = {{userInformation.street}}>
+            <h3 class="first">Street</h3>
+            <input id="address2" type="text" size="30" pInputText  formControlName="street"   name="street" [value] = "userInformation.street"
+            >
+            <!-- <span class="error" *ngIf="editForm.get('street').touched  && editForm.hasError('required', 'street')" style="color:red"> Street is Required</span> -->
         </div>
         <div class="form-group ui-g-6">
             <h3 class="first">Zip code</h3>
-            <input id="zipcode" type="text" size="30" pInputText [(ngModel)]="editdetails.zipcode" name="zipcode" 
-            #zipcode = "ngModel" value = {{userInformation.zipcode}} >
+            <input id="zipcode" type="tel" size="30" formControlName="zipcode"  (blur) = "zipcodeService()" minlength="3" maxlength="10" pInputText  name="zipcode" [value] = "userInformation.zipcode"
+            >
+            <!-- <span class="error" *ngIf=" !editForm.get('zipcode').valid && editForm.get('zipcode').touched && editForm.hasError('required', 'zipcode')" style="color:red">zipcode is required</span>
+            <span class="error" *ngIf=" !editForm.get('zipcode').valid && editForm.get('zipcode').touched && editForm.hasError('minLength', 'zipcode')" style="color:red">Please enter a valid 5 digit zip code</span> -->
         </div>
         <div class="form-group ui-g-6">
             <h3 class="first">City</h3>
-            <input id="city" type="text" size="30" pInputText >
+            <input id="city"  [readonly]="true" type="text"  formControlName="city" size="30" pInputText  [value] = "userInformation.city">
         </div>
         <div class="form-group ui-g-6">
             <h3 class="first">State</h3>
-            <!-- <input id="state" type="text" size="30" pInputText > -->
+            <input id="state"  [readonly]="true" type="text"   formControlName="state" size="30" pInputText  [value] = "userInformation.state">
         </div>
+    </form> 
     </div>
     <div class="pull-right">
-        <button type="button" class="btn-group-green" pButton (click)="editUserDetails()" label="ADD"></button>
+        <button type="button" class="btn-group-green" pButton (click)="editUserDetails(editForm)" label="ADD"></button>
         <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="accouEdit=false" label="Cancel"></button>
+   
     </div>
     <div class="clearfix"></div>
 </p-dialog>

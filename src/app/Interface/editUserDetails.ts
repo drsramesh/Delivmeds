@@ -7,8 +7,11 @@ export class editUserDetails {
     street: string;
     zipcode: string;
     city: string;
+    bio: string;
     pharmacyUsers: string[];
-    pharmacyServices: {};
+    services:string[];
     pharmacyBusinessHours: string[];
+    delivery:boolean;
+    pickup: boolean
     // pharmacyInsuranceProviders: string;
     }

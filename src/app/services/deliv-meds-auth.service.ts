@@ -27,7 +27,7 @@ export class DelivMedsAuthService {
 
  // sign in api call
  signIn(params) {
-  console.log(params);
+  //console.log(params);
   return this._http.post(environment.host + 'pharmacy/login', params);
 }
 
@@ -81,9 +81,11 @@ emailAvailability(params) {
 
 //for updateddetails
 updateDetails(profilepageObj) {
-  console.log(profilepageObj);   
- return this._http.post(environment.host + 'pharmacy/profile', profilepageObj);
+  // const header = {'authentication_token': localStorage.getItem('authentication_token')};
+  console.log(JSON.stringify(profilepageObj));   
+ return this._http.post(environment.host + 'pharmacy/profile',  profilepageObj);
 }
+
 
 // forgot password call
 forgotPassword(params) {

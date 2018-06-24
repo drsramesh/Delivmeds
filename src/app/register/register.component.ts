@@ -20,6 +20,7 @@ import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { PreloadService } from '../services/preload.service'
 import { DISABLED } from '@angular/forms/src/model';
+import { LoginComponent } from '../login/login.component';
 
 
 
@@ -34,9 +35,9 @@ export class RegisterComponent implements OnInit {
   msgs = [];
   loginFailed = false;
   zipCodeServices: any={};
-  //mask: any[] = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-  mask: any[] = [ /[1-9]/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-   countries: any [];
+  mask: any[] = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+ // mask: any[] = [ /[1-9]/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+   countries=[];
   filteredCountriesMultiple: any[];
   brands: string[] = ['Audi', 'BMW', 'Fiat', 'Ford', 'Honda', 'Jaguar', 'Mercedes', 'Renault', 'Volvo', 'VW'];
   // countries: string[] = ['India', 'United staes of America', 'U.S.A', 'Bangladesh'];
@@ -70,7 +71,7 @@ export class RegisterComponent implements OnInit {
       street: new FormControl(null, Validators.required),
       zipcode: new FormControl(null, Validators.required),
       city: new FormControl(null, Validators.required),
-//       inemail: ["", [
+//       inemail: ["", [   [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
 //         Validators.required],
 //       this.isEmailUnique.bind(this) // async Validator passed as 3rd parameter 
 //  ],
@@ -107,48 +108,79 @@ export class RegisterComponent implements OnInit {
 filterCountry(query, countries: any):any {
   //in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
   let filtered : any[] = [];
-  for(let i = 0; i < countries.length; i++) {
+  console.log(query);
+  
+  console.log(countries);
+  console.log(this.countries);
+  
+  
+  for(let i = 0; i < this.countries.length; i++) {
       let country = countries[i];
-      if(country.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+      if(country.zipcode.indexOf(query)) {
           filtered.push(country);
       }
   }
-  let country = countries;
-  console.log(countries);
-  
-  if(country.zipCode) {
-      filtered.push(country);
-      console.log(country);
   return filtered;
+  // let country = countries;
+  // console.log(countries);
+  
+  // if(country.zipCode) {
+  //     filtered.push(country);
+  //     console.log(country);
+  // return filtered;
  
   
 }
-}
+
 
   // zipcodeService(){
   //   console.log('zipcode service is pressed');
     
   // }
 
-
-zipcodeServicesForTest()
-{
-  
-  this.filteredCountries = [];
-  const header = {'authentication_token': localStorage.getItem('authentication_token')};
-    console.log(header);
-    console.log("auth" + localStorage.getItem ('authentication_token'));
+  zipcodeService() {
+    console.log(this.signInForm.value.zipcode);
     
-    this.http.get(environment.host + 'zipcodes/get_serviceable/501', { headers: header} ).subscribe(data =>
-    {
-      console.log(JSON.stringify(data));
-   this.zipCodeServices = data;
+    this.http.get(environment.host + 'zipcodes/get_serviceable/' + this.signInForm.value.zipcode ).subscribe((res: any) => {
+      console.log(res);
+      
+if(res.statusCode === 401) {
+  //alert('zipcode is not servicable')
+  this.signInForm.patchValue({city: "" ,state: ""});
+
+} else {
+  console.log(this.signInForm.value.zipcode);
+      console.log(JSON.stringify(res));
+   this.zipCodeServices = res;
   // this.zipcodeService.push
     console.log(this.zipCodeServices);
     this.signInForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
-  
-    });
 }
+
+    })
+  }
+
+
+// zipcodeServicesForTest()
+// {
+  
+//   this.filteredCountries = [];
+//   const header = {'authentication_token': localStorage.getItem('authentication_token')};
+//     console.log(header);
+//     console.log("auth" + localStorage.getItem ('authentication_token'));
+    
+//     this.http.get(environment.host + 'zipcodes/get_serviceable/' + this.signInForm.value.zipcode ).subscribe(data =>
+//     {
+//       console.log(this.signInForm.value.zipcode);
+//       console.log(JSON.stringify(data));
+     
+//    this.zipCodeServices = data;
+//   // this.zipcodeService.push
+//     console.log(this.zipCodeServices);
+//     this.signInForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
+  
+//     });
+// }
 
 //  filterCountries(event) {
 //    this.filteredCountries = [];
@@ -218,6 +250,8 @@ zipcodeServicesForTest()
         zipcode: signInForm.value.zipcode
         // city: signInForm.value.city
       };
+      console.log("called");
+      
        this.loader.open();
       this.auth.signUp(params).subscribe((res: any) => {
         console.log(res);
@@ -227,7 +261,7 @@ zipcodeServicesForTest()
         if (res.statusCode == 200) {
           console.log(res);
           this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully Registered.'});
-          alert("success");
+          //alert("success");
            this.loader.close();
           //  this.tokenService.storeTokens(
           //    res['authentication_token'],
@@ -241,22 +275,22 @@ zipcodeServicesForTest()
         } else if(res.statusCode != 200){
           this.msgs.push({severity: 'error', summary: 'Error', detail: 'already registered '});
           this.loginFailed = true;
-          this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
-          alert("failure");
+         // this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
+          //alert("failure");
          this.loader.close();
         }
         else {
           this.msgs.push({severity: 'error', summary: 'Error', detail: 'registration unsuccesfull'});
           this.loginFailed = true;
-          this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
-          alert("failure");
+          //this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
+          //alert("failure");
           this.loader.close();
         }
       }, (err) => {
         this.loader.close();
         this.msgs.push({severity: 'error', summary: 'Error', detail: 'server error'});
-         this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
-         alert("server error");
+         //this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
+        // alert("server error");
       }
       );
     } else {
