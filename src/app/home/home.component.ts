@@ -52,63 +52,6 @@ this.OrderList();
             { name: 'Completed Orders', value: 'Delivered' }
         ];
 
-//           {
-//             'id': '12345678',
-//             'Prescription': '#xyz 123456',
-//             'PatientName': 1987,
-//             'OrderDate': '5/20/2018 11:43',
-//             'status': 'New',
-//             'time': '3:00pm to 8:00pm'
-//         },
-//         {
-//           'id': '12345678',
-//           'Prescription': '#xyz 123456',
-//           'PatientName': 1987,
-//           'OrderDate': '5/20/2018 11:43',
-//           'status': 'Rejected',
-//           'time': '3:00pm to 8:00pm'
-//       },
-//       {
-//         'id': '12345678',
-//         'Prescription': '#xyz 123456',
-//         'PatientName': 1987,
-//         'OrderDate': '5/20/2018 11:43',
-//         'status': 'Waiting For Delivery',
-//         'time': '3:00pm to 8:00pm'
-//     },
-//     {
-//       'id': '12345678',
-//       'Prescription': '#xyz 123456',
-//       'PatientName': 1987,
-//       'OrderDate': '5/20/2018 11:43',
-//       'status': 'Awaiting for payment confirmation',
-//       'time': '3:00pm to 8:00pm'
-//   },
-//   {
-//     'id': '12345678',
-//     'Prescription': '#xyz 123456',
-//     'PatientName': 1987,
-//     'OrderDate': '5/20/2018 11:43',
-//     'status': 'Waiting for customer pickup',
-//     'time': '3:00pm to 8:00pm'
-// },
-// {
-//   'id': '12345678',
-//   'Prescription': '#xyz 123456',
-//   'PatientName': 1987,
-//   'OrderDate': '5/20/2018 11:43',
-//   'status': 'In Transit',
-//   'time': '3:00pm to 8:00pm'
-// },
-// {
-//   'id': '12345678',
-//   'Prescription': '#z 123456',
-//   'PatientName': 1987,
-//   'OrderDate': '5/20/2018 11:43',
-//   'status': 'Delivered',
-//   'time': '3:00pm to 8:00pm'
-// },
-        // ];
         this.filterableCars = [].concat(this.cars);
         this.cols = [
             { field: 'id', header: 'Order ID' },
@@ -130,7 +73,7 @@ this.OrderList();
         dt.filter(event.value, 'year', 'gt');
     }, 250);
 }
-
+pages :boolean
 OrderList() {
   const header = {'authentication_token': localStorage.getItem('authentication_token')};
   console.log(header);
@@ -144,6 +87,7 @@ OrderList() {
       } else {
             console.log(JSON.stringify(res));
          this.cars = res['object']['orders'];
+         this.pages = true
          
         // this.zipcodeService.push
           console.log(this.cars);
@@ -155,20 +99,6 @@ OrderList() {
 }
 
 
-//services
-
-// getAll()
-// {
-// return Observable.of(this.cars)
-// }
-// getOrder(id)
-// {
-// return this.getAll().map(data => {
-// for (let order of data['object']['orders']){
-//   let ord = order.
-// }
-// })
-// }
  viewDetail(id){
      console.log("button clicked");
      console.log(id);
@@ -180,25 +110,6 @@ OrderList() {
       this.router.navigate(['/order-view']);
       
      }
-         
-    //  this.http.get(environment.host + 'order/pharmacy/'+ id, { headers:header} ).subscribe((res: any) => {
-    //   console.log(res)
-    //   if(res.statusCode === 401) {
-    //     //alert('zipcode is not servicable')
-    //     this.msgs.push({severity: 'error', summary: 'Error', detail: 'No Orders Found '});
-    //     console.log('No orders Found');
-    //     } else {
-    //           console.log(JSON.stringify(res));
-    //        this.cars = res['object']['orders'];
-           
-    //       // this.zipcodeService.push
-    //         console.log(this.cars);
-    //       //  this.editForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
-   
-    //       }
-    // })
-     
-    
  }
 
 

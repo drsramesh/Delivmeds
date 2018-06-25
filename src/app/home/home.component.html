@@ -1,4 +1,5 @@
-<p-table class="orders-table" #dt [columns]="cols" [value]="cars" [paginator]="true" [rows]="10">
+<p-growl [(value)]="msgs"></p-growl>
+<p-table class="orders-table" #dt [columns]="cols" [value]="cars"  [rows]="10" [paginator] = "pages"  >
     <ng-template pTemplate="caption">
         <h3 class="pull-left">All Orders</h3>
         <div class="pull-right order-filter">
@@ -9,7 +10,7 @@
         </div>
         <div class="clearfix"></div>
      </ng-template> 
-     <ng-template pTemplate="header"  let-columns>
+     <ng-template pTemplate="header"  let-columns *ngIf="cars">
         <tr>
             <!-- <th *ngFor="let col of columns" [pSortableColumn]="col.field">
                     {{col.header}}
@@ -38,16 +39,24 @@
             </th>
         </tr>
     </ng-template> 
-    <ng-template pTemplate="body"  let-i="index" let-car let-columns="columns">
+    <ng-template pTemplate="body"  let-i="index" let-car let-columns="columns" >
         <tr >
-            <td  (click)="viewDetail(car.id)">
+            <td   (click)="viewDetail(car.id)">
                 {{car.id}}
             </td>
-            <td routerLink='/order-view'>
+            <td (click)="viewDetail(car.id)">
                 {{car.customerResponse.id}}
             </td>
-            <td routerLink='/order-view'>
+            <td (click)="viewDetail(car.id)" >
+                <div *ngIf = "car.customerResponse.customerMembers && car.customerResponse.customerMembers.length>0; else patientData">
+                        {{car.customerResponse.customerMembers[0].firstName}}{{car.customerResponse.customerMembers[0].lastName}}
+                </div>
+                <ng-template #patientData>
+                      <div>
                     {{car.customerResponse.firstName}}{{car.customerResponse.lastName}}
+                    </div>
+                </ng-template>
+              
                 </td>
                 <td>
                     {{car.lastModifiedOn}}
@@ -64,6 +73,7 @@
                 </td>
         </tr>
     </ng-template>
-     <ng-template pTemplate="emptymessage" >No Data Found
+     <ng-template pTemplate="emptymessage" *ngIf != "cars" >No Data Found
         </ng-template> 
+        
 </p-table>

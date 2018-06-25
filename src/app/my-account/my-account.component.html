@@ -22,7 +22,7 @@
             <!-- <form action="" [formGroup] = "serviceForm"></form> -->
             <h3 for="first" class="first">Services offer</h3>
             <!-- <div class="multi-add" > -->
-                    <p-multiSelect [options]="servicesOffer" [(ngModel)]="selectedServices" defaultLabel="choose Services" [maxSelectedLabels] = 0 [resetFilterOnHide] = true [displaySelectedLabel] = "false" ></p-multiSelect>
+                    <p-multiSelect [options]="servicesOffer" class="multi-dropdown" [(ngModel)]="selectedServices" defaultLabel="choose Services" [maxSelectedLabels] = 0 [resetFilterOnHide] = true [displaySelectedLabel] = "false" ></p-multiSelect>
                    
                 <!-- <input   id="serviceOffer" (click)="addServices()"class="" type="text" size="30" pInputText>  -->
                 <!-- <button pButton type="button"  icon="fa fa-plus" label="Add" class="ui-button-secondary"></button> -->
@@ -92,7 +92,7 @@
             <!-- <form action="" [formGroup] = "serviceForm"></form> -->
             <h3 for="first" class="first">Insurance Provider</h3>
             <!-- <div class="multi-add" > -->
-               <p-multiSelect  [options]="insuranceProviders" [(ngModel)]="selectedInsuranceProviders" defaultLabel="choose Providers" [displaySelectedLabel] = "false"  [resetFilterOnHide] = true></p-multiSelect >
+               <p-multiSelect  [options]="insuranceProviders" class="multi-dropdown" [(ngModel)]="selectedInsuranceProviders" defaultLabel="choose Providers" [displaySelectedLabel] = "false"  [resetFilterOnHide] = true></p-multiSelect >
                 <!-- <button pButton type="button" (click)="addProviders()" icon="fa fa-plus" label="Add Provider" class="ui-button-secondary"></button> -->
             <!-- </div> -->
             <div class="des-chips"  >

@@ -362,6 +362,9 @@ display: inline-block;
     border-right: 1px solid #e0e0e0;
     padding-top: 10px;
 }
+.header-logo .logo img{
+    cursor: pointer;
+}
 
 .main-header .header-logo h3 {
     font-size: 18px;
@@ -452,7 +455,13 @@ display: inline-block;
     margin-top: 5px;
     font-weight: 300;
 }
-
+.orders-table .ui-paginator .ui-paginator-page.ui-state-active{
+    background: #7bc466;
+    border-color: #7bc466;
+}
+.orders-table .ui-paginator .ui-paginator-page{
+    padding: 0 8px;
+}
 .orders-table .ui-widget-header .order-filter,
 .order-filter {
     text-align: right;
@@ -471,8 +480,8 @@ display: inline-block;
 
 .drop-down .ui-dropdown-panel .ui-dropdown-item.ui-state-highlight {
     background: #7bc466;
+   
 }
-
 .drop-down .ui-dropdown .ui-dropdown-trigger {
     border-left: none;
 }
@@ -521,23 +530,29 @@ display: inline-block;
     float: left;
     text-align: left;
 }
-
+.multi-dropdown .ui-multiselect-label,
 .drop-down .ui-dropdown-label {
     height: 34px;
     padding: 9px 0 9px 5px;
 }
+.multi-dropdown .ui-multiselect-trigger{
+    border-left: 0;
 
+}
+.multi-dropdown .ui-multiselect-label{
+    width: 300px;
+}
+.multi-dropdown .ui-multiselect-trigger .fa,
 .drop-down .ui-dropdown .ui-dropdown-trigger .fa {
     margin-top: 0.8em;
 }
-
+.multi-dropdown .ui-multiselect-panel .ui-multiselect-list,
 .drop-down .ui-dropdown-panel .ui-dropdown-list {
     padding: 0;
 }
-
 .drop-down .ui-dropdown-panel .ui-dropdown-item {
     border-radius: 0;
-    padding: 5px;
+    padding: 8px 15px;
 }
 
 .drop-down .ui-dropdown.ui-state-focus,
@@ -705,11 +720,41 @@ display: inline-block;
 }
 
 .medication-list .form-dos {
+    width: calc(16% - 10px);
+    margin-left: 10px;
+    float: left;
+}
+.medication-list .form-qty {
+    width: calc(15% - 10px);
+    margin-left: 10px;
+    float: left;
+}
+.medication-list .form-cost {
     width: calc(20% - 10px);
     margin-left: 10px;
     float: left;
 }
-
+.medication-list .order-cancel{
+    float: left;
+    font-size: 20px;
+    width: 35px;
+    height: 35px;
+    border: 1px solid #aca6a6;
+    text-align: center;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #aca6a6;
+    margin-left: 10px;
+    margin-top: 24px;
+    cursor: pointer;
+}
+.medication-list .order-cancel:hover{
+    color: #fff;
+    border: 1px solid #7bc466;
+    background: #7bc466;
+}
 .medication-list .dolor-icon {
     border: 1px solid #e0e0e0;
     height: 34px;
@@ -964,4 +1009,19 @@ display: inline-block;
 
 .my-account {
     padding-bottom: 25px;
+}
+
+/* for print */
+@media print
+{
+.noprint {display:none;}
+}
+
+@media screen
+{
+    /* .printpage{
+    background-color:#999999;position:relative;
+     border:solid 1px black;width:500px;height:500px;
+    } */
+    
 }

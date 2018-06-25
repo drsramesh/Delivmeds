@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit {
 ) { }
 
   ngOnInit() {
-   // this.RegisteredDetailsService();
+    this.RegisteredDetailsService();
     this.router.events.subscribe( (e) => {
      
       if(e instanceof NavigationEnd) {
