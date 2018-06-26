@@ -10,7 +10,8 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
 import { Http, HttpModule, Response, Headers, RequestOptions } from '@angular/http';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from  '../../environments/environment'
+import { environment } from  '../../environments/environment';
+import { PreloadService } from '../services/preload.service';
 
 
 interface SortEvent {
@@ -38,18 +39,19 @@ export class HomeComponent implements OnInit {
   yearTimeout: any;
 
   constructor(  private http: HttpClient,
-    private router: Router) { }
+    private router: Router,
+    private loader: PreloadService) { }
 
   ngOnInit() {
     // this.carService.getCarsMedium().then(cars => this.cars = cars);
 this.OrderList();
 
         this.brands = [
-            { name: 'All Orders', value: 'AllOrders' },
-            { name: 'New Orders', value: 'New' },
-            { name: 'Active Orders', value: 'Active' },
-            { name: 'Rejected Orders', value: 'Rejected' },
-            { name: 'Completed Orders', value: 'Delivered' }
+            { name: 'All Orders', value: '1' },
+            { name: 'New Orders', value: '0' },
+            { name: 'Active Orders', value: '1' },
+            { name: 'Rejected Orders', value: '0' },
+            { name: 'Completed Orders', value: '0' }
         ];
 
         this.filterableCars = [].concat(this.cars);
@@ -78,23 +80,33 @@ OrderList() {
   const header = {'authentication_token': localStorage.getItem('authentication_token')};
   console.log(header);
   console.log("auth" + localStorage.getItem ('authentication_token'));
+  this.loader.open();
   this.http.get(environment.host + 'order/pharmacy').subscribe((res: any) => {
     console.log(res)
     if(res.statusCode === 401) {
       //alert('zipcode is not servicable')
       this.msgs.push({severity: 'error', summary: 'Error', detail: 'No Orders Found '});
+      this.loader.close();
       console.log('No orders Found');
       } else {
             console.log(JSON.stringify(res));
          this.cars = res['object']['orders'];
          this.pages = true
+         this.loader.close();
+         
          
         // this.zipcodeService.push
           console.log(this.cars);
         //  this.editForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
  
         }
-  })
+  }, (err) => {
+    this.loader.close();
+    this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server Error'});
+    // this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
+  }
+
+);
   
 }
 
@@ -117,12 +129,12 @@ sample(event) {
   this.cars = [];
 
   switch (event.value.value) {
-    case "Active":
+    case "1":
        console.log(this.filterableCars.length);
       for(let i = 0;i < this.filterableCars.length;i++)
       {
         console.log(this.filterableCars[i].status)
-        if ((this.filterableCars[i].status !="Rejected") && (this.filterableCars[i].status !="Delivered")  && ((this.filterableCars[i].status !="New")))
+        if ((this.filterableCars[i].status !="0") && (this.filterableCars[i].status !="Delivered")  && ((this.filterableCars[i].status !="1")))
         {
           this.cars.push(this.filterableCars[i]);
         }
@@ -130,41 +142,41 @@ sample(event) {
       console.log(this.cars);
     break;
 
-    case "Rejected" :
+    case "0" :
    
     for(let i = 0;i < this.filterableCars.length;i++)
       {
         console.log(this.filterableCars[i].status)
-        if ((this.filterableCars[i].status =="Rejected") )
+        if ((this.filterableCars[i].status =="1") )
         {
           this.cars.push(this.filterableCars[i]);
         }
   }
   break;
 
-  case "Delivered" :
+  case "1" :
     for(let i = 0;i < this.filterableCars.length;i++)
       {
         console.log(this.filterableCars[i].status)
-        if ((this.filterableCars[i].status =="Delivered") )
+        if ((this.filterableCars[i].status =="0") )
         {
           this.cars.push(this.filterableCars[i]);
         }
   }
   break;
 
-  case "New" :
+  case "0" :
     for(let i = 0;i < this.filterableCars.length;i++)
       {
         console.log(this.filterableCars[i].status)
-        if ((this.filterableCars[i].status =="New") )
+        if ((this.filterableCars[i].status =="1") )
         {
           this.cars.push(this.filterableCars[i]);
         }
   }
   break;
 
-  case "AllOrders" :
+  case "1" :
     for(let i = 0;i < this.filterableCars.length;i++)
       {
         this.cars.push(this.filterableCars[i]);

@@ -45,28 +45,11 @@ submitted: boolean;
   ngOnInit() {
       console.log('login');
       this.user.destroyUser();
+      console.log(localStorage.getItem("authentication_token"));
+      // localStorage.clear();
+      // console.log(localStorage.getItem("authentication_token"));
     }
-//   signIn(signInForm) {
-//    if (signInForm.valid) {
-//     const params = {
-//             email: signInForm.value.signinEmail,
-//             password: signInForm.value.signinPassword,
-//           };
-//           console.log('login success');
-//           this.router.navigate(['/orders']);
-//          } else {
-//           this.setFormTouched(this.signInForm);
-//            console.log('login unsuccessfull');
-//          }
-// }
-//   // function for validate all form fields
-//    setFormTouched(form_obj: any) {
-//     Object.keys(form_obj.controls).forEach(field => {
-//       const control = form_obj.get(field);
-//       control.markAsTouched({ onlySelf: true });
-//     });
-//   }
-
+    
   // sign in functionality
    signIn(signInForm) {
      this.loading = true
@@ -80,9 +63,9 @@ submitted: boolean;
        this.loader.open();
       this.auth.signIn(params).subscribe((res: any) => {
         console.log(res);
-        console.log(res.statusCode == 200);
-        console.log(res.profileCompleted == false);
-        console.log( (res.statusCode == 200 ) && (res.profileCompleted == false));
+        // console.log(res.statusCode == 200);
+        // console.log(res.profileCompleted == false);
+        // console.log( (res.statusCode == 200 ) && (res.profileCompleted == false));
         
         console.log(res.profileCompleted)
         if (res.statusCode === 200  && res.profileCompleted === true) {
@@ -99,6 +82,8 @@ submitted: boolean;
           // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
         }
         else if(res.statusCode === 200  && res.profileCompleted === false) {
+          console.log('profile completed false');
+          
           //alert('faliure');
           this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
            this.loader.close();

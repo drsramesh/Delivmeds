@@ -49,6 +49,8 @@ export class TokenInterceptor implements HttpInterceptor {
 
     if (localStorage.getItem("authentication_token") !== null) {
       // this._tokenService.open()
+      console.log('T= valid');
+      
        headers = {
          setHeaders: {
            'authentication_token': localStorage.getItem("authentication_token"),

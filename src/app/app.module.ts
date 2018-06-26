@@ -55,8 +55,22 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthLoginGuardService } from './services/auth-login-guard.service';
 import {CheckboxModule} from 'primeng/checkbox';
 import {DialogModule} from 'primeng/dialog';
+import { MessagingService} from './messaging.service';
+ import { AngularFireAuthModule, AngularFireAuth }     from 'angularfire2/auth';
+
+ import { AngularFireDatabase, AngularFireDatabaseModule } from 'angularfire2/database';
+// import {AngularFireModule} from 'angularFire2';
 
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
+
+export const config = {
+  apiKey: "AIzaSyBPdrOSKvYG9KVXGO_sh42ojg-hfapvwPg",
+  authDomain: "delivmed-1528981249385.firebaseapp.com",
+  databaseURL: "https://delivmed-1528981249385.firebaseio.com",
+  projectId: "delivmed-1528981249385",
+  storageBucket: "",
+  messagingSenderId: "76947739447"
+};
 // import {Ng4SpinnerModule} from 'ng4-spinner';
 @NgModule({
   declarations: [
@@ -91,14 +105,19 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
     MultiSelectModule,
     HttpModule ,
     HttpClientModule,
+    AngularFireDatabaseModule,
+  // AngularFireAuthModule,
     ToastModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot(),
     BreadcrumbModule,
     LightboxModule,
         CheckboxModule,
     DialogModule,
+  //  AngularFireAuthModule,
     TooltipModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+ // AngularFireModule.initializeApp(config)
+  
     // Ng4SpinnerModule// add it to the imports
     
   ],
@@ -112,6 +131,7 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
     RegisterService,
     TokenInterceptor,
     PreloadService,
+    MessagingService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

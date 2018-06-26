@@ -1,19 +1,41 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { AUTH_PROVIDERS } from 'angular2-jwt';
+import { MessagingService } from '../messaging.service';
+// import { AngularFireDatabase } from 'angularfire2/database';
+// import { AngularFireAuth } from 'angularfire2/auth';
+// import { Observable } from 'rxjs/Observable';
+// import * as firebase from 'firebase/app';
+// import { AngularFireObject, AngularFireList } from 'angularfire2/database';
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.css']
 })
 export class NotificationsComponent implements OnInit {
+  // user: Observable<firebase.User>;
+  // items: AngularFireObject<any[]>;
+  msgVal: string = '';
+  message;
   brands: any[];
   notifications= [];
   trashNotifi: any[];
   filteredNotifications = [];
-  constructor(private router:Router) { }
+  constructor(private router:Router,
+    private msgService: MessagingService,
+    //public afAuth: AngularFireAuth, 
+    // public af: AngularFireDatabase
+  )
+     {
+      //  this.af.list('/messages', ref => {
+      //   let q = ref.limitToLast(25).orderByKey();
+      //   return q;
+      // });
+      // this.user = this.afAuth.authState;
+     }
 
   ngOnInit() {
+    
     this.brands = [
       { name: '--All--', value: 'AllOrders' },
       { name: 'New Orders', value: 'New' },
@@ -21,6 +43,9 @@ export class NotificationsComponent implements OnInit {
       { name: 'Rejected Orders', value: 'Rejected' },
       { name: 'Completed Orders', value: 'Delivered' }
   ];
+  //this.msgService.getPermission()
+  //this.msgService.receiveMessage()
+ // this.message = this.msgService.currentMessage
   this.notifications = [
     {
       "label":'Waiting for Delevery',

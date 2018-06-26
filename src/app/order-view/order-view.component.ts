@@ -87,11 +87,29 @@ addReason() {
 
 }
 
-print(){
-  console.log('print delivery address');
-  window.print();
- // var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+// print(){
+//   console.log('print delivery address');
+//   window.print();
+//  // var mywindow = window.open('', 'PRINT', 'height=400,width=600');
   
+// }
+
+print(): void {
+  let printContents, popupWin;
+  printContents = document.getElementById('print-section').innerHTML;
+  //popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+  popupWin = window.open('', '_blank', 'top=0,left=0,width=auto,height=100%,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no,margin = 0mm');
+  popupWin.document.open();
+  popupWin.document.write(`
+    <html>
+      <head>
+        <style>
+        </style>
+      </head>
+  <body onload="window.print();window.close()">${printContents}</body>
+    </html>`
+  );
+  popupWin.document.close();
 }
 
 showDialog() {
