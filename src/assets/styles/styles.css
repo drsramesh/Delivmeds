@@ -25,7 +25,7 @@ ul li {
 }
 
 .text-center {
-    text-align: center;
+    text-align: left;
 }
 
 .text-left {
@@ -38,6 +38,22 @@ ul li {
 
 .form-control {
     width: 100%;
+    position: relative;
+}
+
+.error {
+    color: #ff0000;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
+
+.ui-float-label input.ng-dirty.ng-invalid~label {
+    color: #ff0000;
+}
+
+.error-tooltip {
+    display: inline-block;
 }
 
 .form-type {
@@ -78,6 +94,12 @@ ul li {
     font-weight: 600;
     height: 50px;
     color: #fff !important;
+}
+
+.ui-button.btn-green:enabled:hover,
+.ui-button.btn-green:enabled:focus {
+    background: #7bc466;
+    border: none;
 }
 
 .ui-button.btn-group-green {
@@ -166,6 +188,39 @@ img {
     width: 100%;
 }
 
+p-autocomplete.auto-complete.ng-dirty.ng-invalid>.ui-autocomplete>.ui-inputtext {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    color: #222222;
+}
+
+.sign-pass .ui-float-label .ui-inputtext.auto-complete {
+    padding: 0;
+    display: inline-block;
+}
+
+.sign-pass .ui-float-label .ui-inputtext.auto-complete .ui-autocomplete.ui-widget.ui-autocomplete-multiple {
+    display: block;
+    text-align: left;
+}
+
+
+/* .sign-pass .ui-float-label .auto-complete .ui-inputtext.ui-autocomplete-multiple-container{
+    padding: 0;
+} */
+
+.auto-complete .ui-autocomplete {
+    width: 100%
+}
+
 
 /* loginpage----------------------- */
 
@@ -192,6 +247,7 @@ img {
     height: 62px;
     padding: 25px 15px 0;
     border-radius: 0;
+    font-size: 14px;
 }
 
 .sign-pass .ui-float-label label {
@@ -580,6 +636,10 @@ img {
 .bread-crumb .ui-breadcrumb ul li a.ui-state-active {
     background: #fff;
     border: none;
+}
+
+.order-viewer img {
+    height: 350px;
 }
 
 .order-view {

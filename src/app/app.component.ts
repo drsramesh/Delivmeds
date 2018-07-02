@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { Route } from '@angular/compiler/src/core';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+//   constructor( private router: Router) {
+//     this.router.events.pairwise().subscribe((event) => {
+// //console.log(event);
+//     });
+//   }
 }

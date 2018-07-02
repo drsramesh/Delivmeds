@@ -3,84 +3,134 @@
         <img src="assets/images/logo.png" alt="">
     </figure>
     <div class="sign-form">
-        <form action="">
+        <form [formGroup]="signInForm" (ngSubmit)="signIn(signInForm)">
             <div class="sign-pass">
                 <span class="ui-float-label form-control">
-                            <input id="float-input" type="text" size="30" pInputText> 
-                            <label for="float-input" class="">Business Name (Trade Name)</label>
-                        </span>
+                            <input id="username" type="text" size="30" pInputText formControlName= "username" required = "required"
+                            data-error="state is required.">
+                             <span class="error" *ngIf="signInForm.get('username').touched  && signInForm.hasError('required', 'username')" > businessname is Required</span>
+                <label for="float-input" class="">Business Name (Trade Name)</label>
+                </span>
+
                 <span class="ui-float-label form-control">
-                                <input id="float-input" type="text" size="30" pInputText> 
-                                <label for="float-input" class="">Phone Number</label>
-                            </span>
+                 <input id="phonenumber"  pattern="^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$" name="phonenumber"  type="tel" size="30" pInputText  formControlName= "phonenumber"      
+                  [textMask] = "{mask: mask}"> 
+                <span class="error" *ngIf=" !signInForm.get('phonenumber').valid && signInForm.get('phonenumber').touched &&  signInForm.hasError('required','phonenumber')" > phonenumber is required</span>
+                <span class="error" *ngIf=" !signInForm.get('phonenumber').valid && signInForm.get('phonenumber').touched &&  signInForm.hasError('pattern','phonenumber')"> phonenumber  required 10 digits</span>
+                <label for="float-input" class="">Phone Number</label>
+                </span>
+
                 <span class="ui-float-label form-control">
-                                    <input id="float-input" type="text" size="30" pInputText> 
-                                    <label for="float-input" class="">Email Address</label>
-                                </span>
+                                    <input id="email" name="signinEmail" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  type="email" class="" size="30"  pInputText  formControlName="signinEmail" required="required"
+                                    > 
+                    
+                                    <span class="error" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('required', 'signinEmail')" > 
+                                            Email is required</span>
+                <span class="error" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('isEmailUnique', 'signinEmail')"> 
+                                        This email has been registered already</span>
+                <span class="error" *ngIf=" signInForm.get('signinEmail').touched && signInForm.hasError('pattern', 'signinEmail')">Valid email is required</span>
+                <label for="float-input" class="">Email Address</label>
+                </span>
+
                 <span class="ui-float-label form-control">
-                            <input id="float-input" class="" type="password"  size="30" pPassword>
-                            <label for="float-input" class="">Password</label>
-                        </span>
-            </div>
-            <div class="form-group text-left primary-block">
-                <h3 class="first">Pharmacy Timings</h3>
-                <p-calendar class="primary-timeings pull-left" placeholder="From Time" [timeOnly]="true" hourFormat="12"></p-calendar> <span class="pull-left time-to">To</span>
-                <p-calendar class="primary-timeings text-right pull-right" placeholder="To Time" [timeOnly]="true" hourFormat="12"></p-calendar>
-                <div class="clearfix"></div>
-            </div>
-            <div class="sign-pass">
+                                    <input id="emailValidation" name="inemail" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  type="email" class="" size="30"  pInputText  formControlName="inemail" required="required"
+                                    > 
+                    
+                                    <span class="error" *ngIf=" !signInForm.get('inemail').valid && signInForm.get('inemail').touched && signInForm.hasError('required', 'inemail')" > 
+                                            Email is required</span>
+                <span class="error" *ngIf=" !signInForm.get('inemail').valid && signInForm.get('inemail').touched && signInForm.hasError('isEmailUnique', 'inemail')"> 
+                                        This email has been registered already</span>
+                <span class="error" *ngIf=" signInForm.get('inemail').touched && signInForm.hasError('pattern', 'inemail')">Valid email is required</span>
+                <label for="float-input" class="">Email Address with validations</label>
+                </span>
+
                 <span class="ui-float-label form-control">
-                                <input id="float-input" type="text" size="30" pInputText> 
-                                <label for="float-input" class="">Address 1</label>
-                            </span>
+                                        <input id="password" name="inPassword" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}" maxlength="8" type="password" class="" size="30"  pInputText  formControlName="inPassword" required="required"
+                                        > 
+                                        <span class="error" *ngIf=" !signInForm.get('inPassword').valid && signInForm.get('inPassword').touched && signInForm.hasError('required', 'inPassword')" > 
+                                                password is required</span>
+                <span class="error" *ngIf=" signInForm.get('inPassword').touched && signInForm.hasError('pattern', 'inPassword')">Password is invalid   
+                                        <p class="error-tooltip" pTooltip="Password must contain one lowercase, one uppercase, one special character 1 number and total 8 charcters" tooltipPosition="top">!</p>
+                                        </span>
+                <span class="error" *ngIf="signInForm.hasError('minlength')">Password must have 8 digits</span>
+                <label for="float-input" class="">Password</label>
+                </span>
                 <span class="ui-float-label form-control">
-                                    <input id="float-input" type="text" size="30" pInputText> 
-                                    <label for="float-input" class="">Address 2</label>
-                                </span>
+                                        <input id="address1" type="text" size="30"  [(ngModel)] = "createuser.address1" formControlName="address" pInputText required> 
+                                        <span class="error" *ngIf="signInForm.get('address').touched  && signInForm.hasError('required', 'address')" > Address is Required</span>
+                <label for="float-input" class="">Address 1</label>
+                </span>
                 <span class="ui-float-label form-control">
-                                        <input id="float-input" type="text" size="30" pInputText> 
-                                        <label for="float-input" class="">Zip Code</label>
-                                    </span>
+                                            <input id="address2" type="text" size="30" [(ngModel)] = "createuser.address2" formControlName="address1"  pInputText required
+                                            > 
+                                            <span class="error" *ngIf="signInForm.get('address1').touched  && signInForm.hasError('required', 'address1')" > Address is Required</span>
+                <label for="float-input" class="">Address 2</label>
+                </span>
                 <span class="ui-float-label form-control">
-                                <input id="float-input" class="" type="text"  size="30" pInputText>
-                                <label for="float-input" class="">City</label>
-                            </span>
+                                                <input id="zipcode" type="tel" pattern=\d{5}(-\d{4})? formControlName="zipcode"  minlength="5" maxlength="10" required pInputText> 
+                                                <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('required', 'zipcode')" >zipcode is required</span>
+                <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('minLength', 'zipcode')">Please enter a valid 5 digit zip code</span>
+                <!-- <span *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('maxlength', 'zipcode')" >zipcode must be 5 digits </span> -->
+                <!-- <" pattern (\d{5}([\-]\d{4})?)" span *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched && signInForm.hasError('maxlength')" >zipcode must be  is 6 characters</span> -->
+                <label for="float-input" class="">Zip Code</label>
+                </span>
+                <!-- <span class="ui-float-label form-control">
+                                        <input id="city" class="" type="text"  size="30"  formControlName="city" pInputText required >
+                                        <span class="error" *ngIf="signInForm.get('city').touched  && signInForm.hasError('required', 'city')" > City is Required</span>
+                                        <label for="float-input" class="">City</label>
+                                    </span> -->
+                <!-- <span class="ui-float-label form-control">
+                                            <input id="state" class="" type="text"  size="30"  formControlName="state" pInputText required>
+                                            <span *ngIf="signInForm.get('state').touched  && signInForm.hasError('required', 'state')" > State is Required</span>
+                                            <label for="float-input" class="">State</label>
+                                        </span>class="auto-complete"
+                                         -->
+                <!-- <span class="ui-float-label form-control">
+                                                <p-autoComplete class="auto-complete"  formControlName="city" [(ngModel)]="countries" [suggestions]="filteredCountriesMultiple" (completeMethod)="filterCountryMultiple($event)" pInputText
+                                                    [minLength]="1" placeholder="City" field="name" [multiple]="true" required>
+                                                    <span class="error" *ngIf="signInForm.get('state').touched  && signInForm.hasError('required', 'minlength')" > City is Required</span>
+                                                </p-autoComplete>
+                                            </span> -->
+
                 <span class="ui-float-label form-control">
-                                    <input id="float-input" class="" type="text"  size="30" pInputText>
-                                    <label for="float-input" class="">State</label>
-                                </span>
+
+                                                <p-autoComplete class="auto-complete"  formControlName="state" [suggestions]="filteredCountries" (completeMethod)="filterCountries($event)" 
+                                                    [minLength]="1" placeholder="State" field="name" required>
+                                                    <ng-template  class="auto-complete" let-country pTemplate="item"><!-- <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5"> </div> -->
+                                                            <div>{{country}}</div>
+                                                        </ng-template>
+                                                </p-autoComplete>
+                                                <span *ngIf="!signInForm.get('state').valid && signInForm.get('state').touched" >
+                                                    <span class="error" *ngIf="signInForm.hasError('required', 'state')">State is required</span>
+                </span>
+                </span>
+
+
+                <span class="ui-float-label form-control">
+
+                                                    <p-autoComplete class="auto-complete" inputId="float-input"  formControlName="city" [suggestions]="filteredCountries" (completeMethod)="filterCountries($event)" 
+                                                        [minLength]="1"  field="name" required>
+                                                        <ng-template  class="auto-complete" let-country pTemplate="item"><!-- <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5"> </div> -->
+                                                                <div>{{country}}</div>
+                                                            </ng-template>
+                                                    </p-autoComplete>
+                                                    <label for="float-input">City</label>
+                                                    <span *ngIf="!signInForm.get('city').valid && signInForm.get('city').touched" >
+                                                        <span class="error" *ngIf="signInForm.hasError('required', 'city')">City is required</span>
+                </span>
+                </span>
+
+                <!-- <span class="ui-float-label form-control">
+                                            <p-autoComplete class="auto-complete"  formControlName="state" [(ngModel)]="countries" [suggestions]="filteredCountriesMultiple" (completeMethod)="filterCountryMultiple($event)" pInputText
+                                                [minLength]="1" placeholder="State" field="name" [multiple]="true" required>
+                                                <span class="error" *ngIf="signInForm.get('state').touched  && signInForm.hasError('required', 'minlength')" > City is Required</span>
+                                            </p-autoComplete>
+                                        </span> -->
+
             </div>
-            <div class="primary-block">
-                <textarea class="btn-full text-area" rows="5" cols="30" placeholder="Enter About Pharmacy" pInputTextarea></textarea>
-            </div>
-            <!-- <div class="form-group">
-                <h3 class="first">Business name(Trade Name)</h3>
-                <input id="input" class="form-control form-type" type="text" size="30" placeholder="Business name(Trade Name)" pInputText>
-            </div>
-            <div class="form-group">
-                <h3 class="first">Phone Number</h3>
-                <input id="input" class="form-control form-type" type="text" placeholder="Phone Number" size="30" pInputText>
-            </div>
-            <div class="form-group">
-                <h3 class="first">Email Address</h3>
-                <input id="input" class="form-control form-type" type="text" placeholder="Email Address" size="30" pInputText>
-            </div>
-            <div class="form-group">
-                <h3 class="first">Password</h3>
-                <input id="input" class="form-control form-type" type="text" placeholder="Password" size="30" pInputText>
-            </div>
-            <div class="form-group text-left primary-block">
-                <h3 class="first">Pharmacy Timings</h3>
-                <p-calendar class="primary-timeings pull-left" [timeOnly]="true" hourFormat="12"></p-calendar> <span class="pull-left time-to">To</span>
-                <p-calendar class="primary-timeings text-right pull-right" [timeOnly]="true" hourFormat="12"></p-calendar>
-                <div class="clearfix"></div>
-            </div>
-            <div class="form-group text-left primary-block">
-                <h3 class="first">Bio</h3>
-                <textarea class="btn-full text-area" rows="5" cols="30" pInputTextarea></textarea>
-            </div> -->
+
             <p class="login-btn">
-                <button pButton type="button" class="btn-full form-type btn-green" label="Register"></button>
+                <button pButton type="submit" class="btn-full form-type btn-green" label="Register"></button>
             </p>
         </form>
         <p class="sign-up-account">Already have an account?<a routerLink="/login">LOGIN</a></p>

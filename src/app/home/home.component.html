@@ -1,4 +1,4 @@
-<p-table class="orders-table" #dt [columns]="cols" [value]="cars">
+<p-table class="orders-table" #dt [columns]="cols" [value]="cars" [paginator]="false" [rows]="10">
     <ng-template pTemplate="caption">
         <h3 class="pull-left">All Orders</h3>
         <div class="pull-right order-filter">
@@ -68,7 +68,6 @@
             </td>
         </tr>
     </ng-template>
-    <!-- <ng-template pTemplate="body" let-rowData let-columns="columns" [hidden]="rowData.field == 'null'">
-            <p>No Orders</p>
-        </ng-template> -->
+    <ng-template pTemplate="emptymessage">No Data Found
+    </ng-template>
 </p-table>
