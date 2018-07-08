@@ -21,6 +21,7 @@ import { UserService } from '../services/user.service';
 import { PreloadService } from '../services/preload.service'
 import { DISABLED } from '@angular/forms/src/model';
 import { LoginComponent } from '../login/login.component';
+import { AUTH_PROVIDERS } from 'angular2-jwt';
 
 
 
@@ -31,13 +32,15 @@ import { LoginComponent } from '../login/login.component';
 })
 export class RegisterComponent implements OnInit {
   signInForm: FormGroup;
+  filteredCountriesSingle: any=[];
   createuser: any = {};
   msgs = [];
   loginFailed = false;
   zipCodeServices: any={};
   mask: any[] = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
  // mask: any[] = [ /[1-9]/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-   countries=[];
+   countries:  any[];
+   
   filteredCountriesMultiple: any[];
   brands: string[] = ['Audi', 'BMW', 'Fiat', 'Ford', 'Honda', 'Jaguar', 'Mercedes', 'Renault', 'Volvo', 'VW'];
   // countries: string[] = ['India', 'United staes of America', 'U.S.A', 'Bangladesh'];
@@ -46,9 +49,11 @@ export class RegisterComponent implements OnInit {
   filteredCountries: any[];
 
   brand: string;
-  country: string;
+  //country: string;
   is_edit: boolean = false;
 
+  //autocomplete
+  country: any[]
 
   constructor(
     private fb: FormBuilder,
@@ -69,6 +74,7 @@ export class RegisterComponent implements OnInit {
       password: new FormControl(null, Validators.required),
       address: new FormControl(null, Validators.required),
       street: new FormControl(null, Validators.required),
+      // dea: new FormControl(null, Validators.required),
       zipcode: new FormControl(null, Validators.required),
       city: new FormControl(null, Validators.required),
 //       inemail: ["", [   [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
@@ -95,53 +101,56 @@ export class RegisterComponent implements OnInit {
   // }
 
   ngOnInit() {
-   console.log('login');
-   //this.zipcodeServicesForTest();
+  // console.log('login');
   }
 
-  filterCountryMultiple(event) {
-    let query = event.query;
-    this.StateService.getCountries().then(countries => {
-        this.filteredCountriesMultiple = this.filterCountry(query, countries);
-    });
-}
-filterCountry(query, countries: any):any {
-  //in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
-  let filtered : any[] = [];
-  console.log(query);
-  
-  console.log(countries);
-  console.log(this.countries);
-  
-  
-  for(let i = 0; i < this.countries.length; i++) {
-      let country = countries[i];
-      if(country.zipcode.indexOf(query)) {
-          filtered.push(country);
-      }
-  }
-  return filtered;
-  // let country = countries;
-  // console.log(countries);
-  
-  // if(country.zipCode) {
-  //     filtered.push(country);
-  //     console.log(country);
-  // return filtered;
- 
-  
+  filterCountrySingle(event) {
+    console.log(event);
+    // let query = event.query;
+    // this.StateService.getCountries().then(country => {
+    //     this.filteredCountriesSingle = this.filterCountry(query, country);
+    // });
+     let query = event.query;
+    //  this.filteredCountriesSingle = [{name:undefined,code:undefined}];
+    // http://35.153.176.128/zipcodes/serviceable/5
+     this.http.get(environment.host + 'zipcodes/serviceable/' + this.signInForm.value.zipcode ).subscribe(country => {
+       if(country['statusCode']==401){
+        this.filteredCountriesSingle=[];
+        this.msgs.push({severity: 'error', summary: 'Error', detail: 'Zipcode not available '})
+       }else{
+        this.filteredCountriesSingle=[]
+        country['object'].forEach(country=>{
+          this.filteredCountriesSingle.push({name:country,code:country})
+          
+        })
+       }
+     
+     
+     })
 }
 
+// filterCountry(query, countries: any):any {
+//   console.log(query);
+//   console.log(countries);
+  
+  
+//   //in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
+//   let filtered : any[] = [];
+//   for(let i = 0; i < countries.length; i++) {
+//       let country = countries[i];
+//       if(country.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+//           filtered.push(country);
+//       }
+//   }
+//   return filtered;
+// }
 
-  // zipcodeService(){
-  //   console.log('zipcode service is pressed');
-    
-  // }
 
-  zipcodeService() {
-    console.log(this.signInForm.value.zipcode);
+  zipcodeService(event) {
+    console.log(event)
+    console.log(this.signInForm.value.zipcode.code);
     
-    this.http.get(environment.host + 'zipcodes/get_serviceable/' + this.signInForm.value.zipcode ).subscribe((res: any) => {
+    this.http.get(environment.host + 'zipcodes/get_serviceable/' + this.signInForm.value.zipcode.code ).subscribe((res: any) => {
       console.log(res);
       
 if(res.statusCode === 401) {
@@ -159,80 +168,7 @@ if(res.statusCode === 401) {
 
     })
   }
-
-
-// zipcodeServicesForTest()
-// {
   
-//   this.filteredCountries = [];
-//   const header = {'authentication_token': localStorage.getItem('authentication_token')};
-//     console.log(header);
-//     console.log("auth" + localStorage.getItem ('authentication_token'));
-    
-//     this.http.get(environment.host + 'zipcodes/get_serviceable/' + this.signInForm.value.zipcode ).subscribe(data =>
-//     {
-//       console.log(this.signInForm.value.zipcode);
-//       console.log(JSON.stringify(data));
-     
-//    this.zipCodeServices = data;
-//   // this.zipcodeService.push
-//     console.log(this.zipCodeServices);
-//     this.signInForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
-  
-//     });
-// }
-
-//  filterCountries(event) {
-//    this.filteredCountries = [];
-//   let query = event.query
-//   const header = {'authentication_token': localStorage.getItem('authentication_token')};
-//     console.log(header);
-//     console.log("auth" + localStorage.getItem ('authentication_token'));
-    
-//     this.http.get(environment.host + 'zipcodes/get_serviceable/501', { headers: header} ).subscribe(data =>
-//     {
-//       console.log(JSON.stringify(data));
-//    this.zipCodeServices = data;
-//    this.filteredCountries = this.filterCountries(query,data)
-//   // this.zipcodeService.push
-//     console.log(this.zipCodeServices);
-  
-//     });
-//   this.http.get()
-//   for (let i = 0; i < this.countries.length; i++) {
-//     const country = this.countries[i];
-//     if (country.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
-//         this.filteredCountries.push(country);
-//     }
-// }
-
-
-// signIn(signInForm) {
-//   console.log('register');
-
-//   if (signInForm.valid) {
-//    const params = {
-//            username: signInForm.value.username,
-//            phonenumber: signInForm.value.phonenumber,
-//            email: signInForm.value.signinEmail,
-//            password: signInForm.value.inPassword,
-//            address: signInForm.value.address,
-//            address1: signInForm.value.address1,
-//            zipcode: signInForm.value.zipcode,
-//            city: signInForm.value.city
-//           //  state: signInForm.value.state
-
-//          };
-//          console.log('Registration  successfull');
-//          // this._router.navigate(['/orders']);
-//         } else {
-//          this.setFormTouched(this.signInForm);
-//           console.log('Registration unsuccessfull');
-//         }
-//       }
-// // function for validate all form fields
-
-    
     
 // sign in functionality
    signUp(signInForm) {
@@ -247,8 +183,9 @@ if(res.statusCode === 401) {
         password: signInForm.value.password,
         address: signInForm.value.address,
         street: signInForm.value.street,
-        zipcode: signInForm.value.zipcode
-        // city: signInForm.value.city
+        zipcode: signInForm.value.zipcode.code,
+         city: signInForm.value.city
+        // dea: signInForm.value.eda
       };
       console.log("called");
       

@@ -53,9 +53,9 @@ export class TokenInterceptor implements HttpInterceptor {
       
        headers = {
          setHeaders: {
+           
            'authentication_token': localStorage.getItem("authentication_token"),
-           'Content-Type': 'application/json; charset=UTF-8' ,
-          "Access-Control-Allow-Origin" : '*'
+           'Content-Type': 'application/json; charset=UTF-8' 
 
         
          }

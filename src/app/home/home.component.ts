@@ -12,6 +12,8 @@ import { Http, HttpModule, Response, Headers, RequestOptions } from '@angular/ht
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from  '../../environments/environment';
 import { PreloadService } from '../services/preload.service';
+import { DelivMedsAuthService } from '../services/deliv-meds-auth.service';
+import { Logs } from 'selenium-webdriver';
 
 
 interface SortEvent {
@@ -40,21 +42,21 @@ export class HomeComponent implements OnInit {
 
   constructor(  private http: HttpClient,
     private router: Router,
-    private loader: PreloadService) { }
+    private loader: PreloadService,
+    private auth: DelivMedsAuthService) { }
 
   ngOnInit() {
     // this.carService.getCarsMedium().then(cars => this.cars = cars);
 this.OrderList();
 
         this.brands = [
-            { name: 'All Orders', value: '1' },
-            { name: 'New Orders', value: '0' },
-            { name: 'Active Orders', value: '1' },
-            { name: 'Rejected Orders', value: '0' },
-            { name: 'Completed Orders', value: '0' }
+            { name: 'All Orders', value: 'AllOrders' },
+            { name: 'New Orders', value: 1 },
+            { name: 'Active Orders', value: 2 },
+            { name: 'Rejected Orders', value: 3 },
+            { name: 'Completed Orders', value: 4 }
         ];
 
-        this.filterableCars = [].concat(this.cars);
         this.cols = [
             { field: 'id', header: 'Order ID' },
             { field: 'Prescription', header: 'Prescription ID' },
@@ -91,9 +93,10 @@ OrderList() {
       } else {
             console.log(JSON.stringify(res));
          this.cars = res['object']['orders'];
+         this.filterableCars = res['object']['orders'];
          this.pages = true
          this.loader.close();
-         
+         console.log(this.cars)
          
         // this.zipcodeService.push
           console.log(this.cars);
@@ -111,6 +114,7 @@ OrderList() {
 }
 
 
+
  viewDetail(id){
      console.log("button clicked");
      console.log(id);
@@ -124,67 +128,106 @@ OrderList() {
      }
  }
 
+ Delivered(id){
+   let params = {
+
+    orderId:id,
+    //orderId: localStorage.getItem('orderId'),
+    //status for ready for pickup
+     status: 7
+   }
+  this.auth.statusOrder(params).subscribe((res:any) => {
+    console.log(params);
+    console.log(res);
+  });  
+  window.location.reload();  
+ }
+ ReadyForPickup(id){
+   console.log(id);
+   let params = {
+    orderId:id,
+    //status for ready for pickup
+     status: 6
+   }
+  this.auth.statusOrder(params).subscribe((res:any) => {
+    console.log(params);
+    console.log(res);
+  
+    // this.router.navigate(['/orders']);
+  });
+  window.location.reload();  
+ }
+
 
 sample(event) {
-  this.cars = [];
 
+
+  this.filterableCars = [];
+  console.log(event.value.value);
+  
+ 
   switch (event.value.value) {
-    case "1":
-       console.log(this.filterableCars.length);
-      for(let i = 0;i < this.filterableCars.length;i++)
+    
+
+    case "AllOrders":
+     
+      for(let i = 0;i < this.cars.length;i++)
+      
       {
-        console.log(this.filterableCars[i].status)
-        if ((this.filterableCars[i].status !="0") && (this.filterableCars[i].status !="Delivered")  && ((this.filterableCars[i].status !="1")))
+      
+        if ((this.cars[i].status !=3)  && ((this.cars[i].status !=4)))
         {
-          this.cars.push(this.filterableCars[i]);
+          this.filterableCars.push(this.cars[i]);
         }
       }
       console.log(this.cars);
     break;
 
-    case "0" :
+    case 1 :
+   console.log(this.filterableCars.length);
    
-    for(let i = 0;i < this.filterableCars.length;i++)
+    for(let i = 0;i < this.cars.length;i++)
       {
-        console.log(this.filterableCars[i].status)
-        if ((this.filterableCars[i].status =="1") )
+     
+        if (this.cars[i].status ==1)
         {
-          this.cars.push(this.filterableCars[i]);
+          this.filterableCars.push(this.cars[i]);
         }
   }
   break;
 
-  case "1" :
-    for(let i = 0;i < this.filterableCars.length;i++)
+  case 2 :
+    for(let i = 0;i < this.cars.length;i++)
       {
-        console.log(this.filterableCars[i].status)
-        if ((this.filterableCars[i].status =="0") )
+        if ((this.cars[i].status ==2 ||  this.cars[i].status ==5 || this.cars[i].status ==6) )
         {
-          this.cars.push(this.filterableCars[i]);
+          this.filterableCars.push(this.cars[i]);
+          
+          
         }
   }
   break;
 
-  case "0" :
-    for(let i = 0;i < this.filterableCars.length;i++)
+  case 3 :
+    for(let i = 0;i < this.cars.length;i++)
       {
-        console.log(this.filterableCars[i].status)
-        if ((this.filterableCars[i].status =="1") )
+        if ((this.cars[i].status ==3) || (this.cars[i].status ==4) )
         {
-          this.cars.push(this.filterableCars[i]);
+          this.filterableCars.push(this.cars[i]);
         }
   }
   break;
 
-  case "1" :
-    for(let i = 0;i < this.filterableCars.length;i++)
+  case 4 :
+    for(let i = 0;i < this.cars.length;i++)
       {
-        this.cars.push(this.filterableCars[i]);
+        if (this.cars[i].status ==7){
+        this.filterableCars.push(this.cars[i]);
+        }
     }
     break;
   }
 
-  console.log(event.value.value);
 }
 customSort(event: SortEvent) {
   event.data.sort((data1, data2) => {

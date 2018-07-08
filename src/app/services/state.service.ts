@@ -14,12 +14,12 @@ export class StateService {
     // console.log(header);
     // console.log("auth" + localStorage.getItem ('authentication_token'));
    
-    return this.http. get(environment.host + 'zipcodes/get_serviceable/501' )
+    return this.http. get(environment.host + 'zipcodes/serviceable/' )
                 .toPromise()
                 .then(res => <any[]> res.json().data)
-                
                 .then(data => {console.log(data);
                 });
 }
+
 
 }

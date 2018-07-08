@@ -1,5 +1,5 @@
 <p-growl [(value)]="msgs"></p-growl>
-<p-table class="orders-table" #dt [columns]="cols" [value]="cars"  [rows]="10" [paginator] = "pages"  >
+<p-table class="orders-table" #dt [columns]="cols" [value]="filterableCars" [rows]="10" [paginator]="pages">
     <ng-template pTemplate="caption">
         <h3 class="pull-left">All Orders</h3>
         <div class="pull-right order-filter">
@@ -9,71 +9,110 @@
             <p-dropdown class="drop-down order-dropdown" [options]="brands" [style]="{'width':'100%'}" (onChange)="sample($event)" optionLabel="name"></p-dropdown>
         </div>
         <div class="clearfix"></div>
-     </ng-template> 
-     <ng-template pTemplate="header"  let-columns *ngIf="cars">
+    </ng-template>
+    <ng-template pTemplate="header" let-columns *ngIf="cars">
         <tr>
             <!-- <th *ngFor="let col of columns" [pSortableColumn]="col.field">
-                    {{col.header}}
-                    <p-sortIcon [field]="col.field"></p-sortIcon>
-                </th> -->
-             <th>
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th> -->
+            <th style="width: 130px">
                 Order ID
             </th>
-            <th>
+            <th style="width: 160px">
                 Prescription ID
             </th>
-            <th>
+            <th style="width: 200px">
                 Patient Name
             </th>
-            <th>
+            <th style="width: 200px">
                 Order Date
             </th>
             <th>
                 Status
             </th>
-            <th>
+            <th style="width:250px">
                 &nbsp;
             </th>
             <th>
                 &nbsp;
             </th>
-        </tr>
-    </ng-template> 
-    <ng-template pTemplate="body"  let-i="index" let-car let-columns="columns" >
-        <tr >
-            <td   (click)="viewDetail(car.id)">
-                {{car.id}}
-            </td>
-            <td (click)="viewDetail(car.id)">
-                {{car.customerResponse.id}}
-            </td>
-            <td (click)="viewDetail(car.id)" >
-                <div *ngIf = "car.customerResponse.customerMembers && car.customerResponse.customerMembers.length>0; else patientData">
-                        {{car.customerResponse.customerMembers[0].firstName}}{{car.customerResponse.customerMembers[0].lastName}}
-                </div>
-                <ng-template #patientData>
-                      <div>
-                    {{car.customerResponse.firstName}}{{car.customerResponse.lastName}}
-                    </div>
-                </ng-template>
-              
-                </td>
-                <td>
-                    {{car.lastModifiedOn}}
-                </td>
-                <td>
-                    {{car.status}}
-                </td>
-                <td> 
-                     &nbsp; 
-
-                </td>
-                <td> 
-                    &nbsp;
-                </td>
         </tr>
     </ng-template>
-     <ng-template pTemplate="emptymessage" *ngIf != "cars" >No Data Found
-        </ng-template> 
-        
+    <ng-template pTemplate="body" let-i="index" let-car let-columns="columns">
+        <tr>
+            <td style="width: 130px" (click)="viewDetail(car.id)">
+                {{car.id}}
+            </td>
+            <td style="width: 160px" (click)="viewDetail(car.id)">
+                {{car.customerResponse.id}}
+            </td>
+            <td style="width: 200px" (click)="viewDetail(car.id)">
+                <div *ngIf="car.customerResponse.customerMembers && car.customerResponse.customerMembers.length>0; else patientData">
+                    {{car.customerResponse.customerMembers[0].firstName}}{{car.customerResponse.customerMembers[0].lastName}}
+                </div>
+                <ng-template #patientData>
+                    <div>
+                        {{car.customerResponse.firstName}}{{car.customerResponse.lastName}}
+                    </div>
+                </ng-template>
+
+            </td>
+            <td style="width: 200px">
+                {{car.lastModifiedOn}}
+            </td>
+            <td>
+
+                <!-- <button pButton type="button" label="New"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+                <label *ngIf="car.status == 1"> New</label>
+
+
+                <!-- <button pButton type="button"  label="Waiting For customer"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+                <label *ngIf="car.status == 2"> Waiting For customer Response</label>
+
+
+
+                <!-- <button  pButton type="button"   label="Rejected"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+                <label *ngIf="car.status == 3"> Rejected by pharmacy</label>
+
+
+                <!-- <button  pButton type="button"   label="Rejected by customer"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+                <label *ngIf="car.status == 4"> Rejected by customer</label>
+                <label *ngIf="car.status == 5">Waiting For payment</label>
+                <!-- <button  pButton type="button"   label="Ready For pickup"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+
+
+
+
+                <label *ngIf="car.status == 6 && car.deliveryType==1"> Waiting for customer</label>
+                <!-- <button  pButton type="buttond   label="Deliverd"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+
+
+                <label *ngIf="car.status == 6  && car.deliveryType==2"> Waiting for deliv Driver</label>
+                <label *ngIf="car.status == 7">Delivered</label>
+            </td>
+            <td>
+                <div *ngIf="car.status == 5 ">
+                    <button pButton type="button" (click)="ReadyForPickup(car.id)" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
+                </div>
+                <div>
+                    <div *ngIf="car.status == 6 && car.deliveryType==1 ">
+                        <button pButton type="button" (click)="Delivered(car.id)" label="Delivered" class="ui-button-secondary btn-secondary-green pull-right"></button>
+                    </div>
+                    <div *ngIf="car.status == 6 && car.deliveryType==2 ">
+                        <!-- <button  pButton type="button" (click)= "Delivered(car.id)"  label="Delivered"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+                    </div>
+                </div>
+
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage" *ngIf="filterableCars.length == 0">No Orders Found
+    </ng-template>
+
+
 </p-table>

@@ -31,6 +31,14 @@ export class DelivMedsAuthService {
   return this._http.post(environment.host + 'pharmacy/login', params);
 }
 
+statusOrder(params){
+  return this._http.post(environment.host + 'order/pharmacy/status', params);
+}
+
+totalOrderPrice(params){
+  return this._http.post(environment.host + 'order/pharmacy', params);
+}
+
  // update token call checking for auth token if not will send refresh token
  updateRefreshToken() {
   const params = this._tokenService.getTokens();
@@ -75,8 +83,9 @@ emailAvailability(params) {
 }
  // Signup method
  signUp(params) {
+  const header = {'authentication_token': localStorage.getItem ('authentication_token')};
    console.log(params);   
-  return this._http.post(environment.host + 'pharmacy/register', params);
+  return this._http.post(environment.host + 'pharmacy/register' ,params);
 }
 
 //for updateddetails
@@ -84,6 +93,12 @@ updateDetails(profilepageObj) {
   // const header = {'authentication_token': localStorage.getItem('authentication_token')};
   console.log(JSON.stringify(profilepageObj));   
  return this._http.post(environment.host + 'pharmacy/profile',  profilepageObj);
+}
+
+EdituserDetails(params) {
+  // const header = {'authentication_token': localStorage.getItem('authentication_token')};
+  console.log(JSON.stringify(params));   
+ return this._http.post(environment.host + 'pharmacy/update_basic_profile',  params);
 }
 
 

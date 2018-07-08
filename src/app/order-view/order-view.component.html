@@ -1,193 +1,272 @@
 <p-growl [(value)]="msgs"></p-growl>
-<div class="order-view" >
-    <div *ngIf= "orderDetails">
-    <div class="panel-heading">
-        <div class= "noprint">
-        <h3 class="pull-left panel-head">All Orders</h3>
-        <div class="bread-crumb pull-right">
-            <p-breadcrumb [model]="items"></p-breadcrumb>
+<div class="order-view">
+    <div class="" *ngIf="orderDetails">
+        <div class="panel-heading">
+            <div class="noprint">
+                <h3 class="pull-left panel-head">All Orders</h3>
+                <div class="bread-crumb pull-right">
+                    <p-breadcrumb [model]="items"></p-breadcrumb>
+                </div>
+                <div class="clearfix"></div>
+            </div>
         </div>
-        <div class="clearfix"></div>
-        </div>
-    </div>
-    <div class="view-left">
-            <div class= "noprint">
-        <div class="price-details">
-            <!-- <img src="assets/images/default.png" alt=""> -->
-            <p-lightbox class="light-box"  class= "noprint" [images]="images" (click) = "print()"></p-lightbox>
-            <div class="price-value">
-                <p>Cost Details</p>
-                <span>
+        <div class="view-left">
+            <div class="noprint">
+                <div class="price-details">
+                    <img src="https://s3.amazonaws.com/deliv-meds-resources/{{orderDetails.rxImage}}" alt="">
+                    <!-- <img src=" https://s3.amazonaws.com/deliv-meds-resources/{{orderDetails.rximage}}" alt=""> -->
+                    <!-- / <p-lightbox class="light-box noprint" [images]="https://s3.amazonaws.com/deliv-meds-resources/orderDetails.rxImage"></p-lightbox> -->
+
+                    <!-- <ngx-image-viewer class="order-viewer" [src]="['https://s3.amazonaws.com/deliv-meds-resources/orderDetails.rxImage']" [(index)]="imageIndex"></ngx-image-viewer> -->
+
+                    <!-- <ngx-image-viewer class="order-viewer" ></ngx-image-viewer> -->
+                    <div class="price-value">
+                        <p>Cost Details</p>
+                        <span>
             Cost (Medication): ${{sum}}
           </span>
-            </div>
-            <div class="payable text-center">
-                <p>Payable Amount</p>
-                <span class="payble-green">$ {{week.value*sum | number}}</span>
-            </div>
-            <div class="clearfix"></div>
-            
-        </div>
-        <div class="prescription">
-            <p class="pull-left prescription-left">prescription id: #46456 (refill)</p>
-            <span class="pull-left prescription-right">
-        <p-dropdown class="drop-down order-dropdown" [options]="brands" [(ngModel)]= "week"  [style]="{'width':'60%'}" (onChange)="sample($event.value)" optionLabel="name"></p-dropdown>
-        <button pButton type="button" (click)=" addNewRow()" label="Add" icon="fa fa-plus" class="ui-button-secondary btn-secondary-green"></button>
+                    </div>
+                    <div class="payable text-center" *ngIf="orderDetails.status ==1">
+                        <p>Payable Amount</p>
+                        <span class="payble-green">$ {{sumAfterDiscount}}</span>
+                        <!-- <span class="payble-green">$ {{sumAfterDiscount}}</span> -->
+                    </div>
+                    <div class="payable text-center" *ngIf="orderDetails.status ==2 ||orderDetails.status ==3 ||orderDetails.status ==4 ||orderDetails.status ==5 || orderDetails.status ==6 || orderDetails.status ==7">
+                        <p>Payable Amount</p>
+                        <span class="payble-green">$ {{ orderDetails.priceTotal}}</span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="prescription" *ngIf="orderDetails.status ==2 ||orderDetails.status ==3 ||orderDetails.status ==4 ||orderDetails.status ==5 || orderDetails.status ==6 || orderDetails.status ==7">
+                    <p class="pull-left prescription-left">prescription id: Nan</p>
+                    <span class="pull-left prescription-right">
+        <!-- <p-dropdown class="drop-down order-dropdown" [options]="brands" [(ngModel)]= "week"  [style]="{'width':'60%'}" (onChange)="sample($event.value)" optionLabel="name"></p-dropdown> -->
+        <button  [disabled]="true" pButton type="button" (click)=" addNewRow()" label="Add" icon="fa fa-plus" class="ui-button-secondary btn-secondary-green"></button>
       </span>
-            <div class="clearfix"></div>
-        </div>
-        <div class="medication-list">
-    
-    <form [formGroup]="invoiceForm">
-            <div formArrayName="itemRows">
-             <div class="form-group"  *ngFor="let itemrow of invoiceForm.controls.itemRows.controls; let i=index"  [formGroupName]="i">
-                 
-                <div class="form-name">
-                    <h3 class="first">Medication Name</h3>
-                    <input formControlName="medicalName" class="form-control" pInputText> 
+                    <div class="clearfix"></div>
                 </div>
-                <div class="form-dos">
-                    <h3 class="first">Dosage</h3>
-                    <input formControlName="dosage" class="form-control" pInputText>
+
+                <div class="prescription" *ngIf="orderDetails.status ==1">
+                    <p class="pull-left prescription-left">prescription id: Nan</p>
+                    <span class="pull-left prescription-right">
+            <!-- <p-dropdown class="drop-down order-dropdown" [options]="brands" [(ngModel)]= "week"  [style]="{'width':'60%'}" (onChange)="sample($event.value)" optionLabel="name"></p-dropdown> -->
+            <button pButton type="button" (click)=" addNewRow()" label="Add" icon="fa fa-plus" class="ui-button-secondary btn-secondary-green"></button>
+          </span>
+                    <div class="clearfix"></div>
                 </div>
-                <div class="form-qty">
-                    <h3 class="first">Quantity</h3>
-                    <input formControlName="quantity" class="form-control" size="30" pInputText>
+                <div *ngIf="orderDetails">
+                    <div class="medication-list">
+                        <form [formGroup]="invoiceForm">
+                            <div formArrayName="itemRows">
+                                <div class="form-group" *ngFor="let itemrow of invoiceForm.controls.itemRows.controls; let i=index" [formGroupName]="i">
+                                    <div class="form-name">
+                                        <h3 class="first">Medication Name</h3>
+                                        <input formControlName="medicalName" class="form-control" pInputText>
+                                        <!-- <span *ngIf=" !invoiceForm.get('medicalName').valid && invoiceForm.get('medicalName').touched && invoiceForm.hasError('required', 'medicalName')" style="color:red"> 
+                                        <!-- Medical Name is required</span> -->
+                                    </div>
+                                    <div class="form-qty">
+                                        <h3 class="first">Quantity</h3>
+                                        <input formControlName="quantity" type="number" class="form-control" (change)="previewOfUpdateClicked()" size="30" pInputText>
+                                        <!-- <span *ngIf=" !invoiceForm.get('quantity').valid && invoiceForm.get('quantity').touched && invoiceForm.hasError('required', 'quantity')" style="color:red">  -->
+                                        <!-- Quantity Name is required</span> -->
+                                    </div>
+                                    <div class="form-cost">
+                                        <h3 class="first">Cost</h3>
+                                        <span class="dolor-icon">
+                    <input  formControlName="cost"  type="number" class="form-control"  (change)="previewOfUpdateClicked()" size="30"  required pInputText>
+                      <!-- <span  *ngIf="  invoiceForm.hasError('required')" style="color:red">   -->
+                         <!-- Cost is required</span> -->
+                                        <i class="fa fa-usd" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+
+                                    <div class="form-dos">
+                                        <h3 class="first">Copay</h3>
+                                        <!-- <input formControlName="dosage" class="form-control" pInputText> -->
+                                        <p-dropdown class="drop-down" formControlName="copay" [options]="brands" [style]="{'width':'60%'}" (onChange)="previewOfUpdateClicked()" optionLabel="name"></p-dropdown>
+                                    </div>
+                                    <!-- <div>  -->
+                                    <div *ngIf="orderDetails.status ==2 ||orderDetails.status ==3 ||orderDetails.status ==4 ||orderDetails.status ==5 || orderDetails.status ==6 || orderDetails.status ==7">
+                                        <!-- <button *ngIf="invoiceForm.controls.itemRows.controls.length > 1" (click)="deleteRow(i)" class="btn btn-danger"> x</button> -->
+                                        <button [disabled]="true" (click)="showDialog(i, itemrow)" class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                        <form [formGroup]="reasonForm">
+                                            <p-dialog header="Reject Order" class="medication-list" [(visible)]="display" name="reason1" formGroupName="reason1" formControlName="reason1" required ngDefaultControl [(ngModel)]="weekdata" [modal]="true" [responsive]="true" [width]="600" [minWidth]="200"
+                                                [minY]="70">
+                                                <textarea class="btn-full text-area commenttext-box" rows="5" cols="30" placeholder="Enter Reason" pInputTextarea maxlength="250"></textarea>
+                                                <p-footer>
+                                                    <button type="button" [ngClass]="reject-order" class="btn-group-green" pButton *ngIf="invoiceForm.controls.itemRows.controls.length > 0" (click)=" deleteRow(i) " label="Submit "></button>
+                                                    <button type="button " class="ui-button-secondary btn-secondary-green " pButton (click)="display=false " label="Cancel "></button>
+
+                                                </p-footer>
+                                            </p-dialog>
+                                        </form>
+                                    </div>
+                                    <div *ngIf="orderDetails.status==1 ">
+                                        <!-- <button *ngIf="invoiceForm.controls.itemRows.controls.length> 1" (click)="deleteRow(i)" class="btn btn-danger"> x</button> -->
+                                        <button (click)="showDialog(i, itemrow)" class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                        <form [formGroup]="reasonForm">
+                                            <p-dialog header="Reject Order" class="medication-list" [(visible)]="display" name="reason1" formGroupName="reason1" formControlName="reason1" ngDefaultControl [(ngModel)]="weekdata" [modal]="true" [responsive]="true" [width]="600" [minWidth]="200" [minY]="70">
+                                                <textarea class="btn-full text-area commenttext-box" rows="5" cols="30" placeholder="Enter Reason" pInputTextarea maxlength="250"></textarea>
+                                                <p-footer>
+                                                    <button type="button" class="btn-group-green" pButton *ngIf="invoiceForm.controls.itemRows.controls.length > 0" (click)="deleteRow(i)" label="Submit"></button>
+                                                    <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="display=false" label="Cancel"></button>
+
+                                                </p-footer>
+                                            </p-dialog>
+                                        </form>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <!-- <button pButton type="button" (click)= "showDialog()" label="Reject Order"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+                        </form>
+                    </div>
                 </div>
-                <div class="form-cost">
-                    <h3 class="first">Cost</h3>
-                    <span class="dolor-icon">
-                    <input  formControlName="cost"  type="number" class="form-control"  size="30" pInputText>
-                   
-                    <i class="fa fa-usd" aria-hidden="true"></i>
-                    </span>
+            </div>
+            <div *ngIf="orderDetails.status ==2 ||orderDetails.status ==3 ||orderDetails.status ==4 ||orderDetails.status ==5 || orderDetails.status ==6 || orderDetails.status ==7">
+                <button [disabled]="true" class="medication-list mg-tp btn-group-green" pButton type="button" (click)="updateButtonClicked()" label="submit"></button>
+            </div>
+            <div *ngIf=" orderDetails.status ==1">
+                <button [disabled]="!invoiceForm.valid" class="medication-list mg-tp btn-group-green" pButton type="button" (click)="updateButtonClicked(itemRows)" label="Submit"></button>
+            </div>
+        </div>
+        <div class="view-right">
+            <div class="noprint">
+                <div class="orders">
+                    <h3 class="panel-head pull-left"><label>order Id :</label>{{orderDetails.id}} <span class="new">
+                
+                <label *ngIf = "orderDetails.status ==1"> New</label> 
+                    <!-- <button pButton type="button"  label="New"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+               
+                 <label *ngIf = "orderDetails.status ==2"> Waiting For customer Response</label> 
+                    <!-- <button pButton type="button"  label="Waiting for Customer response"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+               
+                <label *ngIf = "orderDetails.status ==3 ||orderDetails.status ==4"> Rejected</label> 
+                     <!-- <button pButton type="button"  label="Rejected"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+           
+                    <label *ngIf = "orderDetails.status ==5"> Ready For pickup</label> 
+                     <!-- <button pButton type="button"  label="Accepted"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+                        <label *ngIf = "orderDetails.status ==6">Customer Accepted</label> 
+                         <!-- <button pButton type="button"  label="Accepted"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+                            <label *ngIf = "orderDetails.status ==7"> Delivered</label> 
+                             <!-- <button pButton type="button"  label="Accepted"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+                </span></h3>
+                    <div *ngIf="orderDetails.status ==2 || orderDetails.status ==3 || orderDetails.status ==4 ||orderDetails.status ==5 || orderDetails.status ==6 || orderDetails.status ==7">
+                        <button [disabled]="true" pButton type="button" (click)="showDialog1()" label="Reject Order" class="ui-button-secondary btn-secondary-green pull-right"></button>
+                    </div>
+                    <div *ngIf=" orderDetails.status ==1">
+                        <button pButton type="button" (click)="showDialog1()" label="Reject Order" class="ui-button-secondary btn-secondary-green pull-right"></button>
+                        <form [formGroup]="reasonForm1">
+                            <p-dialog header="Reject Order1" class="medication-list" [(visible)]="display1" name="reason2" formGroupName="reason2" formControlName="reason2" ngDefaultControl [(ngModel)]="orderRejectedCompletey" [modal]="true" [responsive]="true" [width]="600" [minWidth]="200"
+                                [minY]="70">
+                                <textarea class="btn-full text-area commenttext-box" placeholder="Enter Reason" pInputTextarea maxlength="250"></textarea>
+                                <p-footer>
+                                    <button type="submit" class="btn-group-green" pButton (click)="addReason1()" label="Submit"></button>
+                                    <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="display1=false" label="Cancel"></button>
+                                </p-footer>
+                            </p-dialog>
+                        </form>
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
-                <!-- <button *ngIf="invoiceForm.controls.itemRows.controls.length > 1" (click)="deleteRow(i)" class="btn btn-danger"> x</button> -->
-                <p   (click)= "showDialog()"  class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></p>
-                <!-- <button pButton type="button" (click)= "showDialog()" label="Reject Order"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-          
-                <div class="clearfix"></div>
-                <p-dialog header="Reject Order" class="medication-list" [(visible)]="display"  [modal]="true"  [responsive]="true" [width]="350" [minWidth]="200" [minY]="70">
-                    <textarea class="btn-full text-area"   rows="5" cols="30" placeholder="Enter Reason"  pInputTextarea maxlength="250"></textarea> 
-                    <p-footer>
-                                   <button type="button" pButton  *ngIf="invoiceForm.controls.itemRows.controls.length > 0" (click)="deleteRow(i)" label="Submit"></button>
-                                <!-- <button type="button" pButton  (click)="display=false" label="Cancel"></button> -->
-                               </p-footer>
-                       </p-dialog>
             </div>
+            <div class="noprint">
+                <div class="patient-details">
+                    <div *ngIf="orderDetails.customerResponse.customerMembers && orderDetails.customerResponse.customerMembers.length > 0">
+                        <p>Patient Name: {{orderDetails.customerResponse.customerMembers[0].firstName}} {{orderDetails.customerResponse.customerMembers[0].lastName}} </p>
+                        <p>DOB: {{orderDetails.customerResponse.customerMembers[0].birthDate}}</p>
+                        <p>Contact: {{orderDetails.customerResponse.customerMembers[0].phone}}</p>
+                    </div>
+                </div>
             </div>
-        </form>
-            <button pButton type="button" (click)="updateButtonClicked()" label="Update" class="btn-group-green"></button>
-        </div>
-        </div>
-    </div>
-    <div class="view-right">
-        <div class= "noprint">
-        <div class="orders">
-            <h3 class="panel-head pull-left">{{orderDetails.id}} <span class="new">New</span></h3>
-            <button pButton type="button" (click)= "showDialog()" label="Reject Order"  class="ui-button-secondary btn-secondary-green pull-right"></button>
-            <p-dialog header="Reject Order" class="medication-list" [(visible)]="display"  [modal]="true"  [responsive]="true" [width]="350" [minWidth]="200" [minY]="70">
-             <textarea class="btn-full text-area"   [(ngModel)] = "value" rows="5" cols="30" placeholder="Enter Reason" pInputTextarea maxlength="250"></textarea> 
-             <p-footer>
-                            <button type="button" pButton (click)="addReason()" label="Submit"></button>
-                            <button type="button" pButton  (click)="display=false" label="Cancel"></button>
-                        </p-footer>
-                </p-dialog>
-            <div class="clearfix"></div>
-        </div>
-    </div>
-        <div  class= "noprint">
-        <div class="patient-details">
-            <div *ngIf= "orderDetails.customerResponse.customerMembers && orderDetails.customerResponse.customerMembers.length > 0">
-            <p>Patient Name: {{orderDetails.customerResponse.customerMembers[0].firstName}} {{orderDetails.customerResponse.customerMembers[0].lastName}} </p>
-            <p>DOB: {{orderDetails.customerResponse.customerMembers[0].birthDate}}</p>
-            <p>Contact: {{orderDetails.customerResponse.customerMembers[0].phone}}</p>
+            <div class="noprint">
+                <div class="patient-details">
+                    <div *ngIf="orderDetails.customerResponse">
+                        <p>User: {{orderDetails.customerResponse.firstName}} {{orderDetails.customerResponse.lastName}} </p>
+                        <p>Contact: {{orderDetails.customerResponse.phone}}</p>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-        <div  class= "noprint">
-        <div class="patient-details">
-            <div *ngIf= "orderDetails.customerResponse">
-            <p>User: {{orderDetails.customerResponse.firstName}} {{orderDetails.customerResponse.lastName}} </p>
-            <p>Contact: {{orderDetails.customerResponse.phone}}</p>
-            </div>
-        </div>
-    </div>
-        <div  class= "noprint">
-        <div class="patient-details"  > 
-            <div *ngIf = "orderDetails.customerResponse.customerDoctors">
-                <ul>CustomerDoctors:</ul>
-                    <div *ngFor = "let doctor of orderDetails.customerResponse.customerDoctors">
+            <div class="noprint">
+                <div class="patient-details">
+                    <div *ngIf="orderDetails.customerResponse.customerDoctors">
+                        <ul>CustomerDoctors:</ul>
+                        <div *ngFor="let doctor of orderDetails.customerResponse.customerDoctors">
                             <p>Doctor: {{doctor.doctorName}} </p>
                             <p>Contact: {{doctor.doctorPhone}}</p>
                         </div>
-            </div>
-            <!-- {{orderDetails.customerResponse.customerDoctors[0].doctorName}} -->
-            <div *ngFor = "let doctor of customerResponses.customerMembers">
-                <p>Doctor: {{doctor.doctorName}} </p>
-                <p>Contact: {{doctor.doctorPhone}}</p>
-            </div>
-        </div>
-        </div>
-        <div  class= "noprint">
-        <div class="insurance-details ui-g" *ngIf = "orderDetails.customerResponse.customerInsurances && orderDetails.customerResponse.customerInsurances.length > 0">
-                <div >
-                        <!-- class="ui-g-7"        -->
-                    <h4>Insurance Details</h4>
-                    <ul >
-                    <p>InsuranceProviderName: {{orderDetails.customerResponse.customerInsurances[0].insuranceProviderName}}</p>
-                        <!-- <li>{{insurance.insuranceProviderName}}</li> -->
-                        <li>Patient ID: {{ orderDetails.customerResponse.customerInsurances[0].insuranceProviderId}}</li>
-                        <li>PCN Number: {{orderDetails.customerResponse.customerInsurances[0].pcnNo}}</li>
-                        <li>Provider Contact: 9856321457</li>
-                        <li>Bin No: {{orderDetails.customerResponse.customerInsurances[0].binNo}}</li>
-                    </ul>
-                </div>
-        </div>
-        <div class="insurance-details ui-g" *ngIf = "orderDetails.customerResponse.customerMembers && orderDetails.customerResponse.customerMembers[0].insurances">
-            <div >
-                    <!-- class="ui-g-7"        -->
-                <h4>Insurance Details</h4>
-                <ul >
-                <p> InsuranceProviderName: {{orderDetails.customerResponse.customerMembers[0].insurances[0].insuranceProviderName}}</p>
-                    <!-- <li>{{insurance.insuranceProviderName}}</li> -->
-                    <li>Insurance ID: {{ orderDetails.customerResponse.customerMembers[0].insurances[0].insuranceId}}</li>
-                    <li>PCN Number: {{orderDetails.customerResponse.customerMembers[0].insurances[0].pcnNo}}</li>
-                    <li>Provider Contact: 9856321457</li>
-                    <li>Bin No: {{orderDetails.customerResponse.customerMembers[0].insurances[0].binNo}}</li>
-                </ul>
-            </div>
-            <div class="ui-g-5">
-                <!-- <img src="assets/images/default.png" alt=""> -->
-                <p-lightbox class="light-box" [images]="images"></p-lightbox>
-            </div>
-        </div>
-    </div>
-        
-        <div class="delevery-address" >
-                <div class ="page">
-                        <div  id="print-section">
-            <h4 class="">Delivery Address <span class="pull-right"><i class="fa fa-print" aria-hidden="true" (click) = "print()"></i>
-          </span></h4>
-            <div class="clearfix"></div>
-                    <div *ngIf = "orderDetails" >
-                       
-                    <!-- <div *ngIf = "orderDetails.customerResponse.customerMembers" {{orderDetails.customerResponse.customerMembers[0].city}}  {{orderDetails.customerResponse.customerMembers[0].state}}  {{orderDetails.customerResponse.customerMembers[0].zipCode}}> -->
-                        <p> {{orderDetails.address}} <br>
-                             {{orderDetails.street}} <br>
-                             </p>
+                    </div>
+                    <!-- {{orderDetails.customerResponse.customerDoctors[0].doctorName}} -->
+                    <div *ngFor="let doctor of customerResponses.customerMembers">
+                        <p>Doctor: {{doctor.doctorName}} </p>
+                        <p>Contact: {{doctor.doctorPhone}}</p>
                     </div>
                 </div>
-      
-            
+            </div>
+            <div class="noprint">
+                <div class="insurance-details ui-g ui-row" *ngIf="orderDetails.customerResponse.customerInsurances && orderDetails.customerResponse.customerInsurances.length > 0">
+                    <div class="ui-g-7 ui-md-7">
+                        <!-- class="ui-g-7"        -->
+                        <h4>Insurance Details</h4>
+                        <ul>
+                            <p>InsuranceProviderName: {{orderDetails.customerResponse.customerInsurances[0].insuranceProviderName}}</p>
+                            <!-- <li>{{insurance.insuranceProviderName}}</li> -->
+                            <li>Patient ID: {{ orderDetails.customerResponse.customerInsurances[0].insuranceProviderId}}</li>
+                            <li>PCN Number: {{orderDetails.customerResponse.customerInsurances[0].pcnNo}}</li>
+                            <li>Provider Contact: 9856321457</li>
+                            <li>Bin No: {{orderDetails.customerResponse.customerInsurances[0].binNo}}</li>
+                        </ul>
+                    </div>
+                    <div class="ui-g-5 ui-md-5">
+                        <!-- <img src="assets/images/default.png" alt=""> -->
+                        <p-lightbox class="light-box " [images]="images"></p-lightbox>
+                    </div>
+                </div>
+                <div class="insurance-details ui-g" *ngIf="orderDetails.customerResponse.customerMembers && orderDetails.customerResponse.customerMembers[0].insurances">
+                    <div class="ui-g-7 ui-md-7">
+                        <!-- class="ui-g-7"        -->
+                        <h4>Insurance Details</h4>
+                        <ul>
+                            <p> InsuranceProviderName: {{orderDetails.customerResponse.customerMembers[0].insurances[0].insuranceProviderName}}</p>
+                            <!-- <li>{{insurance.insuranceProviderName}}</li> -->
+                            <li>Insurance ID: {{ orderDetails.customerResponse.customerMembers[0].insurances[0].insuranceId}}</li>
+                            <li>PCN Number: {{orderDetails.customerResponse.customerMembers[0].insurances[0].pcnNo}}</li>
+                            <li>Provider Contact: 9856321457</li>
+                            <li>Bin No: {{orderDetails.customerResponse.customerMembers[0].insurances[0].binNo}}</li>
+                        </ul>
+                    </div>
+                    <div class="ui-g-5 ui-md-5">
+                        <!-- <img src="assets/images/default.png" alt=""> -->
+                        <p-lightbox class="light-box" [images]="images"></p-lightbox>
+                    </div>
+                </div>
+            </div>
+
+            <div class="delevery-address">
+                <div class="page">
+                    <div id="print-section">
+                        <h4 class="">Delivery Address <span class="pull-right"><i class="fa fa-print"  (click) = "print()"></i>
+          </span></h4>
+                        <div class="clearfix"></div>
+                        <div *ngIf="orderDetails">
+                            <div *ngIf="orderDetails.customerResponse.customerMembers;else patientData">
+                                <p> {{orderDetails.customerResponse.customerMembers[0].address}} <br> {{orderDetails.customerResponse.customerMembers[0].state}} <br> {{orderDetails.customerResponse.customerMembers[0].city}}
+                                    <br> {{orderDetails.customerResponse.customerMembers[0].zipCode}}
+                                    <br>
+
+                                </p>
+                            </div>
+                            <ng-template #patientData>
+                                <p>
+                                    {{orderDetails.address}} <br> {{orderDetails.street}} <br> {{orderDetails.state}} <br> {{orderDetails.city}} <br> {{orderDetails.zipCode}} <br>
+                                </p>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
+        <div class="clearfix"></div>
     </div>
-    </div>
-    <div class="clearfix"></div>
 </div>
-
-
-
-
-

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { FormBuilder, FormControl, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import { first, map, retry } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Http, HttpModule, Response, Headers, RequestOptions } from '@angular/http';
 import { UserService } from '../services/user.service';
@@ -18,6 +18,7 @@ import { TokenService } from '../services/token.service';
 import { Router } from '@angular/router'
 import { runInThisContext } from 'vm';
 import { PreloadService } from '../services/preload.service'
+import { Password } from 'primeng/primeng';
 
 
 
@@ -29,7 +30,10 @@ import { PreloadService } from '../services/preload.service'
 })
 export class MyAccountComponent implements OnInit {
  
+  filteredCountriesSingle: any=[];
   signInForm: FormGroup;
+  backendDetails = [];
+  backendDetails1 : any;
 
   SignUpForm : FormGroup;
   editForm: FormGroup;
@@ -67,11 +71,12 @@ export class MyAccountComponent implements OnInit {
   user: boolean = false;
   accouEdit:  boolean = false;
   serviceForm: FormGroup;
-  userInformation: any = [];
-  updatedInformation:any[];
+  userInformation: any = []
+  updatedInformation : string[] = [];
   servicesOffer = [];
   insuranceProviders = [];
   selectedServices: string[] = [];
+  services= [];
   selectedInsuranceProviders: string[] = [];
   fromTime: string[] =[];
   week: WeekDay;
@@ -81,12 +86,16 @@ export class MyAccountComponent implements OnInit {
   // toTime: [ ];
   msgs = [];
   zipCodeServices: any={};
+  country: any[]
+  date7: Date;
+  date8: Date;
   
   
   ngOnInit() {
     this.RegisteredDetailsService();
     this.serviceOfferingsService();
     this.addProviders();
+   // this.zipcodeService();
     this.profilepageObj = this.userInformation
     console.log("profilePage ="+ JSON.stringify( this.profilepageObj))
     console.log("userInformation ="+ this.userInformation)
@@ -98,10 +107,6 @@ export class MyAccountComponent implements OnInit {
       zipcode: new FormControl(null, Validators.required),
       city: new FormControl(null, Validators.required),
       state: new FormControl(null, Validators.required)
-//       inemail: ["", [   [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
-//         Validators.required],
-//       this.isEmailUnique.bind(this) // async Validator passed as 3rd parameter 
-//  ],
        });
 
    
@@ -109,28 +114,86 @@ export class MyAccountComponent implements OnInit {
     this.weekdays= [
       {
         'name':'Week days',
+        'dayOfWeek': 5
       },
       {
         'name':'Week ends',
+        'dayOfWeek': 2
       },
       {
         'name':'Saturday',
+        'dayOfWeek': 1
       },
       {
         'name':'Sunday',
+        'dayOfWeek': 0
       }
+
     ]
     
   }
-   weekdata :string;
+
   
+  filterCountrySingle(event) {
+    console.log(event);
+     let query = event.query;
+     this.http.get(environment.host + 'zipcodes/serviceable/' + this.editForm.value.zipcode ).subscribe(country => {
+       if(country['statusCode']==401){
+        this.filteredCountriesSingle=[];
+        this.msgs.push({severity: 'error', summary: 'Error', detail: 'Zipcode not available '})
+       }else{
+        this.filteredCountriesSingle=[]
+        country['object'].forEach(country=>{
+          this.filteredCountriesSingle.push({name:country,code:country})
+          
+        })
+       }
+     
+     
+     })
+}
+
+zipcodeService(event) {
+  console.log(event)
+  console.log(this.editForm.value.zipcode.code);
+  
+  this.http.get(environment.host + 'zipcodes/get_serviceable/' + this.editForm.value.zipcode.code ).subscribe((res: any) => {
+    console.log(res);
+    
+if(res.statusCode === 401) {
+//alert('zipcode is not servicable')
+this.editForm.patchValue({city: "" ,state: ""});
+
+} else {
+console.log(this.editForm.value.zipcode);
+    console.log(JSON.stringify(res));
+ this.zipCodeServices = res;
+// this.zipcodeService.push
+  console.log(this.zipCodeServices);
+  this.editForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
+}
+
+  })
+}
+
+   weekdata :string;
+   weekvalue:number;
+  userInfo;
    onSelectType(event) {
     if(event) {
        console.log(event['name']);
         this.weekdata = event['name'];
+        this.weekvalue = event['dayOfWeek'];
     }
     console.log('Day ='+ this.weekdata);
 }
+
+  tempKeys: Array<string>;
+  tempValues: Array<string> ;
+  tempValues1: Array<string>;
+  tempKeysInsurannce: Array<string>;
+  tempTimings= [];
+  updateInsurances: any = [];
 
   RegisteredDetailsService() {
     const header = {'authentication_token': localStorage.getItem('authentication_token')};
@@ -139,48 +202,43 @@ export class MyAccountComponent implements OnInit {
     this.http.get(environment.host + 'pharmacy/profile', { headers: header} ).subscribe(data =>
     {
       console.log(JSON.stringify(data));
-   this.userInformation = data;
-    console.log(this.userInformation);
+      this.userInformation = data;
+      if(data['pharmacyServices']){
+        this.updatedInformation.push(data['pharmacyServices']);
+        this.tempKeys =  Object.values(this.updatedInformation[0]);
+       this.tempValues = Object.keys(this.updatedInformation[0])
+       this.services.push()
+        console.log(this.updatedInformation);
+        console.log(this.tempValues)
+        let ids = this.services.push
+      }
+     
+
+      if(data['pharmacyInsuranceProviders']){
+        this.updateInsurances.push(data['pharmacyInsuranceProviders'])
+      this.tempKeysInsurannce = Object.values(this.updateInsurances[0]);
+      this.tempValues1 = Object.keys(this.updateInsurances[0])
+      console.log(this.updateInsurances);
+      
+      }
+      
+ 
+    this.country=this.userInformation.zipcode.code
+
+    
     this.editForm.patchValue({
       businessName: this.userInformation.pharmacyName,
       phoneNo1: this.userInformation.phoneNo,
       address: this.userInformation.address,
       street: this.userInformation.street,
       zipcode: this.userInformation.zipcode,
-      city : this.userInformation.city,
-      state: this.userInformation.state
+       city : this.userInformation.city,
+       state: this.userInformation.state
     })
   
     });
     
   }
-
-  zipcodeService() {
-    console.log(this.editForm.value.zipcode);
-    
-    this.http.get(environment.host + 'zipcodes/get_serviceable/' + this.editForm.value.zipcode ).subscribe((res: any) => {
-      console.log(res);
-      
-if(res.statusCode === 401) {
-  //alert('zipcode is not servicable')
-  this.msgs.push({severity: 'error', summary: 'Error', detail: 'zipcode not available '});
-  this.editForm.patchValue({city: "" ,state: ""});
-
-} else {
-  console.log(this.editForm.value.zipcode);
-      console.log(JSON.stringify(res));
-   this.zipCodeServices = res;
-   
-  // this.zipcodeService.push
-    console.log(this.zipCodeServices);
-    this.editForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
-    console.log( this.editForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state}));
-    
-}
-
-    })
-  }
-
 
   serviceOfferingsService() {
    
@@ -191,7 +249,7 @@ if(res.statusCode === 401) {
       this.updateService.push(data['object'])
       console.log(this.updateService[0]);
       // this.updateService = data
-      console.log(data)
+      console.log(data) 
       this.servicesOffer.push(this.updateService[0].map((e) => {  return { 'label': e.serviceName, 'value': {'name': e.serviceName,'id': e.serviceOfferingId }  }
     }))
     this.servicesOffer = this.servicesOffer[0]
@@ -207,40 +265,10 @@ if(res.statusCode === 401) {
   }
   accountEdit(){
     this.userInformation.pharmacyName;
-    // console.log(this.userInformation.pharmacyName)
-    // console.log(this.editdetails.pharmacyName)
-    // this.editdetails.pharmacyName = this.userInformation.pharmacyName;
-    //  this.userInformation.phoneNo = this.editdetails.phoneNo;
-    //   this.userInformation.email = this.editdetails.email;
-    //   this.userInformation.address = this.editdetails.address;
-    //   this.userInformation.street = this.editdetails.street;
-    //   this.userInformation.zipcode = this.editdetails.zipcode;
-    //   this.userInformation.city = this.editdetails.city;
-   // this.RegisteredDetailsService();
-    //this.editdetails.phoneNo = this.userInformation.phoneNo;
-    // this.editdetails.email = this.userInformation.email;
-    // this.editdetails.phoneNo = this.userInformation.phoneNo;
-    // this.editdetails.address = this.userInformation.address;
-    // this.editdetails.street = this.userInformation.street;
-    // this.editdetails.zipcode = this.userInformation.zipcode;
-    // this.editdetails.city = this.userInformation.city;
-    // this.editdetails.bio = this.userInformation.bio;
+    
     this.accouEdit = true
   }
 
-  //userdetials
-  // editUserDetails( ) {
-  //   this.userInformation.pharmacyName = this.editdetails.pharmacyName;
-  //   this.userInformation.phoneNo = this.editdetails.phoneNo;
-  //    this.userInformation.email = this.editdetails.email;
-  //    this.userInformation.address = this.editdetails.address;
-  //    this.userInformation.street = this.editdetails.street;
-  //    this.userInformation.zipcode = this.editdetails.zipcode;
-  //    this.userInformation.city = this.editdetails.city;
-  //    this.userInformation.bio = this.editdetails.bio;
-     
-  //   this.accouEdit= false
-  //    }
   details = [];
   editUserDetails(editForm) {
 
@@ -280,12 +308,6 @@ if(res.statusCode === 401) {
     }
   }
 
-  // onSelect($event) {
-  //   let hour = new Date($event).getHours();
-  //   let min = new Date($event).getMinutes();
-  //   this.timeValue = `${hour}:${min}`;
-  //   //this.updatePharmacy.push(this.timeValue);
-  // }
 
   edit( ) {
     this.userInformation.pharmacyName = this.editdetails.pharmacyName;
@@ -295,15 +317,21 @@ if(res.statusCode === 401) {
      this.userInformation.street = this.editdetails.street;
      this.userInformation.zipcode = this.editdetails.zipcode;
      this.userInformation.city = this.editdetails.city;
+     this.userInformation.bio = this.editdetails.bio;
+     this.userInformation.pharmacyBusinessHours = this.editdetails.pharmacyBusinessHours;
      
      
     // this.accouEdit= false
      }
 
+     pharmacyTiming = [];
   addPharmacy(newPharmacy: string, newPharmacy1: string, newPharmacy2: string) {
       console.log(newPharmacy)
       console.log(newPharmacy1)
       console.log(newPharmacy2)
+      if(newPharmacy == null && newPharmacy1 == null && newPharmacy2 == null){
+        this.msgs.push({severity: 'error', summary: 'please enter the fields', detail: ''});
+      }else {
       let week_time =this.weekdata
       this.currentVal = newPharmacy2;
       let hour = new Date(newPharmacy).getHours();  
@@ -311,16 +339,30 @@ if(res.statusCode === 401) {
       var ampm = hour >= 12 ? 'PM' : 'AM';
       hour = hour % 12;
       hour = hour ? hour : 12; // the hour '0' should be '12'
-      this.timeValue = `${hour}:${min}` + ampm; 
+       this.timeValue = `${hour}:${min}` + " " +ampm; 
+      //this.timeValue = `${hour}:${min}`
+
   //second field
     let  hour1 = new Date(newPharmacy1).getHours();
      let min1 = new Date(newPharmacy1).getMinutes();
      var ampm = hour1 >= 12 ? 'PM' : 'AM';
       hour1 = hour1 % 12;
       hour1 = hour1 ? hour1 : 12; // the hour '0' should be '12'
-     this.timeValue1 =  `${hour1}:${min1}` + ampm;
+      this.timeValue1 =  `${hour1}:${min1}` + " "+ ampm;
+    //this.timeValue1 =  `${hour1}:${min1}`
       this.updatePharmacy.push(this.timeValue + "  " + this.timeValue1  + "  " + week_time);
+
+      let obj = {
+        dayOfWeek: this.weekvalue,
+        opens: this.timeValue,
+        closes: this.timeValue1
+      }
+      console.log(obj)
+     this.pharmacyTiming.push(obj)
+     console.log(this.pharmacyTiming);
+     
   }
+   }
 
   deleteUser(index){
     let i = this.addNewUser.indexOf
@@ -333,86 +375,146 @@ if(res.statusCode === 401) {
     this.updatePharmacy.splice(index,1)
   }
 
+  deletePharmacyTimings1(index) {
+    let i = this.userInformation.pharmacyBusinessHours.indexOf
+    // this.updatePharmacy.splice(index,1)
+    this.userInformation.pharmacyBusinessHours.splice(index,1)
+    this.pharmacyarrays.splice(index,1)
+    
+  }
+
+  
+   
  //update complete details
- updateDetails(details) {
+ aboutPharmacy: string;
+ submitDetails(details) {
+   
+  console.log(this.pharmacyTiming)
+   
     let ids = this.selectedServices.map((e)=> {return e['id']})
-    let insuranceids = this.selectedInsuranceProviders
+    let insuranceIds = this.selectedInsuranceProviders.map((e) => {return e['id']})
+   
   
    let  profilepageObj = {
      pharmacyName : this.userInformation.pharmacyName,
      phoneNo :  this.userInformation.phoneNo,
-     bio: this.editdetails.bio,
-     services: ids,
-    address: this.userInformation.address,
-    street: this.userInformation.street,
-    zipcode: this.userInformation.zipcode,
-    city: this.userInformation.city,
-    pharmacyUsers: this.addNewUser,
-    pharmacyBusinessHours: this.updatePharmacy,
-    delivery: this.checkboxvalue,
-    pickup: this.checkboxvalue1
+     bio: this.aboutPharmacy,
+     pharmacyBusinessHours: this.pharmacyTiming,
+     pharmacyServices: ids ,
+     pharmacyInsuranceProviders: insuranceIds,
+     delivery: this.checkboxvalue,
+     pickup: this.checkboxvalue1,
+    pharmacyUsers: this.newUserDetails
     
-     //services: [2,3,5]
 
    };
+
+   console.log(profilepageObj);
    this.loader.open();
    this.auth.updateDetails(profilepageObj).subscribe((res: any) => {
-    console.log(res.statusCode);
+  
     if (res.statusCode == 200) {
-      console.log(res.statusCode);
       this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully updated.'});
-      //alert("success");
        this.loader.close();
-      //  this.tokenService.storeTokens(
-      //    res['authentication_token'],
-      //    res['refresh_token'],
-      //  );
-      // this.user.createUser(res['user']);
-     //  console.log(res['user']);
+       this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully updated.'});
       this.router.navigate(['/orders']);
       
-      // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
     } 
     else if(res.statusCode == 400){
-      console.log(res.statusCode);
       this.msgs.push({severity: 'error', summary: 'Either pharmacy Name or Phone Number or List of services are not entered', detail: 'Update unsuccesfull'});
-      //alert("Either phrmacyName or Phone Number or List of services are not entered ")
-      
+      this.loader.close();    
     }
     
     else {
       this.msgs.push({severity: 'error', summary: 'Error', detail: 'Update  unsuccesfull'});
-     // this.loginFailed = true;
-     // this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
-      //alert("failure");
-      console.log(res.statusCode);
-      //this.loader.close();
+      this.loader.close();
     }
   }, (err) => {
-   // this.loader.close();
+    this.loader.close();
     this.msgs.push({severity: 'error', summary: 'Error', detail: 'server error'});
-    // this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
-    // alert("server error");
   }
   );
    }
 
-  // const header = {'authentication_token': localStorage.getItem('authentication_token')};
-  // console.log(header);
-  // console.log("auth" + localStorage.getItem ('authentication_token'));
-  
-  //  console.log("details updated");
-  //  console.log(this.profilepageObj)
-  //  console.log(this.accountEdit)
-  //  this.http.post(environment.host + 'pharmacy/profile',  this.edit).subscribe(data =>
-  //   {
-  //     console.log(JSON.stringify(data));
-  //  this.editdetails = data as any ;
-  //  console.log(data)
-  //   console.log(this.editdetails);
-  
-  //   })
 
+   pharmacyarrays= [];
+
+   updateDetails() {
+     console.log(this.tempKeys)
+  
+     let id = this.selectedServices.map((e)=> {return e['id']})
+    let insuranceId = this.selectedInsuranceProviders.map((e) => {return e['id']}) 
+
+   let constantbio = this.aboutPharmacy || ''
+   let constantTimings = this.pharmacyTiming || []
+   let constantIds = id || []
+   let constantsInsuranceIds = insuranceId || []
+   let deliverychanged = this.checkboxvalue || ''
+   let pickupchanged = this.checkboxvalue1 || ''
+   let constantUsers = this.newUserDetails || ''
+   let previousProviders =[];
+   let pharmacyProviders =[];
+   let tempids = [] ;
+   let tempids1 = [];
+   if(this.tempValues.length >0){
+    tempids = this.tempValues.map((e => { 
+    return parseInt(e)
+  }))
+}
+
+console.log(this.tempValues1)
+if(this.tempValues1.length>0 && tempids.length>0 ){
+    tempids1 = this.tempValues1.map((e => {
+    return parseInt(e)
+  }))
+}
+
+   let users = this.userInformation.pharmacyUsers || ''
+   this. pharmacyarrays = this.userInformation.pharmacyBusinessHours || [];
+  //  console.log(constantTimings)
+
+   console.log(this.userInformation.pharmacyServices);
+   console.log(constantsInsuranceIds)
+   console.log(this.userInformation.pharmacyInsuranceProviders)
+
+   let  profilepageObj = {
+     pharmacyName : this.userInformation.pharmacyName,
+     phoneNo :  this.userInformation.phoneNo,
+     bio:  constantbio,
+     pharmacyBusinessHours: this.pharmacyarrays.concat(constantTimings),
+     pharmacyServices: tempids.concat(constantIds) ,
+     pharmacyInsuranceProviders: tempids1.concat(constantsInsuranceIds),
+     delivery:this.userInformation.delivery,
+     pickup: this.userInformation.pickup,
+     pharmacyUsers: users + constantUsers
+
+   };
+   
+
+   console.log(profilepageObj);
+   this.auth.updateDetails(profilepageObj).subscribe((res: any) => {
+   console.log
+    if (res.statusCode == 200) {
+      this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully updated.'});
+       this.loader.close();
+      this.router.navigate(['/orders']);
+      
+    } 
+    else if(res.statusCode == 400){
+      this.msgs.push({severity: 'error', summary: 'Either pharmacy Name or Phone Number or List of services are not entered', detail: 'Update unsuccesfull'});
+      this.loader.close();    
+    }
+    
+    else {
+      this.msgs.push({severity: 'error', summary: 'Error', detail: 'Update  unsuccesfull'});
+      this.loader.close();
+    }
+  }, (err) => {
+    this.loader.close();
+    this.msgs.push({severity: 'error', summary: 'Error', detail: 'server error'});
+  }
+  );
+   }
 
 
   deleteService(index) {
@@ -420,7 +522,20 @@ if(res.statusCode === 401) {
     let i = this.selectedServices.indexOf
     let j = this.servicesOffer.indexOf
      this.selectedServices.splice(index,1)
-     //this.servicesOffer.splice(index,1)
+    // this.servicesOffer.splice(index,1)
+
+  }
+  
+  deletedService = [];
+  deleteService1(index) {
+    console.log(index);
+    let i = this.tempKeys.indexOf
+   // let j = this.servicesOffer.indexOf
+     this.tempKeys.splice(index,1)
+     this.tempValues.splice(index,1)
+     this.servicesOffer.splice(index,1)
+     console.log(this.deletedService);
+     
 
   }
 
@@ -436,6 +551,24 @@ if(res.statusCode === 401) {
       console.log(this.insuranceProviders.splice(index,1));
       
   }
+  deletedProvide = [];
+
+  deleteProvider1(index) {
+   
+    let i = this.tempKeysInsurannce.indexOf
+      this.tempKeysInsurannce.splice(index,1);
+     this.selectedInsuranceProviders.splice(index,1);
+     this.tempValues1.splice(index,1)
+     this.insuranceProviders.splice(index,1);
+      //console.log(this.insuranceProviders);
+      console.log(this.insuranceProviders.splice(index,1));
+      console.log(this.deletedProvide);
+    
+      
+  }
+
+
+  newUserDetails = [];
   addButtonclicked(signInForm) {
  
     if (signInForm.valid) {
@@ -446,12 +579,12 @@ if(res.statusCode === 401) {
         lastName: signInForm.value.lastName
       };
        this.addNewUser.push(params.firstname + " " + params.lastName);
+       this.newUserDetails.push(params.email + " "+ params.password + " " + params.firstname + " "+ params.lastName)
        
       this.user= false
-      console.log(this.addNewUser)
-      
-    console.log("add button is clicked");
-    
+      console.log(this.addNewUser)  
+      console.log(this.newUserDetails);
+        
   }
 }
 
@@ -462,15 +595,16 @@ cancelButtonClicked() {
 }
 
 addProviders(){
-  const header = {'authentication_token': localStorage.getItem ('authentication_token') ,  'Content-Type': 'application/json; charset=UTF-8',
-  "Access-Control-Allow-Origin": '*'};
+  const header = {'authentication_token': localStorage.getItem ('authentication_token')};
    this.http.get(environment.host + 'insurance_providers/',  { headers: header}).subscribe((data) =>
   {
     console.log('mydata', data);
     this.updateInsuranceProvider.push(data['object'])
     console.log(this.updateInsuranceProvider[0]);
+    console.log(data);
     
-    this.insuranceProviders.push(this.updateInsuranceProvider[0].map((e) => {  return { 'label': e.providerName, 'value': e.providerName }
+    
+    this.insuranceProviders.push(this.updateInsuranceProvider[0].map((e) => {  return { 'label': e.providerName, 'value': {'name': e.providerName,'id': e.id }}
      }))
      this.insuranceProviders = this.insuranceProviders[0]
      console.log(this.insuranceProviders);
@@ -478,23 +612,5 @@ addProviders(){
     
   })
 }
-
-// addServices()  {
-//   const header = {'authentication_token': localStorage.getItem ('authentication_token')};
-//   console.log(header)
-//    this.http.get(environment.host + '/pharmacy/service_offerings', { headers: header} ).subscribe((data) =>
-//   {
-//     console.log('mydata', data);
-//     this.updateService.push(data['object'])
-//     console.log(this.updateService[0]);
-//     // this.updateService = data
-//     console.log(data)
-//     this.details.push(this.updateService[0].map((e) => {  return { 'label': e.serviceName, 'value': e.serviceName }
-//   }))
-//   this.details = this.details[0]
-//   console.log(this.details);
-  
-//   })
-//    }
 }
 

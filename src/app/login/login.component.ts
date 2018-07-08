@@ -96,7 +96,7 @@ submitted: boolean;
           this.router.navigate(['/my-account']);
         } else {
           //alert('faliure');
-          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again'});
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again or your email is not verified'});
           this.loginFailed = true;
           this.loading = false;
          // this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });

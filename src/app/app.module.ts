@@ -19,6 +19,8 @@ import { MyAccountComponent } from './my-account/my-account.component';
 
 // Third party frameworks
 import { TextMaskModule } from 'angular2-text-mask';
+import { ImageViewerModule } from "ngx-image-viewer";
+
 
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -116,6 +118,7 @@ export const config = {
   //  AngularFireAuthModule,
     TooltipModule,
     ProgressSpinnerModule,
+    ImageViewerModule
  // AngularFireModule.initializeApp(config)
   
     // Ng4SpinnerModule// add it to the imports
