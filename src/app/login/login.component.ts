@@ -63,9 +63,7 @@ submitted: boolean;
        this.loader.open();
       this.auth.signIn(params).subscribe((res: any) => {
         console.log(res);
-        // console.log(res.statusCode == 200);
-        // console.log(res.profileCompleted == false);
-        // console.log( (res.statusCode == 200 ) && (res.profileCompleted == false));
+
         
         console.log(res.profileCompleted)
         if (res.statusCode === 200  && res.profileCompleted === true) {
@@ -78,7 +76,6 @@ submitted: boolean;
            // res['refresh_token'],
           );
           this.router.navigate(['/orders']);
-          console.log('orders')
           // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
         }
         else if(res.statusCode === 200  && res.profileCompleted === false) {
@@ -108,7 +105,8 @@ submitted: boolean;
         // this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
       }
       );
-    } else {
+    } 
+    else {
       this.setFormTouched(this.signInForm);
     }
    }

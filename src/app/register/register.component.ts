@@ -73,7 +73,7 @@ export class RegisterComponent implements OnInit {
       email: new FormControl(null, Validators.required),
       password: new FormControl(null, Validators.required),
       address: new FormControl(null, Validators.required),
-      street: new FormControl(null, Validators.required),
+      street: new FormControl(null),
       // dea: new FormControl(null, Validators.required),
       zipcode: new FormControl(null, Validators.required),
       city: new FormControl(null, Validators.required),
@@ -182,7 +182,7 @@ if(res.statusCode === 401) {
         email: signInForm.value.email,
         password: signInForm.value.password,
         address: signInForm.value.address,
-        street: signInForm.value.street,
+        street: signInForm.value.street || '',
         zipcode: signInForm.value.zipcode.code,
          city: signInForm.value.city
         // dea: signInForm.value.eda
@@ -210,7 +210,7 @@ if(res.statusCode === 401) {
           
           // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
         } else if(res.statusCode != 200){
-          this.msgs.push({severity: 'error', summary: 'Error', detail: 'already registered '});
+          this.msgs.push({severity: 'error', summary: 'Error', detail: ' Email is already registered with different Pharmacy '});
           this.loginFailed = true;
          // this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
           //alert("failure");

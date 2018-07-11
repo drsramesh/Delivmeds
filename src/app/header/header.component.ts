@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit {
 ) { }
 
   ngOnInit() {
-    this.RegisteredDetailsService();
+    
     this.router.events.subscribe( (e) => {
      
       if(e instanceof NavigationEnd) {
@@ -38,6 +38,7 @@ export class HeaderComponent implements OnInit {
           console.log(this.showButton)
          
         }else {
+          this.RegisteredDetailsService();
           this.nav = [
             {
               label: 'Orders',

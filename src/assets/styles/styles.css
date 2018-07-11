@@ -52,6 +52,17 @@ ul li {
     right: 10px;
 }
 
+.error.error-down {
+    left: 8px;
+    bottom: -15px;
+    top: inherit;
+    right: 0;
+}
+
+.position-rel {
+    position: relative;
+}
+
 .form-type {
     height: 36px;
     padding: 0 10px;
@@ -635,6 +646,14 @@ img {
 
 .orders-table table tbody td .pickup-time {
     color: #d9772d;
+}
+
+.order-viewer img {
+    height: 350px;
+}
+
+.order-viewer .spinner {
+    display: none;
 }
 
 

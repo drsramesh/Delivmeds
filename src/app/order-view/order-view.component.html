@@ -13,18 +13,24 @@
         <div class="view-left">
             <div class="noprint">
                 <div class="price-details">
-                    <img src="https://s3.amazonaws.com/deliv-meds-resources/{{orderDetails.rxImage}}" alt="">
+                    <!-- <img src="https://s3.amazonaws.com/deliv-meds-resources/{{orderDetails.rxImage}}" alt=""> -->
                     <!-- <img src=" https://s3.amazonaws.com/deliv-meds-resources/{{orderDetails.rximage}}" alt=""> -->
                     <!-- / <p-lightbox class="light-box noprint" [images]="https://s3.amazonaws.com/deliv-meds-resources/orderDetails.rxImage"></p-lightbox> -->
 
-                    <!-- <ngx-image-viewer class="order-viewer" [src]="['https://s3.amazonaws.com/deliv-meds-resources/orderDetails.rxImage']" [(index)]="imageIndex"></ngx-image-viewer> -->
+                    <div *ngIf="imageSrc.length>0">
+                        <ngx-image-viewer class="order-viewer" [src]="imageSrc"></ngx-image-viewer>
+                    </div>
+                    <div *ngIf="imageSrc.length ==0">
+                        <ngx-image-viewer class="order-viewer" [src]="imageDefault"></ngx-image-viewer>
+                    </div>
+
 
                     <!-- <ngx-image-viewer class="order-viewer" ></ngx-image-viewer> -->
                     <div class="price-value">
                         <p>Cost Details</p>
                         <span>
-            Cost (Medication): ${{sum}}
-          </span>
+ Cost (Medication): ${{sum}} 
+ </span>
                     </div>
                     <div class="payable text-center" *ngIf="orderDetails.status ==1">
                         <p>Payable Amount</p>
@@ -40,86 +46,95 @@
                 <div class="prescription" *ngIf="orderDetails.status ==2 ||orderDetails.status ==3 ||orderDetails.status ==4 ||orderDetails.status ==5 || orderDetails.status ==6 || orderDetails.status ==7">
                     <p class="pull-left prescription-left">prescription id: Nan</p>
                     <span class="pull-left prescription-right">
-        <!-- <p-dropdown class="drop-down order-dropdown" [options]="brands" [(ngModel)]= "week"  [style]="{'width':'60%'}" (onChange)="sample($event.value)" optionLabel="name"></p-dropdown> -->
-        <button  [disabled]="true" pButton type="button" (click)=" addNewRow()" label="Add" icon="fa fa-plus" class="ui-button-secondary btn-secondary-green"></button>
-      </span>
+ <!-- <p-dropdown class="drop-down order-dropdown" [options]="brands" [(ngModel)]= "week" [style]="{'width':'60%'}" (onChange)="sample($event.value)" optionLabel="name"></p-dropdown> -->
+ <button [disabled]="true" pButton type="button" (click)=" addNewRow(i)" label="Add" icon="fa fa-plus" class="ui-button-secondary btn-secondary-green"></button>
+ </span>
                     <div class="clearfix"></div>
                 </div>
 
                 <div class="prescription" *ngIf="orderDetails.status ==1">
                     <p class="pull-left prescription-left">prescription id: Nan</p>
                     <span class="pull-left prescription-right">
-            <!-- <p-dropdown class="drop-down order-dropdown" [options]="brands" [(ngModel)]= "week"  [style]="{'width':'60%'}" (onChange)="sample($event.value)" optionLabel="name"></p-dropdown> -->
-            <button pButton type="button" (click)=" addNewRow()" label="Add" icon="fa fa-plus" class="ui-button-secondary btn-secondary-green"></button>
-          </span>
+ <!-- <p-dropdown class="drop-down order-dropdown" [options]="brands" [(ngModel)]= "week" [style]="{'width':'60%'}" (onChange)="sample($event.value)" optionLabel="name"></p-dropdown> -->
+ <button pButton type="button" (click)=" addNewRow(i)" label="Add" icon="fa fa-plus" class="ui-button-secondary btn-secondary-green"></button>
+ </span>
                     <div class="clearfix"></div>
                 </div>
                 <div *ngIf="orderDetails">
                     <div class="medication-list">
                         <form [formGroup]="invoiceForm">
                             <div formArrayName="itemRows">
-                                <div class="form-group" *ngFor="let itemrow of invoiceForm.controls.itemRows.controls; let i=index" [formGroupName]="i">
-                                    <div class="form-name">
-                                        <h3 class="first">Medication Name</h3>
-                                        <input formControlName="medicalName" class="form-control" pInputText>
-                                        <!-- <span *ngIf=" !invoiceForm.get('medicalName').valid && invoiceForm.get('medicalName').touched && invoiceForm.hasError('required', 'medicalName')" style="color:red"> 
-                                        <!-- Medical Name is required</span> -->
-                                    </div>
-                                    <div class="form-qty">
-                                        <h3 class="first">Quantity</h3>
-                                        <input formControlName="quantity" type="number" class="form-control" (change)="previewOfUpdateClicked()" size="30" pInputText>
-                                        <!-- <span *ngIf=" !invoiceForm.get('quantity').valid && invoiceForm.get('quantity').touched && invoiceForm.hasError('required', 'quantity')" style="color:red">  -->
-                                        <!-- Quantity Name is required</span> -->
-                                    </div>
-                                    <div class="form-cost">
-                                        <h3 class="first">Cost</h3>
-                                        <span class="dolor-icon">
-                    <input  formControlName="cost"  type="number" class="form-control"  (change)="previewOfUpdateClicked()" size="30"  required pInputText>
-                      <!-- <span  *ngIf="  invoiceForm.hasError('required')" style="color:red">   -->
-                         <!-- Cost is required</span> -->
-                                        <i class="fa fa-usd" aria-hidden="true"></i>
-                                        </span>
-                                    </div>
+                                <div [ngClass]=" { 'reject-order' :greyImage}">
+                                    <div class="form-group" [ngClass]=" { 'reject-order' : itemrow.get('status').value==3}" *ngFor="let itemrow of invoiceForm.controls.itemRows.controls; let i=index" [formGroupName]="i">
+                                        <div class="form-name">
+                                            <!-- <input [hidden] formControlName="status" class="form-control" pInputText> -->
+                                            <h3 class="first">Medication Name</h3>
+                                            <input formControlName="medicalName" class="form-control" pInputText>
+                                            <!-- <span *ngIf=" !invoiceForm.get('medicalName').valid && invoiceForm.get('medicalName').touched && invoiceForm.hasError('required', 'medicalName')" style="color:red"> 
+ <!-- Medical Name is required</span> -->
+                                        </div>
+                                        <div class="form-qty">
+                                            <h3 class="first">Quantity</h3>
+                                            <input formControlName="quantity" type="number" min=0 (keypress)="onlyValues($event)" class="form-control" (input)="previewOfUpdateClicked($event.target.value)" size="30" pInputText>
+                                            <!-- <span *ngIf=" !invoiceForm.get('quantity').valid && invoiceForm.get('quantity').touched && invoiceForm.hasError('required', 'quantity')" style="color:red"> -->
+                                            <!-- Quantity Name is required</span> -->
+                                        </div>
+                                        <div class="form-cost">
+                                            <h3 class="first">Cost</h3>
+                                            <span class="dolor-icon">
+ <input formControlName="cost" type="number" min = 0 (keypress) = "onlyValues($event)" class="form-control" (input)="previewOfUpdateClicked($event.target.value)" size="30" pInputText>
+ <!-- <span *ngIf=" invoiceForm.hasError('required')" style="color:red"> -->
+ <!-- Cost is required</span> -->
+                                            <i class="fa fa-usd" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
 
-                                    <div class="form-dos">
-                                        <h3 class="first">Copay</h3>
-                                        <!-- <input formControlName="dosage" class="form-control" pInputText> -->
-                                        <p-dropdown class="drop-down" formControlName="copay" [options]="brands" [style]="{'width':'60%'}" (onChange)="previewOfUpdateClicked()" optionLabel="name"></p-dropdown>
-                                    </div>
-                                    <!-- <div>  -->
-                                    <div *ngIf="orderDetails.status ==2 ||orderDetails.status ==3 ||orderDetails.status ==4 ||orderDetails.status ==5 || orderDetails.status ==6 || orderDetails.status ==7">
-                                        <!-- <button *ngIf="invoiceForm.controls.itemRows.controls.length > 1" (click)="deleteRow(i)" class="btn btn-danger"> x</button> -->
-                                        <button [disabled]="true" (click)="showDialog(i, itemrow)" class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></button>
-                                        <form [formGroup]="reasonForm">
-                                            <p-dialog header="Reject Order" class="medication-list" [(visible)]="display" name="reason1" formGroupName="reason1" formControlName="reason1" required ngDefaultControl [(ngModel)]="weekdata" [modal]="true" [responsive]="true" [width]="600" [minWidth]="200"
-                                                [minY]="70">
-                                                <textarea class="btn-full text-area commenttext-box" rows="5" cols="30" placeholder="Enter Reason" pInputTextarea maxlength="250"></textarea>
-                                                <p-footer>
-                                                    <button type="button" [ngClass]="reject-order" class="btn-group-green" pButton *ngIf="invoiceForm.controls.itemRows.controls.length > 0" (click)=" deleteRow(i) " label="Submit "></button>
-                                                    <button type="button " class="ui-button-secondary btn-secondary-green " pButton (click)="display=false " label="Cancel "></button>
+                                        <div class="form-dos">
+                                            <h3 class="first">Copay</h3>
+                                            <!-- <input formControlName="dosage" class="form-control" pInputText> -->
+                                            <p-dropdown class="drop-down" formControlName="copay" [options]="brands" [style]="{'width':'60%'}" (onChange)="previewOfUpdateClicked()" optionLabel="name"></p-dropdown>
+                                        </div>
+                                        <!-- <div> -->
+                                        <div *ngIf="orderDetails.status ==2 ||orderDetails.status ==3 ||orderDetails.status ==4 ||orderDetails.status ==5 || orderDetails.status ==6 || orderDetails.status ==7">
+                                            <!-- <button *ngIf="invoiceForm.controls.itemRows.controls.length > 1" (click)="deleteRow(i)" class="btn btn-danger"> x</button> -->
+                                            <button [disabled]="true" (click)="showDialog(i, itemrow)" class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                            <form [formGroup]="reasonForm">
+                                                <p-dialog header="Reject Order" class="medication-list" [(visible)]="display" name="reason1" formGroupName="reason1" formControlName="reason1" required ngDefaultControl [(ngModel)]="weekdata" [modal]="true" [responsive]="true" [width]="600" [minWidth]="200"
+                                                    [minY]="70">
+                                                    <textarea class="btn-full text-area commenttext-box" rows="5" cols="30" placeholder="Enter Reason" pInputTextarea maxlength="250"></textarea>
+                                                    <p-footer>
+                                                        <!-- <div *ngIf="invoiceForm.controls.itemRows.controls.length > 1 ;let i=index">
+ {{i}}
+ <button type="button" class="btn-group-green" pButton (click)=" deleteRow() " label="Submit "></button>
+ </div> -->
+                                                        <div>
+                                                            <button type="button" class="btn-group-green" pButton (click)=" deleteRow(i) " label="Submit "></button>
+                                                        </div>
+                                                        <button type="button " class="ui-button-secondary btn-secondary-green " pButton (click)="display=false " label="Cancel "></button>
 
-                                                </p-footer>
-                                            </p-dialog>
-                                        </form>
-                                    </div>
-                                    <div *ngIf="orderDetails.status==1 ">
-                                        <!-- <button *ngIf="invoiceForm.controls.itemRows.controls.length> 1" (click)="deleteRow(i)" class="btn btn-danger"> x</button> -->
-                                        <button (click)="showDialog(i, itemrow)" class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></button>
-                                        <form [formGroup]="reasonForm">
-                                            <p-dialog header="Reject Order" class="medication-list" [(visible)]="display" name="reason1" formGroupName="reason1" formControlName="reason1" ngDefaultControl [(ngModel)]="weekdata" [modal]="true" [responsive]="true" [width]="600" [minWidth]="200" [minY]="70">
-                                                <textarea class="btn-full text-area commenttext-box" rows="5" cols="30" placeholder="Enter Reason" pInputTextarea maxlength="250"></textarea>
-                                                <p-footer>
-                                                    <button type="button" class="btn-group-green" pButton *ngIf="invoiceForm.controls.itemRows.controls.length > 0" (click)="deleteRow(i)" label="Submit"></button>
-                                                    <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="display=false" label="Cancel"></button>
+                                                    </p-footer>
+                                                </p-dialog>
+                                            </form>
+                                        </div>
+                                        <div *ngIf="orderDetails.status==1 ">
+                                            <!-- <button *ngIf="invoiceForm.controls.itemRows.controls.length> 1" (click)="deleteRow(i)" class="btn btn-danger"> x</button> -->
+                                            <button (click)="showDialog(i, itemrow)" class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                            <form [formGroup]="reasonForm">
+                                                <p-dialog header="Reject Order" class="medication-list" [(visible)]="display" name="reason1" formGroupName="reason1" formControlName="reason1" ngDefaultControl [(ngModel)]="weekdata" [modal]="true" [responsive]="true" [width]="600" [minWidth]="200" [minY]="70">
+                                                    <textarea class="btn-full text-area commenttext-box" rows="5" cols="30" placeholder="Enter Reason" pInputTextarea maxlength="250"></textarea>
+                                                    <p-footer>
+                                                        <button type="button" class="btn-group-green" pButton *ngIf="invoiceForm.controls.itemRows.controls.length > 0" (click)="deleteRow(i)" label="Submit"></button>
+                                                        <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="display=false" label="Cancel"></button>
 
-                                                </p-footer>
-                                            </p-dialog>
-                                        </form>
+                                                    </p-footer>
+                                                </p-dialog>
+                                            </form>
+                                        </div>
+                                        <div class="clearfix"></div>
                                     </div>
-                                    <div class="clearfix"></div>
                                 </div>
                             </div>
-                            <!-- <button pButton type="button" (click)= "showDialog()" label="Reject Order"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+                            <!-- <button pButton type="button" (click)= "showDialog()" label="Reject Order" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
                         </form>
                     </div>
                 </div>
@@ -128,37 +143,38 @@
                 <button [disabled]="true" class="medication-list mg-tp btn-group-green" pButton type="button" (click)="updateButtonClicked()" label="submit"></button>
             </div>
             <div *ngIf=" orderDetails.status ==1">
-                <button [disabled]="!invoiceForm.valid" class="medication-list mg-tp btn-group-green" pButton type="button" (click)="updateButtonClicked(itemRows)" label="Submit"></button>
+                <button class="medication-list mg-tp btn-group-green" pButton type="button" (click)="updateButtonClicked(itemRows)" label="Submit"></button>
             </div>
         </div>
         <div class="view-right">
             <div class="noprint">
                 <div class="orders">
                     <h3 class="panel-head pull-left"><label>order Id :</label>{{orderDetails.id}} <span class="new">
-                
-                <label *ngIf = "orderDetails.status ==1"> New</label> 
-                    <!-- <button pButton type="button"  label="New"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-               
-                 <label *ngIf = "orderDetails.status ==2"> Waiting For customer Response</label> 
-                    <!-- <button pButton type="button"  label="Waiting for Customer response"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-               
-                <label *ngIf = "orderDetails.status ==3 ||orderDetails.status ==4"> Rejected</label> 
-                     <!-- <button pButton type="button"  label="Rejected"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-           
-                    <label *ngIf = "orderDetails.status ==5"> Ready For pickup</label> 
-                     <!-- <button pButton type="button"  label="Accepted"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-                        <label *ngIf = "orderDetails.status ==6">Customer Accepted</label> 
-                         <!-- <button pButton type="button"  label="Accepted"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-                            <label *ngIf = "orderDetails.status ==7"> Delivered</label> 
-                             <!-- <button pButton type="button"  label="Accepted"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-                </span></h3>
+ 
+ <label *ngIf = "orderDetails.status ==1"> New</label> 
+ <!-- <button pButton type="button" [disabled]="!invoiceForm.valid" label="New" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+ 
+ <label *ngIf = "orderDetails.status ==2"> Waiting For customer Response</label> 
+ <!-- <button pButton type="button" label="Waiting for Customer response" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+ 
+ <label *ngIf = "orderDetails.status ==3"> Rejected By pharmacy</label> 
+ <label *ngIf = "orderDetails.status ==4"> Rejected By Customer</label> 
+ <!-- <button pButton type="button" label="Rejected" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+ 
+ <label *ngIf = "orderDetails.status ==5"> Ready For pickup</label> 
+ <!-- <button pButton type="button" label="Accepted" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+ <label *ngIf = "orderDetails.status ==6">Customer Accepted</label> 
+ <!-- <button pButton type="button" label="Accepted" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+ <label *ngIf = "orderDetails.status ==7"> Delivered</label> 
+ <!-- <button pButton type="button" label="Accepted" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+ </span></h3>
                     <div *ngIf="orderDetails.status ==2 || orderDetails.status ==3 || orderDetails.status ==4 ||orderDetails.status ==5 || orderDetails.status ==6 || orderDetails.status ==7">
                         <button [disabled]="true" pButton type="button" (click)="showDialog1()" label="Reject Order" class="ui-button-secondary btn-secondary-green pull-right"></button>
                     </div>
                     <div *ngIf=" orderDetails.status ==1">
                         <button pButton type="button" (click)="showDialog1()" label="Reject Order" class="ui-button-secondary btn-secondary-green pull-right"></button>
                         <form [formGroup]="reasonForm1">
-                            <p-dialog header="Reject Order1" class="medication-list" [(visible)]="display1" name="reason2" formGroupName="reason2" formControlName="reason2" ngDefaultControl [(ngModel)]="orderRejectedCompletey" [modal]="true" [responsive]="true" [width]="600" [minWidth]="200"
+                            <p-dialog header="Reject Order" class="medication-list" [(visible)]="display1" name="reason2" formGroupName="reason2" formControlName="reason2" ngDefaultControl [(ngModel)]="orderRejectedCompletey" [modal]="true" [responsive]="true" [width]="600" [minWidth]="200"
                                 [minY]="70">
                                 <textarea class="btn-full text-area commenttext-box" placeholder="Enter Reason" pInputTextarea maxlength="250"></textarea>
                                 <p-footer>
@@ -207,7 +223,7 @@
             <div class="noprint">
                 <div class="insurance-details ui-g ui-row" *ngIf="orderDetails.customerResponse.customerInsurances && orderDetails.customerResponse.customerInsurances.length > 0">
                     <div class="ui-g-7 ui-md-7">
-                        <!-- class="ui-g-7"        -->
+                        <!-- class="ui-g-7" -->
                         <h4>Insurance Details</h4>
                         <ul>
                             <p>InsuranceProviderName: {{orderDetails.customerResponse.customerInsurances[0].insuranceProviderName}}</p>
@@ -225,7 +241,7 @@
                 </div>
                 <div class="insurance-details ui-g" *ngIf="orderDetails.customerResponse.customerMembers && orderDetails.customerResponse.customerMembers[0].insurances">
                     <div class="ui-g-7 ui-md-7">
-                        <!-- class="ui-g-7"        -->
+                        <!-- class="ui-g-7" -->
                         <h4>Insurance Details</h4>
                         <ul>
                             <p> InsuranceProviderName: {{orderDetails.customerResponse.customerMembers[0].insurances[0].insuranceProviderName}}</p>
@@ -246,8 +262,8 @@
             <div class="delevery-address">
                 <div class="page">
                     <div id="print-section">
-                        <h4 class="">Delivery Address <span class="pull-right"><i class="fa fa-print"  (click) = "print()"></i>
-          </span></h4>
+                        <h4 class="">Delivery Address <span class="pull-right"><i class="fa fa-print" (click) = "print()"></i>
+ </span></h4>
                         <div class="clearfix"></div>
                         <div *ngIf="orderDetails">
                             <div *ngIf="orderDetails.customerResponse.customerMembers;else patientData">

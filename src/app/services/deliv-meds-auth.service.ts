@@ -79,15 +79,20 @@ emailAvailability(params) {
 
  // Confirming email for login
  confirmEmail(params) {
-  return this._http.post(environment.host + 'users/confirm_user', params);
+  return this._http.post("http://172.16.19.148:8080/deliv-meds-api/" + 'pharmacy/register/email_verify', params);
 }
  // Signup method
- signUp(params) {
+//  signUp(params) {
+//   const header = {'authentication_token': localStorage.getItem ('authentication_token')};
+//    console.log(params);   
+//   return this._http.post(environment.host + 'pharmacy/register' ,params);
+// }
+signUp(params) {
   const header = {'authentication_token': localStorage.getItem ('authentication_token')};
    console.log(params);   
-  return this._http.post(environment.host + 'pharmacy/register' ,params);
+  return this._http.post("http://172.16.19.148:8080/deliv-meds-api/" + 'pharmacy/register' ,params);
 }
-
+//http://172.16.19.148:8080/deliv-meds-api/pharmacy/register/email_verify/
 //for updateddetails
 updateDetails(profilepageObj) {
   // const header = {'authentication_token': localStorage.getItem('authentication_token')};

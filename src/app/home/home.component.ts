@@ -94,6 +94,10 @@ OrderList() {
             console.log(JSON.stringify(res));
          this.cars = res['object']['orders'];
          this.filterableCars = res['object']['orders'];
+         this.filterableCars = this.filterableCars.sort(res['object']['orders']['id'])
+        //  sort((a,b)=> a.id-b.id)
+         console.log(this.filterableCars);
+         
          this.pages = true
          this.loader.close();
          console.log(this.cars)
@@ -139,26 +143,32 @@ OrderList() {
   this.auth.statusOrder(params).subscribe((res:any) => {
     console.log(params);
     console.log(res);
+    this.OrderList();
   });  
-  window.location.reload();  
+  
  }
- ReadyForPickup(id){
-   console.log(id);
+ ReadyForPickup(car){
+   console.log(car);
    let params = {
-    orderId:id,
+    orderId:car.id,
     //status for ready for pickup
      status: 6
    }
   this.auth.statusOrder(params).subscribe((res:any) => {
     console.log(params);
     console.log(res);
-  
+    this.OrderList();
+   //  car.status = res.status;
     // this.router.navigate(['/orders']);
   });
-  window.location.reload();  
+  // window.location.reload();  
  }
 
-
+ visible: boolean = true;
+ updateVisibility(): void {
+   this.visible = false;
+   setTimeout(() => this.visible = true, 0);
+ }
 sample(event) {
 
 
