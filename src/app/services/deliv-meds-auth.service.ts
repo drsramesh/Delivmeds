@@ -27,7 +27,16 @@ export class DelivMedsAuthService {
 
  // sign in api call
  signIn(params) {
-  return this._http.post(environment.host + 'login', params);
+  //console.log(params);
+  return this._http.post(environment.host + 'pharmacy/login', params);
+}
+
+statusOrder(params){
+  return this._http.post(environment.host + 'order/pharmacy/status', params);
+}
+
+totalOrderPrice(params){
+  return this._http.post(environment.host + 'order/pharmacy', params);
 }
 
  // update token call checking for auth token if not will send refresh token
@@ -70,12 +79,33 @@ emailAvailability(params) {
 
  // Confirming email for login
  confirmEmail(params) {
-  return this._http.post(environment.host + 'users/confirm_user', params);
+  return this._http.post("http://172.16.19.148:8080/deliv-meds-api/" + 'pharmacy/register/email_verify', params);
 }
  // Signup method
- signUp(signup_credentials) {
-  return this._http.post(environment.host + 'pharmacy/register', signup_credentials);
+//  signUp(params) {
+//   const header = {'authentication_token': localStorage.getItem ('authentication_token')};
+//    console.log(params);   
+//   return this._http.post(environment.host + 'pharmacy/register' ,params);
+// }
+signUp(params) {
+  const header = {'authentication_token': localStorage.getItem ('authentication_token')};
+   console.log(params);   
+  return this._http.post("http://172.16.19.148:8080/deliv-meds-api/" + 'pharmacy/register' ,params);
 }
+//http://172.16.19.148:8080/deliv-meds-api/pharmacy/register/email_verify/
+//for updateddetails
+updateDetails(profilepageObj) {
+  // const header = {'authentication_token': localStorage.getItem('authentication_token')};
+  console.log(JSON.stringify(profilepageObj));   
+ return this._http.post(environment.host + 'pharmacy/profile',  profilepageObj);
+}
+
+EdituserDetails(params) {
+  // const header = {'authentication_token': localStorage.getItem('authentication_token')};
+  console.log(JSON.stringify(params));   
+ return this._http.post(environment.host + 'pharmacy/update_basic_profile',  params);
+}
+
 
 // forgot password call
 forgotPassword(params) {
@@ -92,7 +122,7 @@ resetPassword(params) {
   this._http.post(environment.host + 'users/sign_out', { headers: header}).subscribe((res) => {
     this._tokenService.removeTokens();
     this._userService.destroyUser();
-    // this._router.navigate(['auth']);
+     this._router.navigate(['/login']);
   });
 }
 

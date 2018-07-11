@@ -11,7 +11,13 @@ export class UserService {
 
 // service to make a post request to create user
   createUser(reqBody: any): Observable <any> {
+    console.log(reqBody)
     return this.httpClient.post(environment.host + 'create_user', reqBody);
+  
+  }
+
+  setUser(reqBody: any): Observable <any> {
+    return this.httpClient.post(environment.host + 'set_user', reqBody);
   }
    // service method to delete user record
    deleteUser(userId, siteId) {
@@ -19,7 +25,11 @@ export class UserService {
   }
 // service to get user details based on id passed to it
 getUserDetails(userId: string) {
-  return this.httpClient.get(environment.host + 'get_user_details', { params: { id: userId}});
+  return this.httpClient.get(environment.host + 'pharmacy/profile', { params: { id: userId}});
+}
+
+InsuranceDetails(params){
+  return this.httpClient.post(environment.host + '/pharmacy/insurance_providers', params );
 }
   logout( ) {
     return this.httpClient.post(environment.host + 'logout', {});
@@ -28,4 +38,8 @@ getUserDetails(userId: string) {
    destroyUser() {
     return this.httpClient.delete(environment.host + 'logout', {});
    }
+
+  //  getServiceOfferings(auth_TOKEN): Observable <any> {
+  //   return this.httpClient.post(environment.host + 'set_user', reqBody);
+  // }
 }

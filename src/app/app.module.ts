@@ -35,6 +35,7 @@ import { GrowlModule } from 'primeng/primeng';
 import {AutoCompleteModule} from 'primeng/autocomplete';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import {TooltipModule} from 'primeng/tooltip';
+import {MultiSelectModule} from 'primeng/multiselect';
 
 import {BreadcrumbModule} from 'primeng/breadcrumb';
 import {LightboxModule} from 'primeng/lightbox';
@@ -49,10 +50,28 @@ import { UserService } from './services/user.service';
 import { RegisterService } from './services/register.service';
 import { HomeService } from './services/home.service';
 import { EmailRegistrationService } from './services/email-registration.service';
+import { PreloadService } from './services/preload.service'
+import { TokenInterceptor } from '././services/token.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthLoginGuardService } from './services/auth-login-guard.service';
 import {CheckboxModule} from 'primeng/checkbox';
 import {DialogModule} from 'primeng/dialog';
+import { MessagingService} from './messaging.service';
 
+// import {AngularFireModule} from 'angularFire2';
 
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import { EmailverificationComponent } from './emailverification/emailverification.component';
+
+// export const config = {
+//   apiKey: "AIzaSyBPdrOSKvYG9KVXGO_sh42ojg-hfapvwPg",
+//   authDomain: "delivmed-1528981249385.firebaseapp.com",
+//   databaseURL: "https://delivmed-1528981249385.firebaseio.com",
+//   projectId: "delivmed-1528981249385",
+//   storageBucket: "",
+//   messagingSenderId: "76947739447"
+// };
+// import {Ng4SpinnerModule} from 'ng4-spinner';
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,10 +82,12 @@ import {DialogModule} from 'primeng/dialog';
     OrderViewComponent,
     NotificationsComponent,
     NotificationDetailsComponent,
-    MyAccountComponent
+    MyAccountComponent,
+    EmailverificationComponent
   ],
   imports: [
     BrowserModule,
+    AutoCompleteModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     InputTextModule,
@@ -82,23 +103,49 @@ import {DialogModule} from 'primeng/dialog';
     ReactiveFormsModule,
     GrowlModule,
     HttpClientModule,
+    MultiSelectModule,
     HttpModule ,
+    HttpClientModule,
+  // AngularFireAuthModule,
     ToastModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot(),
     BreadcrumbModule,
     LightboxModule,
+<<<<<<< HEAD
     CheckboxModule,
     DialogModule,
     AutoCompleteModule,
     TooltipModule,
     ImageViewerModule.forRoot()
+=======
+        CheckboxModule,
+    DialogModule,
+  //  AngularFireAuthModule,
+    TooltipModule,
+    ProgressSpinnerModule,
+    ImageViewerModule
+ // AngularFireModule.initializeApp(config)
+  
+    // Ng4SpinnerModule// add it to the imports
+    
+>>>>>>> 704db7a3c1a259e92a0c7a5f3d6af29f52ae1b20
   ],
-  providers: [ StateService,
+  providers: [ 
+    StateService,
     DelivMedsAuthService,
     EmailRegistrationService,
+    AuthLoginGuardService,
     UserService,
-    TokenService,DelivMedsAuthService,
-    RegisterService
+    TokenService,
+    RegisterService,
+    TokenInterceptor,
+    PreloadService,
+    MessagingService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
    ],
   bootstrap: [AppComponent]
 })

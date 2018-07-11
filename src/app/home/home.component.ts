@@ -1,7 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { StateService } from '../services/state.service';
-import { Http, Response } from '@angular/http';
+// import { Http, Response } from '@angular/http';
 import { Details } from '../Interface/details';
+import {HttpClientModule} from '@angular/common/http';
+import { Routes, Router, RouterModule, ActivatedRoute, ParamMap } from '@angular/router';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/observable/of';
+import { Http, HttpModule, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from  '../../environments/environment';
+import { PreloadService } from '../services/preload.service';
+import { DelivMedsAuthService } from '../services/deliv-meds-auth.service';
+import { Logs } from 'selenium-webdriver';
+
 
 interface SortEvent {
   data?: any[];
@@ -17,8 +30,8 @@ interface SortEvent {
 })
 export class HomeComponent implements OnInit {
 
-  cars: any[];
-
+  cars: any  = [];
+ msgs = [];
   cols: any[];
   colors: string;
   brands: any[];
@@ -27,77 +40,23 @@ export class HomeComponent implements OnInit {
   filterableCars = [];
   yearTimeout: any;
 
-  constructor( ) { }
+  constructor(  private http: HttpClient,
+    private router: Router,
+    private loader: PreloadService,
+    private auth: DelivMedsAuthService) { }
 
   ngOnInit() {
     // this.carService.getCarsMedium().then(cars => this.cars = cars);
+this.OrderList();
 
         this.brands = [
             { name: 'All Orders', value: 'AllOrders' },
-            { name: 'Active Orders', value: 'Active' },
-            { name: 'Rejected Orders', value: 'Rejected' },
-            { name: 'Completed Orders', value: 'Delivered' }
+            { name: 'New Orders', value: 1 },
+            { name: 'Active Orders', value: 2 },
+            { name: 'Rejected Orders', value: 3 },
+            { name: 'Completed Orders', value: 4 }
         ];
 
-        this.cars = [
-          {
-            'id': '12345678',
-            'Prescription': '#xyz 123456',
-            'PatientName': 1987,
-            'OrderDate': '5/20/2018 11:43',
-            'status': 'New',
-            'time': '3:00pm to 8:00pm'
-        },
-        {
-          'id': '12345678',
-          'Prescription': '#xyz 123456',
-          'PatientName': 1987,
-          'OrderDate': '5/20/2018 11:43',
-          'status': 'Rejected',
-          'time': '3:00pm to 8:00pm'
-      },
-      {
-        'id': '12345678',
-        'Prescription': '#xyz 123456',
-        'PatientName': 1987,
-        'OrderDate': '5/20/2018 11:43',
-        'status': 'Waiting For Delivery',
-        'time': '3:00pm to 8:00pm'
-    },
-    {
-      'id': '12345678',
-      'Prescription': '#xyz 123456',
-      'PatientName': 1987,
-      'OrderDate': '5/20/2018 11:43',
-      'status': 'Awaiting for payment confirmation',
-      'time': '3:00pm to 8:00pm'
-  },
-  {
-    'id': '12345678',
-    'Prescription': '#xyz 123456',
-    'PatientName': 1987,
-    'OrderDate': '5/20/2018 11:43',
-    'status': 'Waiting for cudtomer pickup',
-    'time': '3:00pm to 8:00pm'
-},
-{
-  'id': '12345678',
-  'Prescription': '#xyz 123456',
-  'PatientName': 1987,
-  'OrderDate': '5/20/2018 11:43',
-  'status': 'In Transit',
-  'time': '3:00pm to 8:00pm'
-},
-{
-  'id': '12345678',
-  'Prescription': '#z 123456',
-  'PatientName': 1987,
-  'OrderDate': '5/20/2018 11:43',
-  'status': 'Delivered',
-  'time': '3:00pm to 8:00pm'
-},
-        ];
-        this.filterableCars = [].concat(this.cars);
         this.cols = [
             { field: 'id', header: 'Order ID' },
             { field: 'Prescription', header: 'Prescription ID' },
@@ -118,57 +77,167 @@ export class HomeComponent implements OnInit {
         dt.filter(event.value, 'year', 'gt');
     }, 250);
 }
+pages :boolean
+OrderList() {
+  const header = {'authentication_token': localStorage.getItem('authentication_token')};
+  console.log(header);
+  console.log("auth" + localStorage.getItem ('authentication_token'));
+  this.loader.open();
+  this.http.get(environment.host + 'order/pharmacy').subscribe((res: any) => {
+    console.log(res)
+    if(res.statusCode === 401) {
+      //alert('zipcode is not servicable')
+      this.msgs.push({severity: 'error', summary: 'Error', detail: 'No Orders Found '});
+      this.loader.close();
+      console.log('No orders Found');
+      } else {
+            console.log(JSON.stringify(res));
+         this.cars = res['object']['orders'];
+         this.filterableCars = res['object']['orders'];
+         this.filterableCars = this.filterableCars.sort(res['object']['orders']['id'])
+        //  sort((a,b)=> a.id-b.id)
+         console.log(this.filterableCars);
+         
+         this.pages = true
+         this.loader.close();
+         console.log(this.cars)
+         
+        // this.zipcodeService.push
+          console.log(this.cars);
+        //  this.editForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
+ 
+        }
+  }, (err) => {
+    this.loader.close();
+    this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server Error'});
+    // this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
+  }
+
+);
+  
+}
 
 
+
+ viewDetail(id){
+     console.log("button clicked");
+     console.log(id);
+     const header = {'authentication_token': localStorage.getItem('authentication_token')};
+     if (id != null || undefined)
+     {
+      localStorage.setItem('orderId', id) ;
+      console.log(localStorage.getItem('orderId'));
+      this.router.navigate(['/order-view']);
+      
+     }
+ }
+
+ Delivered(id){
+   let params = {
+
+    orderId:id,
+    //orderId: localStorage.getItem('orderId'),
+    //status for ready for pickup
+     status: 7
+   }
+  this.auth.statusOrder(params).subscribe((res:any) => {
+    console.log(params);
+    console.log(res);
+    this.OrderList();
+  });  
+  
+ }
+ ReadyForPickup(car){
+   console.log(car);
+   let params = {
+    orderId:car.id,
+    //status for ready for pickup
+     status: 6
+   }
+  this.auth.statusOrder(params).subscribe((res:any) => {
+    console.log(params);
+    console.log(res);
+    this.OrderList();
+   //  car.status = res.status;
+    // this.router.navigate(['/orders']);
+  });
+  // window.location.reload();  
+ }
+
+ visible: boolean = true;
+ updateVisibility(): void {
+   this.visible = false;
+   setTimeout(() => this.visible = true, 0);
+ }
 sample(event) {
-  this.cars = [];
 
+
+  this.filterableCars = [];
+  console.log(event.value.value);
+  
+ 
   switch (event.value.value) {
-    case "Active":
-       console.log(this.filterableCars.length);
-      for(let i = 0;i < this.filterableCars.length;i++)
+    
+
+    case "AllOrders":
+     
+      for(let i = 0;i < this.cars.length;i++)
+      
       {
-        console.log(this.filterableCars[i].status)
-        if ((this.filterableCars[i].status !="Rejected") && (this.filterableCars[i].status !="Delivered") )
+      
+        if ((this.cars[i].status !=3)  && ((this.cars[i].status !=4)))
         {
-          this.cars.push(this.filterableCars[i]);
+          this.filterableCars.push(this.cars[i]);
         }
       }
       console.log(this.cars);
     break;
 
-    case "Rejected" :
+    case 1 :
+   console.log(this.filterableCars.length);
    
-    for(let i = 0;i < this.filterableCars.length;i++)
+    for(let i = 0;i < this.cars.length;i++)
       {
-        console.log(this.filterableCars[i].status)
-        if ((this.filterableCars[i].status =="Rejected") )
+     
+        if (this.cars[i].status ==1)
         {
-          this.cars.push(this.filterableCars[i]);
+          this.filterableCars.push(this.cars[i]);
         }
   }
   break;
 
-  case "Delivered" :
-    for(let i = 0;i < this.filterableCars.length;i++)
+  case 2 :
+    for(let i = 0;i < this.cars.length;i++)
       {
-        console.log(this.filterableCars[i].status)
-        if ((this.filterableCars[i].status =="Delivered") )
+        if ((this.cars[i].status ==2 ||  this.cars[i].status ==5 || this.cars[i].status ==6) )
         {
-          this.cars.push(this.filterableCars[i]);
+          this.filterableCars.push(this.cars[i]);
+          
+          
         }
   }
   break;
 
-  case "AllOrders" :
-    for(let i = 0;i < this.filterableCars.length;i++)
+  case 3 :
+    for(let i = 0;i < this.cars.length;i++)
       {
-        this.cars.push(this.filterableCars[i]);
+        if ((this.cars[i].status ==3) || (this.cars[i].status ==4) )
+        {
+          this.filterableCars.push(this.cars[i]);
+        }
+  }
+  break;
+
+  case 4 :
+    for(let i = 0;i < this.cars.length;i++)
+      {
+        if (this.cars[i].status ==7){
+        this.filterableCars.push(this.cars[i]);
+        }
     }
     break;
   }
 
-  console.log(event.value.value);
 }
 customSort(event: SortEvent) {
   event.data.sort((data1, data2) => {
@@ -194,6 +263,13 @@ customSort(event: SortEvent) {
 
 deleteOrder() {
   console.log('button clicked');
+}
+
+count2(index){
+  console.log("button0");
+  this.cars.splice(index,1);
+  this.filterableCars.splice(index,1);
+  
 }
 
 }

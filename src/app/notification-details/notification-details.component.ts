@@ -8,8 +8,12 @@ import { Component, OnInit } from '@angular/core';
 export class NotificationDetailsComponent implements OnInit {
 
   constructor() { }
-
+imageDefault = [];
+ 
   ngOnInit() {
+    // this.imageDefault = [
+    //   // 'assets/images/default.png'
+    //  ];
   }
 
 }
