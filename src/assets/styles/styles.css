@@ -379,9 +379,11 @@
     .pass-error {
         line-height: 14px;
         font-size: 11px;
-        padding-bottom: 20px;
+        padding-bottom: 5px;
         padding-top: 5px;
         color: #898989;
+        font-weight: 300;
+        height: 30px;
     }
     
     .primary-block {
