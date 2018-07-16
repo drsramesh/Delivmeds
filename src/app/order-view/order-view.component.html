@@ -184,30 +184,24 @@
                 </div>
             </div>
             <div class="noprint">
-                <div class="patient-details">
-                    <div *ngIf="orderDetails.customerResponse.customerMembers && orderDetails.customerResponse.customerMembers.length > 0">
-                        <p>Patient Name: {{orderDetails.customerResponse.customerMembers[0].firstName}} {{orderDetails.customerResponse.customerMembers[0].lastName}} </p>
-                        <p>DOB: {{orderDetails.customerResponse.customerMembers[0].birthDate}}</p>
-                        <p>Contact: {{orderDetails.customerResponse.customerMembers[0].phone}}</p>
-                    </div>
+                <div class="patient-details" *ngIf="orderDetails.customerResponse.customerMembers && orderDetails.customerResponse.customerMembers.length > 0">
+                    <p>Patient Name: {{orderDetails.customerResponse.customerMembers[0].firstName}} {{orderDetails.customerResponse.customerMembers[0].lastName}} </p>
+                    <p>DOB: {{orderDetails.customerResponse.customerMembers[0].birthDate}}</p>
+                    <p>Contact: {{orderDetails.customerResponse.customerMembers[0].phone}}</p>
                 </div>
             </div>
             <div class="noprint">
-                <div class="patient-details">
-                    <div *ngIf="orderDetails.customerResponse">
-                        <p>User: {{orderDetails.customerResponse.firstName}} {{orderDetails.customerResponse.lastName}} </p>
-                        <p>Contact: {{orderDetails.customerResponse.phone}}</p>
-                    </div>
+                <div class="patient-details" *ngIf="orderDetails.customerResponse">
+                    <p>User: {{orderDetails.customerResponse.firstName}} {{orderDetails.customerResponse.lastName}} </p>
+                    <p>Contact: {{orderDetails.customerResponse.phone}}</p>
                 </div>
             </div>
             <div class="noprint">
-                <div class="patient-details">
-                    <div *ngIf="orderDetails.customerResponse.customerDoctors">
-                        <ul>CustomerDoctors:</ul>
-                        <div *ngFor="let doctor of orderDetails.customerResponse.customerDoctors">
-                            <p>Doctor: {{doctor.doctorName}} </p>
-                            <p>Contact: {{doctor.doctorPhone}}</p>
-                        </div>
+                <div class="patient-details" *ngIf="orderDetails.customerResponse.customerDoctors">
+                    <ul>CustomerDoctors:</ul>
+                    <div *ngFor="let doctor of orderDetails.customerResponse.customerDoctors">
+                        <p>Doctor: {{doctor.doctorName}} </p>
+                        <p>Contact: {{doctor.doctorPhone}}</p>
                     </div>
                     <!-- {{orderDetails.customerResponse.customerDoctors[0].doctorName}} -->
                     <div *ngFor="let doctor of customerResponses.customerMembers">

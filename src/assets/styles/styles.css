@@ -51,6 +51,7 @@
         position: absolute;
         top: 5px;
         right: 10px;
+        font-size: 12px;
     }
     
     .ui-float-label input.ng-dirty.ng-invalid~label {
@@ -130,8 +131,8 @@
         border-radius: 25px;
         padding: 0 13px;
         font-size: 13px;
-        -webkit-transition: all 2s ease;
-        transition: all 2s ease;
+        -webkit-transition: all 1s ease;
+        transition: all 1s ease;
         border: 1px solid #7bc466;
     }
     
@@ -183,10 +184,10 @@
         padding: 0 13px;
         font-size: 13px;
         color: #7bc466;
-        -webkit-transition: all 2s ease;
-        -moz-transition: all 2s ease;
-        -o-transition: all 2s ease;
-        transition: all 2s ease;
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        transition: all 1s ease;
     }
     
     .ui-button.ui-button-secondary.ui-state-default.btn-secondary-green:hover {
@@ -373,6 +374,14 @@
     .primary-timeings {
         display: inline-block;
         width: 45%;
+    }
+    
+    .pass-error {
+        line-height: 14px;
+        font-size: 11px;
+        padding-bottom: 20px;
+        padding-top: 5px;
+        color: #898989;
     }
     
     .primary-block {
@@ -692,6 +701,10 @@
         height: 350px;
     }
     
+    .order-viewer .img-container button:last-child {
+        display: none;
+    }
+    
     .order-viewer .spinner {
         position: relative;
         ;
@@ -931,6 +944,7 @@
     .delevery-address {
         border: 1px solid #e0e0e0;
         padding: 15px 0;
+        margin-top: 15px;
     }
     
     .delevery-address h4 {
@@ -977,7 +991,7 @@
     .notifi-list .notifi-check {
         display: inline-block;
         width: 20%;
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 500;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -1083,6 +1097,10 @@
         padding: 25px 0;
     }
     
+    .pharmacy-update button {
+        width: 130px;
+    }
+    
     .my-account .first {
         padding-bottom: 10px;
         font-weight: 500;
@@ -1169,6 +1187,14 @@
     
     .my-account {
         padding-bottom: 25px;
+    }
+    
+    .order-refill {
+        display: inline-block;
+        margin-left: 10px;
+        background: #7bc466;
+        padding: 5px 10px;
+        border-radius: 5px;
     }
     /* for print */
     

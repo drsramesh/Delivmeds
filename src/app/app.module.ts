@@ -111,24 +111,16 @@ import { EmailverificationComponent } from './emailverification/emailverificatio
     Ng4LoadingSpinnerModule.forRoot(),
     BreadcrumbModule,
     LightboxModule,
-<<<<<<< HEAD
-    CheckboxModule,
-    DialogModule,
-    AutoCompleteModule,
-    TooltipModule,
-    ImageViewerModule.forRoot()
-=======
         CheckboxModule,
     DialogModule,
   //  AngularFireAuthModule,
     TooltipModule,
     ProgressSpinnerModule,
-    ImageViewerModule
+    ImageViewerModule.forRoot()
  // AngularFireModule.initializeApp(config)
   
     // Ng4SpinnerModule// add it to the imports
     
->>>>>>> 704db7a3c1a259e92a0c7a5f3d6af29f52ae1b20
   ],
   providers: [ 
     StateService,
