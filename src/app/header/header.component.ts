@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     
     this.router.events.subscribe( (e) => {
-     
+      this.RegisteredDetailsService();
       if(e instanceof NavigationEnd) {
         console.log(e.url == '/')
         console.log(e.url.split('/')[1])
@@ -63,15 +63,12 @@ export class HeaderComponent implements OnInit {
 
   RegisteredDetailsService() {
     const header = {'authentication_token': localStorage.getItem('authentication_token')};
-    console.log(header);
-    console.log("auth" + localStorage.getItem ('authentication_token'));
-    
-
     this.http.get(environment.host + 'pharmacy/profile' ).subscribe(data =>
     {
-      console.log(JSON.stringify(data));
+     // console.log(JSON.stringify(data));
    this.userInformation = data;
-    console.log(this.userInformation);
+  //  console.log(this.userInformation);
+    localStorage.setItem('user_id', this.userInformation.id);
   
     });
 }

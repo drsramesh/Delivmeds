@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { AUTH_PROVIDERS } from 'angular2-jwt';
-import { MessagingService } from '../messaging.service';
 // import { AngularFireDatabase } from 'angularfire2/database';
 // import { AngularFireAuth } from 'angularfire2/auth';
 // import { Observable } from 'rxjs/Observable';
@@ -22,7 +21,6 @@ export class NotificationsComponent implements OnInit {
   trashNotifi: any[];
   filteredNotifications = [];
   constructor(private router:Router,
-    private msgService: MessagingService,
     //public afAuth: AngularFireAuth, 
     // public af: AngularFireDatabase
   )

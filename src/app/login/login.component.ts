@@ -13,6 +13,7 @@ import { DelivMedsAuthService } from '../services/deliv-meds-auth.service';
 import { TokenService } from '../services/token.service';
 import { finalize } from 'rxjs/operators';
 import { PreloadService } from '../services/preload.service'
+import { PubNubAngular } from 'pubnub-angular2';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +35,8 @@ submitted: boolean;
       private auth: DelivMedsAuthService,
      private user: UserService,
      private http: Http,
-     private loader: PreloadService
+     private loader: PreloadService,
+     private pubnub: PubNubAngular
   )  {
       this.signInForm = this.fb.group({
         signinEmail: new FormControl(null, Validators.required),
@@ -43,6 +45,7 @@ submitted: boolean;
   }
 
   ngOnInit() {
+   
       console.log('login');
       this.user.destroyUser();
       console.log(localStorage.getItem("authentication_token"));
@@ -70,6 +73,14 @@ submitted: boolean;
           console.log(res.profileCompleted)
           this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
           //alert('success')
+
+            this.pubnub.subscribe({
+            
+                 channels: ['channel_1252' ] ,
+                 withPresence: true
+             });
+
+             
            this.loader.close();
           this.tokenService.storeTokens(
             res['authentication_token']

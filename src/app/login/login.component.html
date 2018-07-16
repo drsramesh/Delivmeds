@@ -1,5 +1,5 @@
-
-<p-growl [(value)]="msgs"></p-growl>
+<p-growl [(value)]="msgs" [life]=1000>
+</p-growl>
 
 <div class="login text-center">
     <figure class="logo">
@@ -12,32 +12,31 @@
                     <input id="email"  name="signinEmail" pattern="^(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*\s*[,]?\b)*$"  type="email" class="" size="30"  pInputText  formControlName="signinEmail" required> 
                     <span class="error" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('required', 'signinEmail')" style="color:red"> 
                             Email is required</span>
-                    <span class="error" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('pattern', 'signinEmail')" style="color:red">Valid email is required</span>
-                    <label for="float-input" class="">Email Address</label>
-                    <!-- pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}" -->
+                <span class="error" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('pattern', 'signinEmail')" style="color:red">Valid email is required</span>
+                <label for="float-input" class="">Email Address</label>
+                <!-- pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}" -->
                 </span>
                 <span class="ui-float-label form-control">
                         <input id="password" name="signinPassword"  minlength="8" type="password" class="" size="30"  pInputText  formControlName="signinPassword" required="required"
                         > 
                         <span class="error" *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched && signInForm.hasError('required', 'signinPassword')" style="color:red"> 
                                 password is required</span>
-                        <span class="error" *ngIf=" signInForm.get('signinPassword').touched && signInForm.hasError('pattern', 'signinPassword')" style="color:red">Password is invalid   
+                <span class="error" *ngIf=" signInForm.get('signinPassword').touched && signInForm.hasError('pattern', 'signinPassword')" style="color:red">Password is invalid   
                         <p class ="error-test" pTooltip="Password must contain one lowercase, one uppercase, one special character 1 number and total 8 charcters" tooltipPosition="top"> !</p>
                         </span>
-                        <!-- <span class= "error" *ngIf= "signInForm.hasError('minlength')" style="color:red">Password must have 8 digits</span> -->
-                        <label for="float-input" class="">Password</label>
-                    </span>
-                
+                <!-- <span class= "error" *ngIf= "signInForm.hasError('minlength')" style="color:red">Password must have 8 digits</span> -->
+                <label for="float-input" class="">Password</label>
+                </span>
+
             </div>
             <p class="text-left forgpt-pass"><a href="">Forgot password? </a></p>
-            <div class = "form-group">
-            <p class="login-btn">
+            <div class="form-group">
+                <p class="login-btn">
                     <!-- routerLink="/orders"  -->
-                <button  pButton type="submit"  class="btn-full form-type btn-green" label="LOGIN"></button>
-            </p>
-        </div>
+                    <button pButton type="submit" class="btn-full form-type btn-green" label="LOGIN"></button>
+                </p>
+            </div>
         </form>
-    
-</div>
-        <p class="sign-up-account">Don't have an account yet?<a routerLink="/register">Sign Up!</a></p>
-  
+
+    </div>
+    <p class="sign-up-account">Don't have an account yet?<a routerLink="/register">Sign Up!</a></p>

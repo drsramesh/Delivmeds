@@ -9,7 +9,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { NotificationDetailsComponent } from './notification-details/notification-details.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { EmailverificationComponent } from './emailverification/emailverification.component';
-
+import { DelivMedsLoginGaurdService } from './services/auth-guard-service'
 const routes: Routes = [
       { path: '', redirectTo: '/login', pathMatch: 'full' },
       // {path:'**', component: LoginComponent},
@@ -20,7 +20,20 @@ const routes: Routes = [
       {path: 'notifications', component: NotificationsComponent},
       {path:'notification-details', component: NotificationDetailsComponent},
       {path:'my-account', component: MyAccountComponent},
-      {path:'confirm-mail/:key', component: EmailverificationComponent},
+      {path:'confirm-mail', component: EmailverificationComponent},
+      {path: '', redirectTo: 'auth', pathMatch: 'full'},
+      // {
+      //   path: 'sites',
+      //   loadChildren: 'app/sites/sites.module#SitesModule',
+      //   canActivate: [AuthGaurdService],
+      // },
+      // {
+      //     path: 'auth',
+      //     canActivate: [ AuthLoginGaurdService ],
+      //     loadChildren: './auth/auth.module#AuthModule'
+      // },
+    
+      // { path: '**', redirectTo: 'auth' }
 
 ];
 

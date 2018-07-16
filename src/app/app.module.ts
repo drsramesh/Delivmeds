@@ -57,7 +57,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthLoginGuardService } from './services/auth-login-guard.service';
 import {CheckboxModule} from 'primeng/checkbox';
 import {DialogModule} from 'primeng/dialog';
-import { MessagingService} from './messaging.service';
+import { PubNubAngular } from 'pubnub-angular2';
+import { DelivMedsLoginGaurdService } from './services/auth-guard-service';
 
 // import {AngularFireModule} from 'angularFire2';
 
@@ -126,6 +127,7 @@ import { EmailverificationComponent } from './emailverification/emailverificatio
   providers: [ 
     StateService,
     DelivMedsAuthService,
+    DelivMedsLoginGaurdService,
     EmailRegistrationService,
     AuthLoginGuardService,
     UserService,
@@ -133,7 +135,7 @@ import { EmailverificationComponent } from './emailverification/emailverificatio
     RegisterService,
     TokenInterceptor,
     PreloadService,
-    MessagingService,
+    PubNubAngular,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

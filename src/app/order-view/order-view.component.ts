@@ -104,29 +104,17 @@ console.log(this.brands.filter(object=>{return object.value == "0.1"})[0]['name'
  }
  initItemRows(orderItem) {
  let formRows = [];
- // orderItems.forEach(element => {
- let temp: any = '';
- // });
- console.log(orderItem.status);
- console.log( orderItem.status ==3 );
- 
- 
- console.log(orderItem);
  this.brands.filter(object=>{
- console.log(object.value, orderItem.copayPrice);
  return object.value == (orderItem.copayPrice)
  })
- // console.log();
+ 
  return this._fb.group({
  medicalName: [orderItem.drug],
  quantity: [orderItem.quantity,Validators.required],
  cost: [orderItem.unitPrice || '',(orderItem.status==3 ? '': Validators.required)],
-// cost: [],
  id: [orderItem.id ],
  status:[orderItem.status],
  copay:[{name: this.brands.filter(object=>{return orderItem.copayPrice == object.value || orderItem.copayPrice == null })[0]['name'], value:orderItem.copayPrice} ],
- // copay:[{name: this.brands.filter(object=>{return orderItem.copayPrice == object.value })[0]['name'] | '---', value:orderItem.copayPrice}],
- //copay: [{ name: this.brands.filter(object=>{return object.value == (orderItem.copayPrice | temp)})[0]['name'] , value: orderItem.copayPrice } ]
  });
  
 }
@@ -146,9 +134,10 @@ addReason1() {
  this.auth.statusOrder(params).subscribe((res:any) => {
  console.log(params);
  console.log(res);
- });
  this.display1 = false; 
  this.router.navigate(['/orders']);
+ });
+
 }
 
 
@@ -182,6 +171,8 @@ weekdata: string = " ";
 greyImage: boolean = false;
 delitm;
 showDialog(i, details) {
+  console.log(i);
+  this.reasonForm.reset();
  this.weekdata = "";
  this.display = true;
  console.log(details.value);
@@ -190,19 +181,17 @@ this.delitm=details.value.id || 0
 console.log(this.delitm)
 }
 
-addNewRow(i) {
- console.log(i);
- 
+addNewRow() {
  let control = <FormArray>this.invoiceForm.controls['itemRows'];
- // control.push(this.initItemRows({drug:'',dosage:'',quantity:'', copay:''}));
- control.push(this.initItemRows({drug:'',quantity:'',cost:'', copay:''}));
+  control.push(this.initItemRows({drug:'',quantity:'',cost:'', copay:'' ,status:2}));
 }
 
 addRowWithValues(orderItems) {
 
  let formgroups = [];
+ console.log("abcd");
+ 
  orderItems.forEach(element => {
- // let control = <FormArray>this.invoiceForm.controls['itemRows'];
  formgroups.push(this.initItemRows(element)); 
  });
  this.invoiceForm = this._fb.group({
@@ -213,55 +202,48 @@ addRowWithValues(orderItems) {
 
 
 
-deleteRow(i) { 
-console.log(i);
- let control = <FormArray>this.invoiceForm.controls['itemRows'];
- console.log(control)
- control['controls'].forEach(element => {
- if(element['controls']['cost']>0)
- delete element['controls']['cost']['errors']['required'] ||  control['controls'][this.deletedIndex]['controls']['cost'].setValidators([])
- control['controls'][this.deletedIndex]['controls']['cost'].updateValueAndValidity()
- if(element['controls']['qunatity']>0) 
- delete element['controls']['cost']['errors']['required'] || control['controls'][this.deletedIndex]['controls']['quantity'].setValidators([])
- control['controls'][this.deletedIndex]['controls']['quantity'].updateValueAndValidity();
- if(element['controls']['cost']=0)
- delete element['controls']['cost']['errors']['required'] ||  control['controls'][this.deletedIndex]['controls']['cost'].setValidators([])
-//  control['controls'][this.deletedIndex]['controls']['cost'].updateValueAndValidity();
- if(element['controls']['qunatity']=0) 
- delete element['controls']['cost']['errors']['required'] || control['controls'][this.deletedIndex]['controls']['quantity'].setValidators([])
-//  control['controls'][this.deletedIndex]['controls']['quantity'].updateValueAndValidity();
- 
- console.log(element)
- });
+deleteRow() { 
+  console.log(this.deletedIndex);
+
+  this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["cost"].setValidators([])
+  this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["quantity"].setValidators([])
+  this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["cost"].updateValueAndValidity();
+  this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["quantity"].updateValueAndValidity();
+
  let params = {
  orderId:this.orderDetails.id,
  orderItemId:this.delitm,
- // orderItemStatus:2,
  comments:this.weekdata,
  status: 3
  }
  this.weekdata="";
  console.log(params);
- 
-// this.auth.statusOrder(params).subscribe((res:any) => {
-// console.log(params);
-// console.log(res);
-// this.greyImage = true;
-// });
+ this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['status'].setValue(3);
+  this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['cost'].setValue(0);
+  this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['quantity'].setValue(1);
+  this.previewOfUpdateClicked();
+  // let Discount = this.invoiceForm.value.itemRows.filter((e)=>{
+  //   if(e.cost =="" &&e.quantity=="")
+  //   return [parseInt(e.quantity),parseInt(e.cost)]}
+  //  )
+  //  if(Discount.length>0){
+  //   Discount.forEach(element => {
+  //   this.sum = element.cost * element.quantity;
+  //   this.sumAfterDiscount =  element.cost * element.quantity ;
+  //   });
  
  this.display = false;
  
- 
+  // }
 }
-
- private newMethod() {
- console.log("123");
- }
 
 onlyValues(event) {
 
- const pattern = /[0-9]/;
- let inputChar = String.fromCharCode(event.charCode);
+
+ const pattern = /[0-9]|\./
+ let inputChar = String.fromCharCode(event.charCode || event.charCode == 46);
+
+//  console.log(event.charCode)
  if (!pattern.test(inputChar)) {
  // invalid character, prevent input
  event.preventDefault();
@@ -298,7 +280,7 @@ sumTotal = [];
 sum = 0;
 sum1 = 0
 sumAfterDiscount = 0;
- previewOfUpdateClicked(value){
+ previewOfUpdateClicked(){
  this.sum = 0;
  this.sumAfterDiscount = 0;
  let Discount = this.invoiceForm.value.itemRows.filter((e)=>{
@@ -309,7 +291,7 @@ sumAfterDiscount = 0;
  if(Discount.length>0){
  Discount.forEach(element => {
  this.sum = this.sum + element.cost * element.quantity;
- this.sumAfterDiscount = this.sumAfterDiscount + element.cost * element.quantity * (element.copay.value || 1);
+ this.sumAfterDiscount = this.sumAfterDiscount + element.cost * element.quantity * (element.copay.name/100 || 1);
  });
 
  }
@@ -320,18 +302,18 @@ sumAfterDiscount = 0;
  updateButtonClicked(itemRows){ 
  // console.log(itemRows);
  console.log(this.invoiceForm);
- let orders = [];
+ 
+  let orders = [];
 
  
- if(this.invoiceForm.valid) {
- console.log(this.sum1);
+  if(this.invoiceForm.valid) {
  orders = this.invoiceForm.value.itemRows.map(element =>{
  return {
  drug: element.medicalName,
  quantity: element.quantity,
  unitPrice: element.cost,
  copayPrice: element.copay.value,
- status: element.status || 2,
+ status: element.status || 2 ,
  id:element.id || 0
  }
 
@@ -347,18 +329,19 @@ sumAfterDiscount = 0;
  }
  console.log(params);
  
-// this.auth.totalOrderPrice(params).subscribe((res:any) => {
+this.auth.totalOrderPrice(params).subscribe((res:any) => {
 
-// console.log(params);
-// console.log(res);
+console.log(params);
+console.log(res);
  
-// this.router.navigate(['/orders']);
-// });
+this.router.navigate(['/orders']);
+});
+ } else if(this.sum ==0 || this.sumAfterDiscount == 0){
+  this.msgs.push({severity: 'error', summary: 'Error', detail: 'Total value cant be zero'});
  }
-
  
  else {
- // this.setFormTouched(this.invoiceForm);
+   this.setFormTouched(this.invoiceForm);
  this.msgs.push({severity: 'error', summary: 'Error', detail: 'please enter all fields'});
  }
  

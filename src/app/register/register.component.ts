@@ -69,18 +69,15 @@ export class RegisterComponent implements OnInit {
   ) {
     this.signInForm = this.fb.group({
       pharmacyName: new FormControl(null, Validators.required),
+      deaNumber: new FormControl(null, Validators.required),
       phoneNo: new FormControl(null, Validators.required),
       email: new FormControl(null, Validators.required),
       password: new FormControl(null, Validators.required),
       address: new FormControl(null, Validators.required),
       street: new FormControl(null),
-      // dea: new FormControl(null, Validators.required),
+      
       zipcode: new FormControl(null, Validators.required),
       city: new FormControl(null, Validators.required),
-//       inemail: ["", [   [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
-//         Validators.required],
-//       this.isEmailUnique.bind(this) // async Validator passed as 3rd parameter 
-//  ],
        state: new FormControl(null, Validators.required)
        });
   }
@@ -89,30 +86,15 @@ export class RegisterComponent implements OnInit {
     return this.is_edit;
   }
 
-  // isEmailUnique(control: FormControl) {
-  //   const email = new Promise((resolve, reject) => {
-  //     setTimeout(() => {
-  //       this.emailService.isEmailRegisterd(control.value).subscribe(() => {
-  //         resolve(null);
-  //       }, () => { resolve({ 'isEmailUnique': true }); });
-  //     }, 1000);
-  //   });
-  //   return email;
-  // }
+  
 
   ngOnInit() {
-  // console.log('login');
   }
 
   filterCountrySingle(event) {
     console.log(event);
-    // let query = event.query;
-    // this.StateService.getCountries().then(country => {
-    //     this.filteredCountriesSingle = this.filterCountry(query, country);
-    // });
      let query = event.query;
-    //  this.filteredCountriesSingle = [{name:undefined,code:undefined}];
-    // http://35.153.176.128/zipcodes/serviceable/5
+
      this.http.get(environment.host + 'zipcodes/serviceable/' + this.signInForm.value.zipcode ).subscribe(country => {
        if(country['statusCode']==401){
         this.filteredCountriesSingle=[];
@@ -124,44 +106,39 @@ export class RegisterComponent implements OnInit {
           
         })
        }
-     
-     
      })
 }
 
-// filterCountry(query, countries: any):any {
-//   console.log(query);
-//   console.log(countries);
-  
-  
-//   //in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
-//   let filtered : any[] = [];
-//   for(let i = 0; i < countries.length; i++) {
-//       let country = countries[i];
-//       if(country.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-//           filtered.push(country);
-//       }
-//   }
-//   return filtered;
-// }
-
-
-  zipcodeService(event) {
-    console.log(event)
-    console.log(this.signInForm.value.zipcode.code);
+zipcodeServiceTab(country) {
+   
+  this.http.get(environment.host + 'zipcodes/get_serviceable/' + country ).subscribe((res: any) => {
+    console.log(res);
     
+if(res.statusCode === 401) {
+//alert('zipcode is not servicable')
+this.signInForm.patchValue({city: "" ,state: ""});
+
+} else {
+  this.signInForm.value.zipcode = country
+ this.zipCodeServices = res;
+  console.log(this.zipCodeServices);
+  this.signInForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
+}
+
+  })
+}
+
+
+  zipcodeService(event) { 
     this.http.get(environment.host + 'zipcodes/get_serviceable/' + this.signInForm.value.zipcode.code ).subscribe((res: any) => {
-      console.log(res);
       
 if(res.statusCode === 401) {
-  //alert('zipcode is not servicable')
   this.signInForm.patchValue({city: "" ,state: ""});
 
 } else {
   console.log(this.signInForm.value.zipcode);
       console.log(JSON.stringify(res));
    this.zipCodeServices = res;
-  // this.zipcodeService.push
     console.log(this.zipCodeServices);
     this.signInForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
 }
@@ -178,6 +155,7 @@ if(res.statusCode === 401) {
     if (signInForm.valid) {
       const params = {
         pharmacyName: signInForm.value.pharmacyName,
+        deaNumber: signInForm.value.deaNumber,
         phoneNo: signInForm.value.phoneNo,
         email: signInForm.value.email,
         password: signInForm.value.password,

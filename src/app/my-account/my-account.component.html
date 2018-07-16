@@ -1,4 +1,4 @@
-<p-growl [(value)]="msgs"></p-growl>
+<p-growl [(value)]="msgs" life="1000"></p-growl>
 <div class="my-account">
 
     <h3 class="panel-head">{{userInformation.pharmacyName }} <a class="pull-right" (click)=accountEdit()><i class="fa fa-pencil" aria-hidden="true"></i>
@@ -18,10 +18,16 @@
  </span>
 
         </div>
+        <div class="des-chips" *ngIf="userInformation.statusCode ==200">
+            <span class="choose-chips" *ngFor="let users of userInformation.pharmacyUsers; let i = index"> {{users.firstName}} {{users.lastName}}
+ <a class="close-icon"><i class="fa fa-times" (click)= "deleteUser1(i)" aria-hidden="true"></i></a>
+ </span>
+
+        </div>
     </div>
     <div class="form-group">
         <!-- <form action="" [formGroup] = "serviceForm"></form> -->
-        <h3 for="first" class="first">Services offer</h3>
+        <h3 for="first" class="first">Services offer*</h3>
         <!-- <div class="multi-add" > -->
         <p-multiSelect [options]="servicesOffer" class="multi-dropdown" [(ngModel)]="selectedServices" defaultLabel="choose Services" [maxSelectedLabels]=0 [resetFilterOnHide]=true [displaySelectedLabel]="false"></p-multiSelect>
 
@@ -32,17 +38,14 @@
             <span class="choose-chips" *ngFor="let service of selectedServices; let i = index"> {{service.name}}
  <a class="close-icon" (click)= "deleteService(i)"><i class="fa fa-times" aria-hidden="true"></i></a>
  </span>
-            <span class="choose-chips" *ngFor=" let tempservices of tempKeys; let i=index">
- {{ tempservices}}
- <a class="close-icon" (click)= "deleteService1(i)"><i class="fa fa-times" aria-hidden="true"></i></a>
- </span>
+
             <div class="pharmacy-timings">
                 <div class="form-group text-left primary-block">
-                    <h3 class="first">Pharmacy Timings</h3>
+                    <h3 class="first">Pharmacy Timings*</h3>
                     <div class="ui-g">
                         <div class="ui-g-3">
 
-                            <p-calendar class="primary-timeings pull-left" placeholder="From Time" #newPharmacy (keyup.enter)="addPharmacy(newPharmacy.value)" (blur)="addPharmacy(newPharmacy.value); newPharmacy.value=''" [timeOnly]="true" hourFormat="24"></p-calendar>
+                            <p-calendar class="primary-timeings pull-left" placeholder="From Time" #newPharmacy (keyup.enter)="addPharmacy(newPharmacy.value)" (blur)="addPharmacy(newPharmacy.value); newPharmacy.value=''" [timeOnly]="true" hourFormat="24" required></p-calendar>
                             <!-- <p-calendar [(ngModel)]="date7" [timeOnly]="true"></p-calendar> {{date7 | hh:mm}} -->
 
                             <span class="pull-left time-to">To</span>
@@ -73,13 +76,7 @@
  <a class="close-icon"><i class="fa fa-times" (click)= "deletePharmacyTimings(i)" aria-hidden="true"></i></a>
  </span>
                     </div>
-                    <div class="des-chips" *ngIf="userInformation.statusCode ==200">
 
-                        <span class="choose-chips" *ngFor=" let pharmacy of userInformation.pharmacyBusinessHours; let i=index">
- {{pharmacy.opens}} {{pharmacy.closes}} {{pharmacy.dayOfWeek == 2?'Weekends': ''}} {{pharmacy.dayOfWeek == 1?'saturday': ''}} {{pharmacy.dayOfWeek == 0?'sunday': ''}} {{pharmacy.dayOfWeek == 5?'Weekdays': ''}}
- <a class="close-icon"><i class="fa fa-times" (click)= "deletePharmacyTimings1(i)" aria-hidden="true"></i></a>
- </span>
-                    </div>
                 </div>
             </div>
             <div class="about-pharmacy border-btm">
@@ -92,9 +89,9 @@
             </div>
             <div class="delevery-type">
                 <div class="form-group text-left primary-block">
-                    <h3 class="first">Delivery Type</h3>
-                    <p-checkbox class="notifi-check" [(ngModel)]="userInformation.pickup" label="Customer Pickup" binary="false"></p-checkbox>
-                    <p-checkbox class="notifi-check" [(ngModel)]="userInformation.delivery" label="Door Delivery" binary="false"></p-checkbox>
+                    <h3 class="first">Delivery Type*</h3>
+                    <p-checkbox class="notifi-check" [(ngModel)]="userInformation.pickup" label="Customer Pickup" binary="false" required></p-checkbox>
+                    <p-checkbox class="notifi-check" [(ngModel)]="userInformation.delivery" label="Door Delivery" binary="false" required></p-checkbox>
                     <!-- <p-checkbox class="notifi-check" [(ngModel)]="userInformation.delivery" label="Door Delivery(self)" binary="false"></p-checkbox> -->
                 </div>
                 <!-- <form action="" [formGroup] = "serviceForm"></form> -->
@@ -106,10 +103,6 @@
                 <div class="des-chips">
                     <span class="choose-chips" *ngFor=" let providers of selectedInsuranceProviders; let i=index">{{providers.name}}
  <a class="close-icon" (click)= "deleteProvider(i)"><i class="fa fa-times" aria-hidden="true"></i></a>
- </span>
-                    <span class="choose-chips" *ngFor=" let tempinsurances of tempKeysInsurannce; let i=index">
- {{ tempinsurances }}
- <a class="close-icon" (click)= "deleteProvider1(i)"><i class="fa fa-times" aria-hidden="true"></i></a>
  </span>
 
                 </div>
@@ -178,24 +171,24 @@
     <div class="ui-g">
         <form action="" [formGroup]="editForm">
             <div class="form-group position-rel ui-g-6">
-                <h3 class="first">Business Name(Trade Name)</h3>
-                <input id="businessname" type="text" size="30" formControlName="businessName" pInputText required [value]="userInformation.pharmacyName">
-                <span class="error error-down" *ngIf=" !editForm.get('businessName').valid && editForm.get('businessName').touched && editForm.hasError('required', 'businessName')" style="color:red">
+                <h3 class="first">Business Name(Trade Name)*</h3>
+                <input id="businessname" type="text" size="30" formControlName="pharmacyName" pInputText required [value]="userInformation.pharmacyName">
+                <span class="error error-down" *ngIf=" !editForm.get('pharmacyName').valid && editForm.get('pharmacyName').touched && editForm.hasError('required', 'pharmacyName')" style="color:red">
                 BusinessName is required</span>
             </div>
             <div class="form-group position-rel ui-g-6">
-                <h3 class="first">Phone Number</h3>
+                <h3 class="first">Phone Number*</h3>
 
-                <input id="phonenumber" type="text" size="30" formControlName="phoneNo1" pInputText minLength="10" required [value]="userInformation.phoneNo">
-                <span class="error error-down" *ngIf=" !editForm.get('phoneNo1').valid && editForm.get('phoneNo1').touched && editForm.hasError('required','phoneNo1')" style="color:red"> phonenumber is required</span>
-                <span class="error error-down" *ngIf=" !editForm.get('phoneNo1').valid && editForm.get('phoneNo1').touched && editForm.hasError('minLength')" style="color:red"> phonenumber required 10 digits</span>
+                <input id="phonenumber" type="text" size="30" formControlName="phoneNo" pInputText minLength="10" [textMask]="{mask: mask}" required [value]="userInformation.phoneNo">
+                <span class="error error-down" *ngIf=" !editForm.get('phoneNo').valid && editForm.get('phoneNo').touched && editForm.hasError('required','phoneNo')" style="color:red"> phonenumber is required</span>
+                <span class="error error-down" *ngIf=" !editForm.get('phoneNo').valid && editForm.get('phoneNo').touched && editForm.hasError('minLength')" style="color:red"> phonenumber required 10 digits</span>
             </div>
             <div class="form-group  position-rel ui-g-6">
-                <h3 class="first">Email</h3>
+                <h3 class="first">Email*</h3>
                 <input [readonly]="true" id="emailid" type="text" size="30" pInputText [value]="userInformation.email">
             </div>
             <div class="form-group  position-rel ui-g-6">
-                <h3 class="first">Address</h3>
+                <h3 class="first">Address*</h3>
                 <input id="address1" type="text" size="30" formControlName="address" required pInputText name="address" [value]="userInformation.address">
                 <span class="error error-down" *ngIf="editForm.get('address').touched && editForm.hasError('required', 'address')" style="color:red"> Address is Required</span>
             </div>
@@ -206,12 +199,15 @@
                 <input id="address2" type="text" size="30" pInputText formControlName="street" name="street" [value]="userInformation.street">
                 <!-- <span class="error" *ngIf="editForm.get('street').touched && editForm.hasError('required', 'street')" style="color:red"> Street is Required</span> -->
             </div>
+            <!-- <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('required', 'zipcode')" style="color:red">zipcode is required</span>                -->
+            <!-- <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('minLength', 'zipcode')" style="color:red">Please enter a valid 5 digit zip code</span> -->
+            <!-- <label for="float-input" class="">Zipcode</label> -->
             <div class="form-group  position-rel ui-g-6">
-                <h3 class="first">Zip code</h3>
-                <p-autoComplete class="auto-complete" id="zipcode" type="tel" formControlName="zipcode" value="userInformation.zipcode" [(ngModel)]="country" [immutable]="true" [suggestions]="filteredCountriesSingle" (completeMethod)="filterCountrySingle($event)" (keypress)="zipcodeService($event)"
-                    (onSelect)="zipcodeService($event)" (onFocus)="userInformation.zipcode" placeholder="Zipcode" field="name" [size]="30" delay=100 [minLength]="1" maxlength="10" inputId="userInformation.zipcode" required></p-autoComplete>
+                <h3 class="first">Zip code*</h3>
+                <p-autoComplete class="auto-complete" id="zipcode" type="tel" formControlName="zipcode" [(ngModel)]="country" [suggestions]="filteredCountriesSingle" (completeMethod)="filterCountrySingle($event)" (onSelect)="zipcodeService($event)" (onBlur)="zipcodeServiceTab(country)"
+                    placeholder="Zipcode" field="name" [size]="30" [minLength]="3" maxlength="5" required></p-autoComplete>
 
-                <!-- <span   class="error error-down" *ngIf=" !editForm.get('zipcode').valid && editForm.get('zipcode').touched && editForm.hasError('required', 'zipcode')" style="color:red">zipcode is required</span> -->
+                <span class="error error-down" *ngIf=" !editForm.get('zipcode').valid && editForm.get('zipcode').touched && editForm.hasError('required', 'zipcode')" style="color:red">zipcode is required</span>
                 <span class="error error-down" *ngIf="  editForm.get('zipcode').touched && editForm.hasError('minLength', 'zipcode')" style="color:red">Please enter a valid 5 digit zip code</span>
             </div>
             <div class="form-group ui-g-6">
@@ -225,7 +221,7 @@
         </form>
     </div>
     <div class="pull-right">
-        <button type="button" class="btn-group-green" pButton (click)="editUserDetails(editForm)" label="ADD"></button>
+        <button type="button" class="btn-group-green" pButton (click)="editUserDetails(editForm)" label="Update"></button>
         <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="accouEdit=false" label="Cancel"></button>
 
     </div>

@@ -14,6 +14,8 @@ import { environment } from  '../../environments/environment';
 import { PreloadService } from '../services/preload.service';
 import { DelivMedsAuthService } from '../services/deliv-meds-auth.service';
 import { Logs } from 'selenium-webdriver';
+//pub nub
+import { PubNubAngular } from 'pubnub-angular2';
 
 
 interface SortEvent {
@@ -43,10 +45,11 @@ export class HomeComponent implements OnInit {
   constructor(  private http: HttpClient,
     private router: Router,
     private loader: PreloadService,
-    private auth: DelivMedsAuthService) { }
+    private auth: DelivMedsAuthService,
+  private pubnub:PubNubAngular ) { }
 
   ngOnInit() {
-    // this.carService.getCarsMedium().then(cars => this.cars = cars);
+
 this.OrderList();
 
         this.brands = [
@@ -77,7 +80,7 @@ this.OrderList();
         dt.filter(event.value, 'year', 'gt');
     }, 250);
 }
-pages :boolean
+// pages :boolean
 OrderList() {
   const header = {'authentication_token': localStorage.getItem('authentication_token')};
   console.log(header);
@@ -86,31 +89,17 @@ OrderList() {
   this.http.get(environment.host + 'order/pharmacy').subscribe((res: any) => {
     console.log(res)
     if(res.statusCode === 401) {
-      //alert('zipcode is not servicable')
-      this.msgs.push({severity: 'error', summary: 'Error', detail: 'No Orders Found '});
       this.loader.close();
       console.log('No orders Found');
       } else {
             console.log(JSON.stringify(res));
          this.cars = res['object']['orders'];
          this.filterableCars = res['object']['orders'];
-         this.filterableCars = this.filterableCars.sort(res['object']['orders']['id'])
-        //  sort((a,b)=> a.id-b.id)
-         console.log(this.filterableCars);
-         
-         this.pages = true
          this.loader.close();
-         console.log(this.cars)
-         
-        // this.zipcodeService.push
-          console.log(this.cars);
-        //  this.editForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
- 
         }
   }, (err) => {
     this.loader.close();
-    this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server Error'});
-    // this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
+    this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server Error'})
   }
 
 );
@@ -136,8 +125,6 @@ OrderList() {
    let params = {
 
     orderId:id,
-    //orderId: localStorage.getItem('orderId'),
-    //status for ready for pickup
      status: 7
    }
   this.auth.statusOrder(params).subscribe((res:any) => {
@@ -151,17 +138,14 @@ OrderList() {
    console.log(car);
    let params = {
     orderId:car.id,
-    //status for ready for pickup
      status: 6
    }
   this.auth.statusOrder(params).subscribe((res:any) => {
     console.log(params);
     console.log(res);
     this.OrderList();
-   //  car.status = res.status;
-    // this.router.navigate(['/orders']);
+   
   });
-  // window.location.reload();  
  }
 
  visible: boolean = true;

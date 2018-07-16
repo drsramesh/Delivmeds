@@ -23,6 +23,7 @@ import { PreloadService } from '../services/preload.service'
 export class EmailverificationComponent implements OnInit {
 
   confirmKey:any;
+  msgs = [];
 
   constructor(
     private toastr:ToastsManager,
@@ -35,22 +36,29 @@ export class EmailverificationComponent implements OnInit {
   //&& this.tokenService.getRefreshToken() === null
   //Checking if any logged in user if not we will validate token and redirect to login page
   ngOnInit() {
-    if(this.tokenService.getAuthenticationToken() === null ){
+    // console.log("asdfhsd;lsdgmkl;sd;gk")
+    //  if(this.tokenService.getAuthenticationToken() === null){
+      // console.log("asdfhsda")
       this.preLoader.open();
       this.activatedRoute.queryParams
       .subscribe(params => {
         this.confirmKey = params['key'];
-        console.log
+        console.log(this.confirmKey)
         if(this.confirmKey !== undefined){
-          var confirmToken = {confirmation_token:this.confirmKey};
+          var confirmToken = {email_token:this.confirmKey};
           this.auth.confirmEmail(confirmToken).subscribe(
-            (res:any) =>{
+            (res:any) =>{ console.log(res)
               this.preLoader.close();
               if(res.statuscode ===200){
-               
+                this.msgs.push({severity: 'success', summary: 'Success', detail: 'Email verified succesfully.'});
                 this.router.navigate(['/login']);
-              }else{
+              }else if(res.statuscode ===401) {
+                this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email not verified.'});
                 this.router.navigate(['/login']);
+              }
+              else{
+                this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email not verified.'});
+                 this.router.navigate(['/login']);
               }
             } ,
             (err) => {
@@ -61,14 +69,14 @@ export class EmailverificationComponent implements OnInit {
         }
         else{
           this.preLoader.close();
-          
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server error'});
           this.router.navigate(['/login']);
         }
       })
-    }
-    else{
-      this.router.navigate(['/login']);
-    }
+    // }
+    // else{
+    //   this.router.navigate(['/login']);
+    // }
   }
   
   }

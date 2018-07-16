@@ -49,7 +49,6 @@ export class TokenInterceptor implements HttpInterceptor {
 
     if (localStorage.getItem("authentication_token") !== null) {
       // this._tokenService.open()
-      console.log('T= valid');
       
        headers = {
          setHeaders: {
@@ -62,11 +61,7 @@ export class TokenInterceptor implements HttpInterceptor {
        };
     }
     const request = req.clone(headers);
-    console.log(request);
-    
-    // const request = req.clone({
-    //         headers: req.headers.set('authentication-token', localStorage.getItem("authentication_token"))
-    //      });
+
 
     return <any>next
       .handle(request)

@@ -3,9 +3,11 @@ import { Router } from '@angular/router';
 import { Route } from '@angular/compiler/src/core';
 import { ToastsManager } from 'ng2-toastr/src/toast-manager';
 import 'rxjs/add/operator/pairwise';
-import { MessagingService } from './messaging.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from  '../environments/environment';
+
+//pub nub
+import { PubNubAngular } from 'pubnub-angular2';
 
 
 
@@ -18,42 +20,42 @@ import { environment } from  '../environments/environment';
 export class AppComponent {
   message;
   title = 'app';
-  // template: string =`<img src="http://pa1.narvii.com/5722/2c617cd9674417d272084884b61e4bb7dd5f0b15_hq.gif" />`
-  userInformation : any = [];
  
 
   constructor(
     private vcr: ViewContainerRef,
     private toastr: ToastsManager,
     private router: Router,
-    private msgService: MessagingService,
-    private http: HttpClient
+    private http: HttpClient,
+    public pubnub: PubNubAngular
     ) {
       this.toastr.setRootViewContainerRef(vcr);
       this.router.events.pairwise().subscribe((event) => {
-        // console.log(event);
       });
 }
 
 ngOnInit() {
-  this.RegisteredDetailsService();
+  this.pubnub.init({
+    publishKey: 'pub-c-b62f7ab5-0dde-4000-a2c2-8a2df4d7d658',
+    subscribeKey: 'sub-c-d7fdeca6-85c2-11e8-a7a7-6244ec17d0a3',
+    ssl: false
+    });
+ 
+this.pubnub.addListener({
+  status: function(st) {
+      if (st.category === "PNConnectedCategory") {
+        console.info('notifications connected')
+      }
+  },
+  message: function(message) {
+      console.dir(message);
+      console.log(message)
+      this.msgs.push({severity: 'success', summary: 'Success', detail: 'Notification Received.'});
+  }
+});
+
+
 }
-
-RegisteredDetailsService() {
-  const header = {'authentication_token': localStorage.getItem('authentication_token')};
-  console.log(header);
-  console.log("auth" + localStorage.getItem ('authentication_token'));
-  
-
-  this.http.get(environment.host + 'pharmacy/profile' ).subscribe(data =>
-  {
-    console.log(JSON.stringify(data));
- this.userInformation = data;
-  console.log(this.userInformation);
-
-  });
-}
-
 
 
 }

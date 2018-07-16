@@ -5,10 +5,10 @@ import { first, map, retry } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Http, HttpModule, Response, Headers, RequestOptions } from '@angular/http';
 import { UserService } from '../services/user.service';
-import { Observable } from 'rxjs/observable';
+import { Observable } from 'rxjs/';
 import { environment } from '../../environments/environment'
 import { addUserDetails } from '../Interface/addUserDetails';
-import { PharmacyDetails } from '../Interface/pharmacydetails';
+// import { PharmacyDetails } from '../Interface/pharmacydetails';
 import { profilePage } from '../Interface/profilePage';
 import { editUserDetails } from '../Interface/editUserDetails';
 import {MultiSelectModule} from 'primeng/multiselect';
@@ -49,8 +49,8 @@ export class MyAccountComponent implements OnInit {
  updateInsuranceProvider= [];
  updatePharmacy = [];
  addNewUser: any = [];
- pharmacyDetailsTimingsArrayList : PharmacyDetails[];
- pharmacyDeatilsTimings: PharmacyDetails;
+ //pharmacyDetailsTimingsArrayList : PharmacyDetails[];
+ //pharmacyDeatilsTimings: PharmacyDetails;
  profilepageObj = profilePage;
  pharmacyname: string[];
  
@@ -75,9 +75,9 @@ export class MyAccountComponent implements OnInit {
  updatedInformation : string[] = [];
  servicesOffer = [];
  insuranceProviders = [];
- selectedServices: string[] = [];
+ selectedServices = [];
  services= [];
- selectedInsuranceProviders: string[] = [];
+ selectedInsuranceProviders = [];
  fromTime: string[] =[];
  week: WeekDay;
  week1: string[]
@@ -89,6 +89,8 @@ export class MyAccountComponent implements OnInit {
  country: any[]
  date7: Date;
  date8: Date;
+ mask: any[] = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+
  
  
  ngOnInit() {
@@ -100,34 +102,35 @@ export class MyAccountComponent implements OnInit {
  console.log("profilePage ="+ JSON.stringify( this.profilepageObj))
  console.log("userInformation ="+ this.userInformation)
  this.editForm = this.fb.group({
- businessName: new FormControl(null, Validators.required),
- phoneNo1: new FormControl(null, Validators.required),
+ pharmacyName: new FormControl(null, Validators.required),
+ phoneNo: new FormControl(null, Validators.required),
  address: new FormControl(null, Validators.required),
- street: new FormControl(null, Validators.required),
+ street: new FormControl(null),
  zipcode: new FormControl(null, Validators.required),
- city: new FormControl(null, Validators.required),
- state: new FormControl(null, Validators.required)
+ email: new FormControl(null),
+ city: new FormControl(null),
+ state: new FormControl(null)
  });
 
  
  //this.userdetails.setUser(res['user'])
  this.weekdays= [
- {
- 'name':'Week days',
- 'dayOfWeek': 5
- },
- {
- 'name':'Week ends',
- 'dayOfWeek': 2
- },
- {
- 'name':'Saturday',
- 'dayOfWeek': 1
- },
- {
- 'name':'Sunday',
- 'dayOfWeek': 0
- }
+  {
+  'name':'Weekdays',
+  'dayOfWeek': 5
+  },
+  {
+  'name':'WeekEnds',
+  'dayOfWeek': 2
+  },
+  {
+  'name':'saturday',
+  'dayOfWeek': 1
+  },
+  {
+  'name':'sunday',
+  'dayOfWeek': 0
+  }
 
  ]
  
@@ -145,7 +148,7 @@ export class MyAccountComponent implements OnInit {
  this.filteredCountriesSingle=[]
  country['object'].forEach(country=>{
  this.filteredCountriesSingle.push({name:country,code:country})
-  // this.editForm.patchValue({city: this.filterCountrySingle.  ,state: this.zipCodeServices.object.state});
+ // this.editForm.patchValue({city: this.filterCountrySingle. ,state: this.zipCodeServices.object.state});
  
  })
  }
@@ -153,6 +156,25 @@ export class MyAccountComponent implements OnInit {
  
  })
 }
+
+zipcodeServiceTab(country) {
+   
+	this.http.get(environment.host + 'zipcodes/get_serviceable/' + country ).subscribe((res: any) => {
+	  console.log(res);
+	  
+  if(res.statusCode === 401) {
+  //alert('zipcode is not servicable')
+  this.signInForm.patchValue({city: "" ,state: ""});
+  
+  } else {
+	this.signInForm.value.zipcode = country
+   this.zipCodeServices = res;
+	console.log(this.zipCodeServices);
+	this.editForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
+  }
+  
+	})
+  }
 
 zipcodeService(event) {
  console.log(event)
@@ -189,6 +211,8 @@ console.log(this.editForm.value.zipcode);
  console.log('Day ='+ this.weekdata);
 }
 
+
+
  tempKeys: Array<string> = []
  tempValues: Array<string> = []
  tempValues1: Array<string> = []
@@ -200,39 +224,59 @@ console.log(this.editForm.value.zipcode);
  const header = {'authentication_token': localStorage.getItem('authentication_token')};
  console.log(header);
  console.log("auth" + localStorage.getItem ('authentication_token'));
+ this.loader.open();
+// 
  this.http.get(environment.host + 'pharmacy/profile', { headers: header} ).subscribe(data =>
  {
  console.log(JSON.stringify(data));
+ 
  this.userInformation = data;
+
+ this.loader.close();
+if(data['pharmacyBusinessHours']){
+    this.userInformation.pharmacyBusinessHours.forEach(element => {
+      this.addPharmacyTimingsFromBackend(element);
+   })
+  }
+ 
  if(data['pharmacyServices']){
  this.updatedInformation.push(data['pharmacyServices']);
  this.tempKeys = Object.values(this.updatedInformation[0]);
- this.tempValues = Object.keys(this.updatedInformation[0])
+ this.tempValues = Object.keys(this.updatedInformation[0]);
+ let index = this.tempValues;
+ this.tempValues.forEach(element => {
+   this.selectedServices.push({name:this.updatedInformation[0][element],id:element})
+ });
  this.services.push()
  console.log(this.updatedInformation);
  console.log(this.tempValues)
  let ids = this.services.push
  }
- 
 
  if(data['pharmacyInsuranceProviders']){
  this.updateInsurances.push(data['pharmacyInsuranceProviders'])
  this.tempKeysInsurannce = Object.values(this.updateInsurances[0]);
  this.tempValues1 = Object.keys(this.updateInsurances[0])
+ let index = this.tempValues1
+ this.tempValues1.forEach(element => {
+	 this.selectedInsuranceProviders.push({name:this.updateInsurances[0][element],id:element})	 
+ });
  console.log(this.updateInsurances);
  
  }
  
  
- this.country=this.userInformation.zipcode.code
+ this.country=this.userInformation.zipcode
+console.log(this.userInformation);
 
  
  this.editForm.patchValue({
- businessName: this.userInformation.pharmacyName,
- phoneNo1: this.userInformation.phoneNo,
+ pharmacyName: this.userInformation.pharmacyName,
+ phoneNo: this.userInformation.phoneNo,
+ email: this.userInformation.email,
  address: this.userInformation.address,
  street: this.userInformation.street,
- zipcode: this.userInformation.zipcode,
+ zipcode: {'name':this.country },
  city : this.userInformation.city,
  state: this.userInformation.state
  })
@@ -255,7 +299,6 @@ console.log(this.editForm.value.zipcode);
  }))
  this.servicesOffer = this.servicesOffer[0]
  console.log(this.servicesOffer);
- // this.servicesOffer.push(this.listOfService['value']);
 
  
  });
@@ -276,43 +319,22 @@ console.log(this.editForm.value.zipcode);
 
  if(editForm.valid){
  const params = {
- businessName: editForm.value.businessName,
- phoneNo1: editForm.value.phoneNo1,
- address: editForm.value.address,
- email: this.userInformation.email,
- street: editForm.value.street,
- zipcode: editForm.value.zipcode,
- city : editForm.value.city,
- state: editForm.value.state
- 
- };
-
- const params1 = {
- pharmacyName: editForm.value.businessName || this.userInformation.pharmacyName,
- phoneNo: editForm.value.phoneNo1 || this.userInformation.phoneNo,
+ pharmacyName: editForm.value.pharmacyName|| this.userInformation.pharmacyName,
+ phoneNo: editForm.value.phoneNo || this.userInformation.phoneNo,
  address: editForm.value.address || this.userInformation.address,
- street: editForm.value.street || this.userInformation.street,
  email: this.userInformation.email,
- zipcode: editForm.value.zipcode|| this.userInformation.zipcode,
+ street: editForm.value.street || this.userInformation.street,
+ zipcode: editForm.value.zipcode.name || editForm.value.zipcode,
  city : editForm.value.city || this.userInformation.city,
  state: editForm.value.state || this.userInformation.state
- }
- console.log(this.editForm.value);
- console.log(params);
- console.log(params1);
  
- this.auth.EdituserDetails(params1).subscribe((res:any) => {
+ };
+ this.auth.EdituserDetails(params).subscribe((res:any) => {
  console.log(params);
  console.log(res);
- if(res.statusCode ==401) {
-   alert("email")
- }
- });
- 
- 
- this.details.push(params.businessName + params.phoneNo1 + params.address + params.street +params.zipcode + params.city + params.state)
- this.userInformation.pharmacyName = params.businessName;
- this.userInformation.phoneNo = params.phoneNo1;
+ this.details.push(params.pharmacyName + params.phoneNo + params.address + params.street +params.zipcode + params.city + params.state)
+ this.userInformation.pharmacyName = params.pharmacyName;
+ this.userInformation.phoneNo = params.phoneNo;
  this.userInformation.address = params.address;
  this.userInformation.street = params.street;
  this.userInformation.zipcode = params.zipcode;
@@ -320,10 +342,13 @@ console.log(this.editForm.value.zipcode);
  this.userInformation.state = params.state;
  
  this.accouEdit= false
- console.log(this.userInformation);
+ 
+ });
+ 
+
  
  }  else {
-  this.setFormTouched(this.signInForm);
+  this.setFormTouched(this.editForm);
  }
 }
 
@@ -346,58 +371,105 @@ console.log(this.editForm.value.zipcode);
  this.userInformation.pharmacyBusinessHours = this.editdetails.pharmacyBusinessHours;
  
  
- // this.accouEdit= false
  }
 
  pharmacyTiming = [];
  addPharmacy(newPharmacy: string, newPharmacy1: string, newPharmacy2: string) {
- console.log(newPharmacy)
- console.log(newPharmacy1)
- console.log(newPharmacy2)
+ 
  if(newPharmacy == null && newPharmacy1 == null && newPharmacy2 == null){
- this.msgs.push({severity: 'error', summary: 'please enter the fields', detail: ''});
- }else {
+	this.msgs.push({severity: 'error', summary: 'please enter the fields', detail: ''});
+ }
+ else {
  let week_time =this.weekdata
  this.currentVal = newPharmacy2;
  let hour = new Date(newPharmacy).getHours(); 
  let min = new Date(newPharmacy).getMinutes();
+ let sMin = '',sMin1 = '';
+if(-1< min && min<10){
+	sMin = "0" +min;
+}
  var ampm = hour >= 12 ? 'PM' : 'AM';
  hour = hour % 12;
  hour = hour ? hour : 12; // the hour '0' should be '12'
- this.timeValue = `${hour}:${min}` + " " +ampm; 
+ this.timeValue = `${hour}:${sMin}` + " " +ampm; 
  //this.timeValue = `${hour}:${min}`
 
  //second field
  let hour1 = new Date(newPharmacy1).getHours();
  let min1 = new Date(newPharmacy1).getMinutes();
+ if(-1< min1 && min1<10){
+	sMin1 = "0" +min1;
+}
  var ampm = hour1 >= 12 ? 'PM' : 'AM';
  hour1 = hour1 % 12;
  hour1 = hour1 ? hour1 : 12; // the hour '0' should be '12'
- this.timeValue1 = `${hour1}:${min1}` + " "+ ampm;
+ this.timeValue1 = `${hour1}:${sMin1}` + " "+ ampm;
  //this.timeValue1 = `${hour1}:${min1}`
- this.updatePharmacy.push(this.timeValue + " " + this.timeValue1 + " " + week_time);
+	console.log(this.updatePharmacy)
+	let pushingElement = this.timeValue + " " + this.timeValue1 + " " + week_time;
+	let index = this.updatePharmacy.indexOf(pushingElement);
 
- let obj = {
- dayOfWeek: this.weekvalue,
- opens: this.timeValue,
- closes: this.timeValue1
- }
- console.log(obj)
- this.pharmacyTiming.push(obj)
- console.log(this.pharmacyTiming);
- 
+	if (index == -1)
+	{
+		let obj = {
+			dayOfWeek: this.weekvalue,
+			opens: this.timeValue,
+			closes: this.timeValue1
+			}
+		this.updatePharmacy.push(pushingElement);
+		this.pharmacyTiming.push(obj)
+		
+	}	 
+	   else {
+		this.msgs.push({severity: 'error', summary: 'Time slot already exist', detail: ''});
+	}
  }
  }
 
+ addPharmacyTimingsFromBackend(input){
+	
+	console.log(input);
+	
+	let arr = this.weekdays.filter((e)=> {
+		if (e['dayOfWeek'] == input['dayOfWeek']) 
+		{
+			console.log("coming")
+			return e['name']
+		} 		
+	 })
+		let obj = {
+			dayOfWeek: arr[0]["name"],
+			opens: input['opens'],
+			closes: input['closes']
+		}	 
+		let pushingElement = obj.opens + " " + obj.closes + " " + obj.dayOfWeek;
+		let index = this.updatePharmacy.indexOf(pushingElement);
+		if (index == -1)
+		{
+			 this.updatePharmacy.push(pushingElement);
+			 
+		}	else {
+			this.msgs.push({severity: 'error', summary: 'Time slot already entered', detail: ''});
+		}	
+ }
  deleteUser(index){
  let i = this.addNewUser.indexOf
  this.addNewUser.splice(index,1)
 
  }
 
+ deleteUser1(index){
+	let i = this.userInformation.pharmacyUsers.indexOf
+	this.userInformation.pharmacyUsers.splice(index,1)
+	this.users.splice(index,1)
+   
+	}
+
  deletePharmacyTimings(index) {
  let i = this.updatePharmacy.indexOf
  this.updatePharmacy.splice(index,1)
+ this.userInformation.pharmacyBusinessHours.splice(index,1)
+ this.pharmacyarrays.splice(index,1)
  }
 
  deletePharmacyTimings1(index) {
@@ -436,6 +508,12 @@ console.log(this.editForm.value.zipcode);
 
  console.log(profilepageObj);
  this.loader.open();
+ if(this.userInformation.pickup == false || this.userInformation.delivery == false){
+	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Delivery details'});
+ } else if(this.pharmacyTiming == []){
+	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one pharmacy Timing details'});
+ }
+ else{
  this.auth.updateDetails(profilepageObj).subscribe((res: any) => {
  
  if (res.statusCode == 200) {
@@ -459,28 +537,28 @@ console.log(this.editForm.value.zipcode);
  this.msgs.push({severity: 'error', summary: 'Error', detail: 'server error'});
  }
  );
+}
  }
 
-
+ids1 = [];
  pharmacyarrays= [];
+ users =[];
 
  updateDetails() {
- console.log(this.tempKeys)
- 
  let id = this.selectedServices.map((e)=> {return e['id']})
  let insuranceId = this.selectedInsuranceProviders.map((e) => {return e['id']}) 
 
  let constantbio = this.aboutPharmacy || ''
- let constantTimings = this.pharmacyTiming || []
+ let constantTimings = this.pharmacyTiming 
  let constantIds = id || []
  let constantsInsuranceIds = insuranceId || []
  let deliverychanged = this.checkboxvalue || ''
  let pickupchanged = this.checkboxvalue1 || ''
  let constantUsers = this.newUserDetails || ''
- let previousProviders =[];
- let pharmacyProviders =[];
  let tempids = [] ;
  let tempids1 = [];
+
+ 
  if(this.tempKeys.length >0 ){
  tempids = this.tempValues.map((e => { 
  return parseInt(e)
@@ -495,24 +573,36 @@ if(this.tempKeysInsurannce.length>0 ){
  }))
 }
 
- let users = this.userInformation.pharmacyUsers || ''
+ this. users = this.userInformation.pharmacyUsers || ''
  this. pharmacyarrays = this.userInformation.pharmacyBusinessHours || [];
- // console.log(constantTimings)
  let profilepageObj = {
  pharmacyName : this.userInformation.pharmacyName || this.editForm.value.pharmacyName,
  phoneNo : this.userInformation.phoneNo || this.editForm.value.phoneNo1,
  bio: constantbio,
- pharmacyBusinessHours: this.pharmacyarrays.concat(constantTimings),
- pharmacyServices: tempids.concat(constantIds) ,
- pharmacyInsuranceProviders: tempids1.concat(constantsInsuranceIds),
+ pharmacyBusinessHours: this.pharmacyTiming.concat(this.pharmacyarrays),
+pharmacyServices: id,
+pharmacyInsuranceProviders: insuranceId,
  delivery:this.userInformation.delivery,
  pickup: this.userInformation.pickup,
- pharmacyUsers: users + constantUsers
+ pharmacyUsers: this.users.concat(constantUsers)
 
  };
- 
 
- console.log(profilepageObj);
+
+ console.log(this.pharmacyarrays);
+ console.log(this.pharmacyTiming);
+ 
+ 
+ console.log(this.pharmacyarrays != []);
+ console.log(this.pharmacyTiming != []);
+//  if(this.userInformation.pickup == false || this.userInformation.delivery == false){
+// 	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Delivery details'});
+
+//   } else 
+if (this.pharmacyTiming == []) {
+ 	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Timing details'});
+  }
+ else {
  this.auth.updateDetails(profilepageObj).subscribe((res: any) => {
  console.log
  if (res.statusCode == 200) {
@@ -522,7 +612,7 @@ if(this.tempKeysInsurannce.length>0 ){
  
  } 
  else if(res.statusCode == 400){
- this.msgs.push({severity: 'error', summary: 'Either pharmacy Name or Phone Number or List of services are not entered', detail: 'Update unsuccesfull'});
+ this.msgs.push({severity: 'error', summary: 'Please select Services offer  ', detail: 'Update unsuccessfull'});
  this.loader.close(); 
  }
  
@@ -535,6 +625,7 @@ if(this.tempKeysInsurannce.length>0 ){
  this.msgs.push({severity: 'error', summary: 'Error', detail: 'server error'});
  }
  );
+}
  }
 
 
@@ -597,18 +688,27 @@ if(this.tempKeysInsurannce.length>0 ){
  
  if (signInForm.valid) {
  const params = {
- email: signInForm.value.signinEmail,
+   email: this.userInformation.email,
+  pharmacyUserEmail: signInForm.value.signinEmail,
  password: signInForm.value.signinPassword,
- firstname: signInForm.value.firstName,
+ firstName: signInForm.value.firstName,
  lastName: signInForm.value.lastName
  };
- this.addNewUser.push(params.firstname + " " + params.lastName);
- this.newUserDetails.push(params.email + " "+ params.password + " " + params.firstname + " "+ params.lastName)
+ 
+ this.newUserDetails.push(params.email + " "+ params.password + " " + params.firstName + " "+ params.lastName)
+ 
+ console.log(params);
+ this.auth.newUser(params).subscribe((res:any) => {
+ console.log(params);
+ console.log(res);
+ if(res.statusCode == 200){
+  this.addNewUser.push(params.firstName + " " + params.lastName);
+ }else {
+  this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email already registered'});
+ }
+ });
  
  this.user= false
- console.log(this.addNewUser) 
- console.log(this.newUserDetails);
- 
  } else {
   this.setFormTouched(this.signInForm);
 }
@@ -634,13 +734,10 @@ addProviders(){
  console.log('mydata', data);
  this.updateInsuranceProvider.push(data['object'])
  console.log(this.updateInsuranceProvider[0]);
- console.log(data);
- 
- 
  this.insuranceProviders.push(this.updateInsuranceProvider[0].map((e) => { return { 'label': e.providerName, 'value': {'name': e.providerName,'id': e.id }}
  }))
  this.insuranceProviders = this.insuranceProviders[0]
- console.log(this.insuranceProviders);
+
  
  
  })
