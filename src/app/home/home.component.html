@@ -1,4 +1,4 @@
-<p-growl [(value)]="msgs" [life]=1000></p-growl>
+<p-growl [(value)]="msgs" life="3000"></p-growl>
 <p-table *ngIf="visible" class="orders-table" #dt sortField="id" sortOrder=-1 [columns]="cols" [value]="filterableCars" [rows]="10">
     <ng-template pTemplate="caption">
         <h3 class="pull-left">All Orders</h3>
@@ -38,10 +38,10 @@
     </ng-template>
     <ng-template pTemplate="body" let-i="index" let-car let-columns="columns">
         <tr>
-            <td style="width: 130px" (click)="viewDetail(car.id)">
+            <td style="width: 130px" routerLink="/order-view/{{car.id}}">
                 {{car.id}}
             </td>
-            <td style="width: 160px" (click)="viewDetail(car.id)">
+            <td style="width: 160px" routerLink="/order-view/{{car.id}}">
                 <!-- <label *ngIf="car.prescriptionNo == ''"> Waiting For customer Response</label> -->
 
                 <div>
@@ -51,7 +51,7 @@
 
 
 
-            <td style="width: 200px" (click)="viewDetail(car.id)">
+            <td style="width: 200px" routerLink="/order-view/{{car.id}}">
 
                 <div *ngIf="car.customerResponse.customerMembers && car.customerResponse.customerMembers.length>0; else patientData ">
                     {{car.customerResponse.customerMembers[0].firstName}}{{car.customerResponse.customerMembers[0].lastName}}
@@ -60,7 +60,7 @@
                     {{car.customerResponse.firstName}}{{car.customerResponse.lastName}}
                 </div> -->
                 <ng-template #patientData>
-                    <div> {{car.customerResponse.firstName}}{{car.customerResponse.lastName}}
+                    <div> {{car.customerResponse.firstName}} {{car.customerResponse.lastName}}
                     </div>
                 </ng-template>
                 <!-- <div *ngIf=" car.customerResponse.customerMembers[0].relationshipName ==='Pet'" {{car.customerResponse.customerMembers[0]}}>
@@ -68,13 +68,13 @@
                 </div> -->
 
             </td>
-            <td style="width: 200px">
+            <td style="width: 200px" routerLink="/order-view/{{car.id}}">
                 {{car.createdOn}}
             </td>
             <td>
 
                 <!-- <button pButton type="button" label="New"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-                <label *ngIf="car.status == 1"> New</label>
+                <label *ngIf="car.status == 1"> New <span  *ngIf ="car.refill == true" class="order-refill">Refill</span></label>
 
 
                 <!-- <button pButton type="button"  label="Waiting For customer"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
@@ -121,15 +121,29 @@
             </td>
         </tr>
     </ng-template>
+    <!-- <ng-template pTemplate="frozenbody">
+        <tr class="empty-order">
+            <td colspan="7">
+                <p class="text-center">Fetching Orders </p>
+            </td>
+        </tr>
 
-    <ng-template pTemplate="emptymessage" *ngIf="filterableCars.length == 0">
+    </ng-template> -->
+    <ng-template pTemplate="emptymessage" *ngIf="filterableCars.length ==0">
+        <tr class="empty-order">
+            <td colspan="7">
+                <p class="text-center"> No Orders Found </p>
+            </td>
+        </tr>
+
+    </ng-template>
+    <!-- <ng-template emptymessage="#{car.id ? '' : 'No records found.'}">
         <tr class="empty-order">
             <td colspan="7">
                 <p class="text-center">No Orders Found </p>
             </td>
         </tr>
 
-    </ng-template>
-
+    </ng-template> -->
 
 </p-table>

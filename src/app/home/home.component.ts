@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { StateService } from '../services/state.service';
 // import { Http, Response } from '@angular/http';
 import { Details } from '../Interface/details';
 import {HttpClientModule} from '@angular/common/http';
@@ -49,6 +48,18 @@ export class HomeComponent implements OnInit {
   private pubnub:PubNubAngular ) { }
 
   ngOnInit() {
+    // this.pubnub.addListener({
+    //   status: function(st) {
+    //       if (st.category === "PNConnectedCategory") {
+    //         console.info('notifications connected')
+    //       }
+    //   },
+    //   message: function(message) {
+    //     console.log(message)
+    //       this.msgs = [];
+    //       this.msgs.push({severity: 'success', summary: 'Success', detail: 'Notification Received.'});
+    //   }
+    // });
 
 this.OrderList();
 
@@ -68,37 +79,35 @@ this.OrderList();
             { field: 'status', header: 'Status' },
             {field: 'time', header: ''},
         ];
-        console.log(this.cols);
+        // console.log(this.cols);
   }
-  onYearChange(event, dt) {
-    console.log(dt);
-    if (this.yearTimeout) {
-        clearTimeout(this.yearTimeout);
-    }
+//   onYearChange(event, dt) {
+//     console.log(dt);
+//     if (this.yearTimeout) {
+//         clearTimeout(this.yearTimeout);
+//     }
 
-    this.yearTimeout = setTimeout(() => {
-        dt.filter(event.value, 'year', 'gt');
-    }, 250);
-}
+//     this.yearTimeout = setTimeout(() => {
+//         dt.filter(event.value, 'year', 'gt');
+//     }, 250);
+// }
 // pages :boolean
 OrderList() {
-  const header = {'authentication_token': localStorage.getItem('authentication_token')};
-  console.log(header);
-  console.log("auth" + localStorage.getItem ('authentication_token'));
   this.loader.open();
   this.http.get(environment.host + 'order/pharmacy').subscribe((res: any) => {
-    console.log(res)
     if(res.statusCode === 401) {
       this.loader.close();
       console.log('No orders Found');
       } else {
-            console.log(JSON.stringify(res));
+            //  console.log(JSON.stringify(res));
          this.cars = res['object']['orders'];
          this.filterableCars = res['object']['orders'];
          this.loader.close();
+         
         }
   }, (err) => {
     this.loader.close();
+    this.msgs = [];
     this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server Error'})
   }
 
@@ -108,18 +117,19 @@ OrderList() {
 
 
 
- viewDetail(id){
-     console.log("button clicked");
-     console.log(id);
-     const header = {'authentication_token': localStorage.getItem('authentication_token')};
-     if (id != null || undefined)
-     {
-      localStorage.setItem('orderId', id) ;
-      console.log(localStorage.getItem('orderId'));
-      this.router.navigate(['/order-view']);
+//  viewDetail(id){
+//      console.log("button clicked");
+//      console.log(id);
+//      this.router.navigate(['/order-view',550]);
+//     //  const header = {'authentication_token': localStorage.getItem('authentication_token')};
+//     //  if (id != null || undefined)
+//     //  {
+//     //   localStorage.setItem('orderId', id) ;
+//     //   console.log(localStorage.getItem('orderId'));
+//     //   this.router.navigate(['/order-view']);
       
-     }
- }
+//     //  }
+//  }
 
  Delivered(id){
    let params = {

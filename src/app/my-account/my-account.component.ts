@@ -19,6 +19,7 @@ import { Router } from '@angular/router'
 import { runInThisContext } from 'vm';
 import { PreloadService } from '../services/preload.service'
 import { Password } from 'primeng/primeng';
+import {MessageService} from 'primeng/components/common/messageservice';
 
 
 
@@ -60,10 +61,10 @@ export class MyAccountComponent implements OnInit {
  private router: Router,
  private editdetails: editUserDetails,
  private loader: PreloadService,
- private userdetails: UserService,) {
+ private userdetails: UserService,
+ private messageService: MessageService) {
  this.signInForm = this.fb.group({
  signinEmail: new FormControl(null, Validators.required),
- signinPassword: new FormControl(null, Validators.required),
  firstName: new FormControl(null, Validators.required),
  lastName: new FormControl(null, Validators.required)
  });
@@ -80,15 +81,15 @@ export class MyAccountComponent implements OnInit {
  selectedInsuranceProviders = [];
  fromTime: string[] =[];
  week: WeekDay;
- week1: string[]
+ week1: any;
  previousVal: any;
  currentVal: any;
  // toTime: [ ];
  msgs = [];
  zipCodeServices: any={};
  country: any[]
- date7: Date;
- date8: Date;
+ date7: any;
+ date8: any;
  mask: any[] = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
  
@@ -99,8 +100,6 @@ export class MyAccountComponent implements OnInit {
  this.addProviders();
  // this.zipcodeService();
  this.profilepageObj = this.userInformation
- console.log("profilePage ="+ JSON.stringify( this.profilepageObj))
- console.log("userInformation ="+ this.userInformation)
  this.editForm = this.fb.group({
  pharmacyName: new FormControl(null, Validators.required),
  phoneNo: new FormControl(null, Validators.required),
@@ -138,11 +137,11 @@ export class MyAccountComponent implements OnInit {
 
  
  filterCountrySingle(event) {
- console.log(event);
  let query = event.query;
  this.http.get(environment.host + 'zipcodes/serviceable/' + this.editForm.value.zipcode ).subscribe(country => {
  if(country['statusCode']==401){
  this.filteredCountriesSingle=[];
+ this.msgs = [];
  this.msgs.push({severity: 'error', summary: 'Error', detail: 'Zipcode not available '})
  }else{
  this.filteredCountriesSingle=[]
@@ -160,7 +159,7 @@ export class MyAccountComponent implements OnInit {
 zipcodeServiceTab(country) {
    
 	this.http.get(environment.host + 'zipcodes/get_serviceable/' + country ).subscribe((res: any) => {
-	  console.log(res);
+
 	  
   if(res.statusCode === 401) {
   //alert('zipcode is not servicable')
@@ -169,7 +168,6 @@ zipcodeServiceTab(country) {
   } else {
 	this.signInForm.value.zipcode = country
    this.zipCodeServices = res;
-	console.log(this.zipCodeServices);
 	this.editForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
   }
   
@@ -177,22 +175,14 @@ zipcodeServiceTab(country) {
   }
 
 zipcodeService(event) {
- console.log(event)
- console.log(this.editForm.value.zipcode.code);
  
  this.http.get(environment.host + 'zipcodes/get_serviceable/' + this.editForm.value.zipcode.code ).subscribe((res: any) => {
- console.log(res);
- 
 if(res.statusCode === 401) {
 //alert('zipcode is not servicable')
 this.editForm.patchValue({city: "" ,state: ""});
 
 } else {
-console.log(this.editForm.value.zipcode);
- console.log(JSON.stringify(res));
  this.zipCodeServices = res;
-// this.zipcodeService.push
- console.log(this.zipCodeServices);
  this.editForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
 }
 
@@ -204,11 +194,10 @@ console.log(this.editForm.value.zipcode);
  userInfo;
  onSelectType(event) {
  if(event) {
- console.log(event['name']);
+
  this.weekdata = event['name'];
  this.weekvalue = event['dayOfWeek'];
  }
- console.log('Day ='+ this.weekdata);
 }
 
 
@@ -222,13 +211,9 @@ console.log(this.editForm.value.zipcode);
 
  RegisteredDetailsService() {
  const header = {'authentication_token': localStorage.getItem('authentication_token')};
- console.log(header);
- console.log("auth" + localStorage.getItem ('authentication_token'));
  this.loader.open();
-// 
  this.http.get(environment.host + 'pharmacy/profile', { headers: header} ).subscribe(data =>
  {
- console.log(JSON.stringify(data));
  
  this.userInformation = data;
 
@@ -247,9 +232,6 @@ if(data['pharmacyBusinessHours']){
  this.tempValues.forEach(element => {
    this.selectedServices.push({name:this.updatedInformation[0][element],id:element})
  });
- this.services.push()
- console.log(this.updatedInformation);
- console.log(this.tempValues)
  let ids = this.services.push
  }
 
@@ -261,15 +243,10 @@ if(data['pharmacyBusinessHours']){
  this.tempValues1.forEach(element => {
 	 this.selectedInsuranceProviders.push({name:this.updateInsurances[0][element],id:element})	 
  });
- console.log(this.updateInsurances);
- 
  }
  
  
  this.country=this.userInformation.zipcode
-console.log(this.userInformation);
-
- 
  this.editForm.patchValue({
  pharmacyName: this.userInformation.pharmacyName,
  phoneNo: this.userInformation.phoneNo,
@@ -290,17 +267,11 @@ console.log(this.userInformation);
  const header = {'authentication_token': localStorage.getItem('authentication_token')};
  this.http.get(environment.host + 'pharmacy/service_offerings', { headers: header} ).subscribe((data) =>
  {
- console.log('mydata', data);
  this.updateService.push(data['object'])
- console.log(this.updateService[0]);
  // this.updateService = data
- console.log(data) 
  this.servicesOffer.push(this.updateService[0].map((e) => { return { 'label': e.serviceName, 'value': {'name': e.serviceName,'id': e.serviceOfferingId } }
  }))
  this.servicesOffer = this.servicesOffer[0]
- console.log(this.servicesOffer);
-
- 
  });
  }
 
@@ -330,8 +301,6 @@ console.log(this.userInformation);
  
  };
  this.auth.EdituserDetails(params).subscribe((res:any) => {
- console.log(params);
- console.log(res);
  this.details.push(params.pharmacyName + params.phoneNo + params.address + params.street +params.zipcode + params.city + params.state)
  this.userInformation.pharmacyName = params.pharmacyName;
  this.userInformation.phoneNo = params.phoneNo;
@@ -375,18 +344,20 @@ console.log(this.userInformation);
 
  pharmacyTiming = [];
  addPharmacy(newPharmacy: string, newPharmacy1: string, newPharmacy2: string) {
- 
- if(newPharmacy == null && newPharmacy1 == null && newPharmacy2 == null){
-	this.msgs.push({severity: 'error', summary: 'please enter the fields', detail: ''});
- }
+ if(!((newPharmacy) && (newPharmacy1 ) && (newPharmacy2))){
+	this.msgs = [];
+	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please enter the Pharmacy Timings'});
+ } 
  else {
  let week_time =this.weekdata
- this.currentVal = newPharmacy2;
+ let currentVal = newPharmacy2
  let hour = new Date(newPharmacy).getHours(); 
  let min = new Date(newPharmacy).getMinutes();
  let sMin = '',sMin1 = '';
 if(-1< min && min<10){
 	sMin = "0" +min;
+}else {
+	sMin = min + ''
 }
  var ampm = hour >= 12 ? 'PM' : 'AM';
  hour = hour % 12;
@@ -399,14 +370,24 @@ if(-1< min && min<10){
  let min1 = new Date(newPharmacy1).getMinutes();
  if(-1< min1 && min1<10){
 	sMin1 = "0" +min1;
+}else {
+	sMin1 = min1 + ''
 }
  var ampm = hour1 >= 12 ? 'PM' : 'AM';
  hour1 = hour1 % 12;
  hour1 = hour1 ? hour1 : 12; // the hour '0' should be '12'
  this.timeValue1 = `${hour1}:${sMin1}` + " "+ ampm;
- //this.timeValue1 = `${hour1}:${min1}`
-	console.log(this.updatePharmacy)
-	let pushingElement = this.timeValue + " " + this.timeValue1 + " " + week_time;
+	let pushingElement = this.timeValue + " to " + this.timeValue1 + " ; " + week_time;
+	console.log(this.timeValue);
+	if(this.timeValue1<= this.timeValue){
+		this.msgs = [];
+		// this.msgs.push({severity: 'error', summary: 'To Time is less than From Time', detail: ''});
+		this.msgs.push({severity: 'error', summary: 'Error', detail: 'To Time must be greater than From Time'});
+// 		this.date7 =""
+// this.date8 =""	
+// this.week = this.weekdays[0]
+	} else {
+	
 	let index = this.updatePharmacy.indexOf(pushingElement);
 
 	if (index == -1)
@@ -418,22 +399,27 @@ if(-1< min && min<10){
 			}
 		this.updatePharmacy.push(pushingElement);
 		this.pharmacyTiming.push(obj)
-		
+this.date7 =""
+this.date8 =""	
+this.week = this.weekdays[0]
 	}	 
 	   else {
-		this.msgs.push({severity: 'error', summary: 'Time slot already exist', detail: ''});
+		this.msgs = [];
+		this.msgs.push({severity: 'error', summary: 'Error', detail: 'Time slot already exist'});
+		this.date7 =""
+this.date8 =""	
+this.week = this.weekdays[0]
 	}
  }
+}
  }
 
  addPharmacyTimingsFromBackend(input){
 	
-	console.log(input);
-	
 	let arr = this.weekdays.filter((e)=> {
 		if (e['dayOfWeek'] == input['dayOfWeek']) 
 		{
-			console.log("coming")
+
 			return e['name']
 		} 		
 	 })
@@ -442,14 +428,15 @@ if(-1< min && min<10){
 			opens: input['opens'],
 			closes: input['closes']
 		}	 
-		let pushingElement = obj.opens + " " + obj.closes + " " + obj.dayOfWeek;
+		let pushingElement = obj.opens + " to " + obj.closes + " ; " + obj.dayOfWeek;
 		let index = this.updatePharmacy.indexOf(pushingElement);
 		if (index == -1)
 		{
 			 this.updatePharmacy.push(pushingElement);
 			 
 		}	else {
-			this.msgs.push({severity: 'error', summary: 'Time slot already entered', detail: ''});
+			this.msgs = [];
+			this.msgs.push({severity: 'error', summary: 'Error', detail: 'Time slot already exist'});
 		}	
  }
  deleteUser(index){
@@ -468,7 +455,8 @@ if(-1< min && min<10){
  deletePharmacyTimings(index) {
  let i = this.updatePharmacy.indexOf
  this.updatePharmacy.splice(index,1)
- this.userInformation.pharmacyBusinessHours.splice(index,1)
+  this.userInformation.pharmacyBusinessHours.splice(index,1)
+ this.pharmacyTiming.splice(index,1);
  this.pharmacyarrays.splice(index,1)
  }
 
@@ -485,9 +473,6 @@ if(-1< min && min<10){
  //update complete details
  aboutPharmacy: string;
  submitDetails(details) {
- 
- console.log(this.pharmacyTiming)
- 
  let ids = this.selectedServices.map((e)=> {return e['id']})
  let insuranceIds = this.selectedInsuranceProviders.map((e) => {return e['id']})
  
@@ -495,45 +480,42 @@ if(-1< min && min<10){
  let profilepageObj = {
  pharmacyName : this.userInformation.pharmacyName,
  phoneNo : this.userInformation.phoneNo,
- bio: this.aboutPharmacy,
+ bio: this.aboutPharmacy || '',
  pharmacyBusinessHours: this.pharmacyTiming,
  pharmacyServices: ids ,
  pharmacyInsuranceProviders: insuranceIds,
- delivery: this.checkboxvalue,
- pickup: this.checkboxvalue1,
+  delivery:this.userInformation.delivery,
+ pickup: this.userInformation.pickup,
  pharmacyUsers: this.newUserDetails
- 
-
  };
-
- console.log(profilepageObj);
- this.loader.open();
- if(this.userInformation.pickup == false || this.userInformation.delivery == false){
-	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Delivery details'});
- } else if(this.pharmacyTiming == []){
-	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one pharmacy Timing details'});
+ if(this.userInformation.pickup == false && this.userInformation.delivery == false){
+	 this.msgs = [];
+	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Delivery type'});
+ } 
+ else if (this.pharmacyTiming.length <1 ) {
+	this.msgs = [];
+	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Pharmacy Timing details'});
  }
  else{
  this.auth.updateDetails(profilepageObj).subscribe((res: any) => {
  
  if (res.statusCode == 200) {
- this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully updated.'});
  this.loader.close();
- this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully updated.'});
- this.router.navigate(['/orders']);
- 
+ this.msgs = [];
+//  this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully updated.'});
+  
+  this.router.navigate(['/orders']);
+  this.messageService.add({severity: 'success', summary: 'Success', detail: 'Successfully updated.'});
  } 
+
  else if(res.statusCode == 400){
- this.msgs.push({severity: 'error', summary: ' Please enter services are not entered', detail: 'Update unsuccesfull'});
+	this.msgs = [];
+ this.msgs.push({severity: 'error', summary: ' Please provide atleast one Service offered', detail: 'Update unsuccessful'});
  this.loader.close(); 
- }
- 
- else {
- this.msgs.push({severity: 'error', summary: 'Error', detail: 'Update unsuccesfull'});
- this.loader.close();
  }
  }, (err) => {
  this.loader.close();
+ this.msgs = [];
  this.msgs.push({severity: 'error', summary: 'Error', detail: 'server error'});
  }
  );
@@ -565,8 +547,6 @@ ids1 = [];
  }))
 }
 
-console.log(this.tempKeysInsurannce)
-console.log(this.tempValues1)
 if(this.tempKeysInsurannce.length>0 ){
  tempids1 = this.tempValues1.map((e => {
  return parseInt(e)
@@ -587,41 +567,32 @@ pharmacyInsuranceProviders: insuranceId,
  pharmacyUsers: this.users.concat(constantUsers)
 
  };
-
-
- console.log(this.pharmacyarrays);
- console.log(this.pharmacyTiming);
  
- 
- console.log(this.pharmacyarrays != []);
- console.log(this.pharmacyTiming != []);
-//  if(this.userInformation.pickup == false || this.userInformation.delivery == false){
-// 	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Delivery details'});
-
-//   } else 
-if (this.pharmacyTiming == []) {
- 	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Timing details'});
-  }
+  if(this.userInformation.pickup === false && this.userInformation.delivery === false){
+	this.msgs = [];
+	 this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Delivery Type'}); 
+  } 
+    else if (this.pharmacyTiming.length <1 && this.userInformation.pharmacyBusinessHours.length<1) {
+		this.msgs = [];
+  	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Pharmacy Timing details'});
+   }
  else {
  this.auth.updateDetails(profilepageObj).subscribe((res: any) => {
- console.log
  if (res.statusCode == 200) {
- this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully updated.'});
- this.loader.close();
- this.router.navigate(['/orders']);
+	this.loader.close();
+	this.msgs = [];
+	this.messageService.add({severity: 'success', summary: 'Success', detail: 'Successfully updated.'});
+    this.router.navigate(['/orders']);
  
  } 
  else if(res.statusCode == 400){
- this.msgs.push({severity: 'error', summary: 'Please select Services offer  ', detail: 'Update unsuccessfull'});
+	this.msgs = [];
+ this.msgs.push({severity: 'error', summary: 'Please provide atleast one  Service Offer  ', detail: 'Update unsuccessful'});
  this.loader.close(); 
- }
- 
- else {
- this.msgs.push({severity: 'error', summary: 'Error', detail: 'Update unsuccesfull'});
- this.loader.close();
  }
  }, (err) => {
  this.loader.close();
+ this.msgs = [];
  this.msgs.push({severity: 'error', summary: 'Error', detail: 'server error'});
  }
  );
@@ -630,26 +601,18 @@ if (this.pharmacyTiming == []) {
 
 
  deleteService(index) {
- console.log(index);
  let i = this.selectedServices.indexOf
  let j = this.servicesOffer.indexOf
  this.selectedServices.splice(index,1)
- // this.servicesOffer.splice(index,1)
 
  }
  
  deletedService = [];
  deleteService1(index) {
- console.log(index);
  let i = this.tempKeys.indexOf
- // let j = this.servicesOffer.indexOf
  this.tempKeys.splice(index,1)
  this.tempValues.splice(index,1)
-//  this.servicesOffer.splice(index,1)
   this.selectedServices.splice(index,1)
-  // this.selectedServices.push()
-//  this.deletedService.push(index,1)
- console.log(this.deletedService);
  
 
  }
@@ -659,11 +622,7 @@ if (this.pharmacyTiming == []) {
  
  let i = this.selectedInsuranceProviders.indexOf
  let j = this.insuranceProviders.indexOf
- console.log(j)
  this.selectedInsuranceProviders.splice(index,1);
- // this.insuranceProviders.splice(index,1);
- //console.log(this.insuranceProviders);
- console.log(this.insuranceProviders.splice(index,1));
  
  }
  deletedProvide = [];
@@ -672,12 +631,8 @@ if (this.pharmacyTiming == []) {
  
  let i = this.tempKeysInsurannce.indexOf
  this.tempKeysInsurannce.splice(index,1);
- //this.selectedInsuranceProviders.splice(index,1);
  this.tempValues1.splice(index,1)
  this.insuranceProviders.splice(index,1);
- //console.log(this.insuranceProviders);
- console.log(this.insuranceProviders.splice(index,1));
- console.log(this.deletedProvide);
  
  
  }
@@ -688,22 +643,18 @@ if (this.pharmacyTiming == []) {
  
  if (signInForm.valid) {
  const params = {
-   email: this.userInformation.email,
-  pharmacyUserEmail: signInForm.value.signinEmail,
- password: signInForm.value.signinPassword,
+email: this.userInformation.email,
+ pharmacyUserEmail: signInForm.value.signinEmail,
  firstName: signInForm.value.firstName,
  lastName: signInForm.value.lastName
  };
  
- this.newUserDetails.push(params.email + " "+ params.password + " " + params.firstName + " "+ params.lastName)
- 
- console.log(params);
- this.auth.newUser(params).subscribe((res:any) => {
- console.log(params);
- console.log(res);
+ this.newUserDetails.push(params.email + " " + params.firstName + " "+ params.lastName)
+ this.auth.newUser(params).subscribe((res:any) => { console.log(res)
  if(res.statusCode == 200){
   this.addNewUser.push(params.firstName + " " + params.lastName);
- }else {
+ }else if(res.statusCode ==401) {
+	this.msgs = [];
   this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email already registered'});
  }
  });
@@ -723,7 +674,6 @@ setFormTouched(form_obj: any) {
 }
 cancelButtonClicked() {
 
- console.log("cancel button is clicked");
  
 }
 
@@ -731,9 +681,7 @@ addProviders(){
  const header = {'authentication_token': localStorage.getItem ('authentication_token')};
  this.http.get(environment.host + 'insurance_providers/', { headers: header}).subscribe((data) =>
  {
- console.log('mydata', data);
  this.updateInsuranceProvider.push(data['object'])
- console.log(this.updateInsuranceProvider[0]);
  this.insuranceProviders.push(this.updateInsuranceProvider[0].map((e) => { return { 'label': e.providerName, 'value': {'name': e.providerName,'id': e.id }}
  }))
  this.insuranceProviders = this.insuranceProviders[0]

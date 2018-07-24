@@ -99,8 +99,6 @@ return this._http.post(environment.host + 'pharmacy/register/user' ,params);
 
 //for updateddetails
 updateDetails(profilepageObj) {
-// const header = {'authentication_token': localStorage.getItem('authentication_token')};
-console.log(JSON.stringify(profilepageObj));   
 return this._http.post(environment.host + 'pharmacy/profile',  profilepageObj);
 }
 

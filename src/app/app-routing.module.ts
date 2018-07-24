@@ -10,6 +10,8 @@ import { NotificationDetailsComponent } from './notification-details/notificatio
 import { MyAccountComponent } from './my-account/my-account.component';
 import { EmailverificationComponent } from './emailverification/emailverification.component';
 import { DelivMedsLoginGaurdService } from './services/auth-guard-service'
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 const routes: Routes = [
       { path: '', redirectTo: '/login', pathMatch: 'full' },
       // {path:'**', component: LoginComponent},
@@ -21,7 +23,14 @@ const routes: Routes = [
       {path:'notification-details', component: NotificationDetailsComponent},
       {path:'my-account', component: MyAccountComponent},
       {path:'confirm-mail', component: EmailverificationComponent},
-      {path: '', redirectTo: 'auth', pathMatch: 'full'},
+      // {path: '', redirectTo: 'orders', pathMatch: 'full'},
+       {path: 'order-view', component: OrderViewComponent},
+       {path: 'forgot-password', component: ForgotPasswordComponent},
+       {path: 'change-password', component: ChangePasswordComponent},
+       {path: 'order-view/:id', component: OrderViewComponent}
+      //  ,children:[
+      //   {path: 'order-view/:id', component: OrderViewComponent}
+      // ]},
       // {
       //   path: 'sites',
       //   loadChildren: 'app/sites/sites.module#SitesModule',

@@ -50,13 +50,16 @@ export class EmailverificationComponent implements OnInit {
             (res:any) =>{ console.log(res)
               this.preLoader.close();
               if(res.statuscode ===200){
+                this.msgs = [];
                 this.msgs.push({severity: 'success', summary: 'Success', detail: 'Email verified succesfully.'});
                 this.router.navigate(['/login']);
               }else if(res.statuscode ===401) {
+                this.msgs = [];
                 this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email not verified.'});
                 this.router.navigate(['/login']);
               }
               else{
+                this.msgs = [];
                 this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email not verified.'});
                  this.router.navigate(['/login']);
               }
@@ -69,6 +72,7 @@ export class EmailverificationComponent implements OnInit {
         }
         else{
           this.preLoader.close();
+          this.msgs = [];
           this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server error'});
           this.router.navigate(['/login']);
         }

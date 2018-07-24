@@ -14,6 +14,8 @@ import { DISABLED } from '@angular/forms/src/model';
 import { element } from 'protractor';
 
 
+
+
 @Component({
  selector: 'app-order-view',
  templateUrl: './order-view.component.html',
@@ -52,19 +54,19 @@ deletedIndex:number;
  private http: HttpClient,
  private router: Router,
  private loader: PreloadService,
- private auth: DelivMedsAuthService) { 
+ private auth: DelivMedsAuthService,
+private route: ActivatedRoute) { 
  this.images = [];
- // this.images.push({source:'https://s3.amazonaws.com/deliv-meds-resources/{{orderDetails.rxImage}}', thumbnail: 'https://s3.amazonaws.com/deliv-meds-resources/{{orderDetails.rxImage}}', title: 'Prescription'});
+  // this.images.push({source:'assets/images/default.png', thumbnail: 'assets/images/default.png', title: 'Prescription'});
  }
 
 
  ngOnInit() {
- this.OrderList();
-
- // if(this.orderDetails.status == 3) {
- // // this.update= DISABLED
- // }
-
+  this.route.params.subscribe((params) => {
+    // this.route.snapshot.paramMap.get('id');
+    this.OrderList();
+  });
+//  this.OrderList();
  this.reasonForm = this._fb.group({
  reason1:new FormControl(null, Validators.required)
  });
@@ -81,21 +83,6 @@ deletedIndex:number;
  routerLink: '/order-view'
  }
  ];
- this.brands = [
- { name: '---', value: 1.0 },
- { name: '10%', value: 0.1 },
- { name: '20%', value: 0.2 },
- { name: '30%', value: 0.3 },
- { name: '40%', value: 0.4 },
- { name: '50%', value: 0.5 },
- { name: '60%', value: 0.6 },
- { name: '70%', value: 0.7 },
- { name: '80%', value: 0.8 },
- { name: '90%', value: 0.9 },
- { name: '100%', value: 1.0 }
-];
-this.week = this.brands[0];
-console.log(this.brands.filter(object=>{return object.value == "0.1"})[0]['name'])
  }
 
 
@@ -104,17 +91,13 @@ console.log(this.brands.filter(object=>{return object.value == "0.1"})[0]['name'
  }
  initItemRows(orderItem) {
  let formRows = [];
- this.brands.filter(object=>{
- return object.value == (orderItem.copayPrice)
- })
- 
  return this._fb.group({
  medicalName: [orderItem.drug],
  quantity: [orderItem.quantity,Validators.required],
  cost: [orderItem.unitPrice || '',(orderItem.status==3 ? '': Validators.required)],
  id: [orderItem.id ],
  status:[orderItem.status],
- copay:[{name: this.brands.filter(object=>{return orderItem.copayPrice == object.value || orderItem.copayPrice == null })[0]['name'], value:orderItem.copayPrice} ],
+ copay:[orderItem.copayPrice || '' ],
  });
  
 }
@@ -130,20 +113,12 @@ addReason1() {
  comments:this.orderRejectedCompletey,
  status: 3
  }
- console.log(params);
+
  this.auth.statusOrder(params).subscribe((res:any) => {
- console.log(params);
- console.log(res);
  this.display1 = false; 
  this.router.navigate(['/orders']);
  });
 
-}
-
-
-Rejected(){
- console.log("reason")
- 
 }
 
 
@@ -163,7 +138,6 @@ print(): void {
 
 showDialog1(){
  this.display1 = true;
- console.log('reason');
  
 }
 
@@ -171,14 +145,11 @@ weekdata: string = " ";
 greyImage: boolean = false;
 delitm;
 showDialog(i, details) {
-  console.log(i);
   this.reasonForm.reset();
  this.weekdata = "";
  this.display = true;
- console.log(details.value);
  this.deletedIndex = i;
 this.delitm=details.value.id || 0
-console.log(this.delitm)
 }
 
 addNewRow() {
@@ -189,8 +160,6 @@ addNewRow() {
 addRowWithValues(orderItems) {
 
  let formgroups = [];
- console.log("abcd");
- 
  orderItems.forEach(element => {
  formgroups.push(this.initItemRows(element)); 
  });
@@ -202,9 +171,7 @@ addRowWithValues(orderItems) {
 
 
 
-deleteRow() { 
-  console.log(this.deletedIndex);
-
+deleteRow() {
   this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["cost"].setValidators([])
   this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["quantity"].setValidators([])
   this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["cost"].updateValueAndValidity();
@@ -217,64 +184,42 @@ deleteRow() {
  status: 3
  }
  this.weekdata="";
- console.log(params);
  this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['status'].setValue(3);
   this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['cost'].setValue(0);
   this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['quantity'].setValue(1);
   this.previewOfUpdateClicked();
-  // let Discount = this.invoiceForm.value.itemRows.filter((e)=>{
-  //   if(e.cost =="" &&e.quantity=="")
-  //   return [parseInt(e.quantity),parseInt(e.cost)]}
-  //  )
-  //  if(Discount.length>0){
-  //   Discount.forEach(element => {
-  //   this.sum = element.cost * element.quantity;
-  //   this.sumAfterDiscount =  element.cost * element.quantity ;
-  //   });
- 
  this.display = false;
- 
-  // }
 }
+
+private specialKeys: Array<number> = [46, 8, 9, 27, 13, 110, 190, 35, 36, 37, 39];
 
 onlyValues(event) {
+  
+
+  var key = window.event ? event.keyCode : event.which;
+
+  if (this.specialKeys.indexOf(event.which) > -1) {
+  return true;
+  }
+  else if ( key < 48 || key > 57 ) {
+  return false;
+  }
+  else return true;
+  };
 
 
- const pattern = /[0-9]|\./
- let inputChar = String.fromCharCode(event.charCode || event.charCode == 46);
+  onlyValues1(event){
+    var key = window.event ? event.keyCode : event.which;
 
-//  console.log(event.charCode)
- if (!pattern.test(inputChar)) {
- // invalid character, prevent input
- event.preventDefault();
- }
+if (event.keyCode == 8|| event.keyCode == 37 || event.keyCode == 39 || event.which == 65) {
+return true;
 }
+else if ( key < 48 || key > 57 ) {
+return false;
+}
+else return true;
+};
 
-// deleteRow1(index: number) {
-// console.log("abac");
- 
-// console.log( index);
- 
-// const control = <FormArray>this.invoiceForm.controls['itemRows'];
-// // control.removeAt(index);
-// const header = {'authentication_token': localStorage.getItem('authentication_token')};
-// let params = {
-// orderId:this.orderDetails.id,
-// // orderItemStatus:2,
-// status: 3
-// }
-// console.log(params);
- 
-// // this.auth.statusOrder(params).subscribe((res:any) => {
-// // console.log(params);
-// // console.log(res);
-// // this.greyImage = true;
-// // });
- 
-// this.display = false;
- 
- 
-// }
 total = [];
 sumTotal = [];
 sum = 0;
@@ -285,13 +230,13 @@ sumAfterDiscount = 0;
  this.sumAfterDiscount = 0;
  let Discount = this.invoiceForm.value.itemRows.filter((e)=>{
  if(e.cost !="" &&e.quantity!="")
- return [parseInt(e.quantity),parseInt(e.cost), e.copay.value]}
+ return [parseInt(e.quantity),parseInt(e.cost), e.copay/100]}
 )
 
  if(Discount.length>0){
  Discount.forEach(element => {
  this.sum = this.sum + element.cost * element.quantity;
- this.sumAfterDiscount = this.sumAfterDiscount + element.cost * element.quantity * (element.copay.name/100 || 1);
+ this.sumAfterDiscount = this.sumAfterDiscount + element.cost * element.quantity * (element.copay/100 || 1);
  });
 
  }
@@ -299,27 +244,29 @@ sumAfterDiscount = 0;
  
 }
 
+
+
  updateButtonClicked(itemRows){ 
  // console.log(itemRows);
- console.log(this.invoiceForm);
  
   let orders = [];
-
- 
-  if(this.invoiceForm.valid) {
+if(this.sum ==0 || this.sumAfterDiscount == 0){
+    this.msgs = [];
+   this.msgs.push({severity: 'error', summary: 'Error', detail: "Total value can't be zero"});
+  }
+ else if(this.invoiceForm.valid) {
  orders = this.invoiceForm.value.itemRows.map(element =>{
  return {
  drug: element.medicalName,
  quantity: element.quantity,
  unitPrice: element.cost,
- copayPrice: element.copay.value,
+ copayPrice: element.copay,
  status: element.status || 2 ,
  id:element.id || 0
  }
 
  });
  
- console.log(orders)
  let params = {
  id:this.orderDetails.id, 
  priceTotal: this.sumAfterDiscount,
@@ -328,22 +275,55 @@ sumAfterDiscount = 0;
  
  }
  console.log(params);
- 
+ this.loader.open();
 this.auth.totalOrderPrice(params).subscribe((res:any) => {
-
-console.log(params);
-console.log(res);
- 
+  this.loader.close();
 this.router.navigate(['/orders']);
 });
- } else if(this.sum ==0 || this.sumAfterDiscount == 0){
-  this.msgs.push({severity: 'error', summary: 'Error', detail: 'Total value cant be zero'});
  }
  
  else {
    this.setFormTouched(this.invoiceForm);
- this.msgs.push({severity: 'error', summary: 'Error', detail: 'please enter all fields'});
+   this.msgs = [];
+ this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please enter Quantity and Cost fields'});
  }
+ 
+}
+
+ReadyForPickup(){
+  let id = this.route.snapshot.paramMap.get('id');
+  console.log(id);
+  
+  let params = { 
+   orderId:id,
+    status: 6
+  }
+  console.log(params);
+  
+ this.auth.statusOrder(params).subscribe((res:any) => {
+   console.log(params);
+   console.log(res);
+   this.router.navigate(['/orders']);
+ });
+}
+
+Delivered(){
+  let id = +this.route.snapshot.paramMap.get('id');
+  console.log(id);
+  let params = {
+
+   orderId:id,
+    status: 7
+  }
+  console.log(params);
+  
+ this.auth.statusOrder(params).subscribe((res:any) => {
+   console.log(params);
+   console.log(res);
+   this.router.navigate(['/orders']);
+  
+ });  
+
  
 }
 
@@ -356,60 +336,31 @@ this.router.navigate(['/orders']);
  });
  }
 
+showcopay: Boolean = false
+
  OrderList() {
  const header = {'authentication_token': localStorage.getItem('authentication_token')};
- var orderId = localStorage.getItem('orderId')
- console.log(header);
- console.log("auth" + localStorage.getItem ('authentication_token'));
+
+ const id = this.route.snapshot.paramMap.get('id');
  this.loader.open();
- this.http.get(environment.host + 'order/pharmacy/' + orderId, {headers: header}).subscribe((res: any) => {
- console.log('orderView =' + JSON.stringify(res));
+ this.http.get(environment.host + 'order/pharmacy/' + id, {headers: header}).subscribe((res: any) => {
+
  if(res.statusCode === 401) {
  //alert('zipcode is not servicable')
+ this.msgs = [];
  this.msgs.push({severity: 'error', summary: 'Error', detail: 'No Orders Found '});
  this.loader.close();
- console.log('No orders Found');
+
  } else {
- // console.clear();
- console.log(res);
- console.log(JSON.stringify(res));
  this.orderDetails = res.object;
- console.log(this.orderDetails);
  if(this.orderDetails.rxImage){
- console.log("image");
- 
  this.imageSrc.push( "https://s3.amazonaws.com/deliv-meds-resources/" + this.orderDetails.rxImage)
- 
- 
  }
- console.log(this.imageSrc);
- console.log(this.orderDetails.rxImage);
- 
- 
- //this.cars = res.object;
+
  this.customerResponses= res.object.customerResponse;
  this.addRowWithValues(this.orderDetails.orderItems);
-
- this.orderDetails.orderItems.map((e => {
- // if(e.status == 3) {
- e.greyImage = true;
- // } else {
- // e.greyImage = false;
- // }
- }))
- console.log(this.orderDetails.orderItems);
- 
- // this.zipcodeService.push
- //console.log(this.cars);
- console.log( 'orderID' + JSON.stringify(this.orderDetails));
- console.log( 'responses' + JSON.stringify(this.customerResponses));
  this.loader.close();
- // this.editForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
- 
  }
  })
- 
  }
-
-
 }

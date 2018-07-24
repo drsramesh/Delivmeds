@@ -6,6 +6,7 @@ import { Http } from '@angular/http';
 
 //third party
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import {MessageService} from 'primeng/components/common/messageservice';
 
 // Servies
 import { UserService } from '../services/user.service';
@@ -14,6 +15,7 @@ import { TokenService } from '../services/token.service';
 import { finalize } from 'rxjs/operators';
 import { PreloadService } from '../services/preload.service'
 import { PubNubAngular } from 'pubnub-angular2';
+import { PubnubService } from '../pubnub.service';
 
 @Component({
   selector: 'app-login',
@@ -36,7 +38,9 @@ submitted: boolean;
      private user: UserService,
      private http: Http,
      private loader: PreloadService,
-     private pubnub: PubNubAngular
+     private pubnub: PubNubAngular,
+     private pb: PubnubService,
+     private messageService: MessageService,
   )  {
       this.signInForm = this.fb.group({
         signinEmail: new FormControl(null, Validators.required),
@@ -45,19 +49,13 @@ submitted: boolean;
   }
 
   ngOnInit() {
-   
-      console.log('login');
       this.user.destroyUser();
-      console.log(localStorage.getItem("authentication_token"));
       // localStorage.clear();
-      // console.log(localStorage.getItem("authentication_token"));
     }
     
   // sign in functionality
    signIn(signInForm) {
      this.loading = true
-    this.msgs = [];
-     console.log(this.signInForm)
     if (signInForm.valid) {
       const params = {
         email: signInForm.value.signinEmail,
@@ -65,20 +63,18 @@ submitted: boolean;
       };
        this.loader.open();
       this.auth.signIn(params).subscribe((res: any) => {
-        console.log(res);
-
-        
-        console.log(res.profileCompleted)
         if (res.statusCode === 200  && res.profileCompleted === true) {
-          console.log(res.profileCompleted)
-          this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
+          this.msgs = [];
+          // this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
+          this.messageService.add({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
           //alert('success')
-
-            this.pubnub.subscribe({
+          localStorage.setItem('pharmacyId', res.pharmacyId)
+            this.pb.subscribe("channel_"+res.pharmacyId)
+            // this.pubnub.subscribe({
             
-                 channels: ['channel_1252' ] ,
-                 withPresence: true
-             });
+            //      channels: ['channel_1252' ] ,
+            //      withPresence: true
+            //  });
 
              
            this.loader.close();
@@ -90,21 +86,28 @@ submitted: boolean;
           // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
         }
         else if(res.statusCode === 200  && res.profileCompleted === false) {
-          console.log('profile completed false');
           
           //alert('faliure');
+          this.msgs = [];
           this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
            this.loader.close();
+           localStorage.setItem('pharmacyId', res.pharmacyId)
           this.tokenService.storeTokens(
             res['authentication_token']
            // res['refresh_token'],
           );
         
-        // this.user.setUser(res['user']);
+        // this.user.setUser(res['user']); emailVerified
           this.router.navigate(['/my-account']);
-        } else {
+        } else if(res.statusCode === 401){
+          this.msgs = [];
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again or  your Email id is not verified'});
+           this.loader.close();
+
+        }else {
           //alert('faliure');
-          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again or your email is not verified'});
+          this.msgs = [];
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again'});
           this.loginFailed = true;
           this.loading = false;
          // this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });

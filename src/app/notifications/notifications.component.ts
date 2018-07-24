@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { AUTH_PROVIDERS } from 'angular2-jwt';
+import { PubNubAngular } from 'pubnub-angular2';
+import { PubnubService } from '../pubnub.service';
 // import { AngularFireDatabase } from 'angularfire2/database';
 // import { AngularFireAuth } from 'angularfire2/auth';
 // import { Observable } from 'rxjs/Observable';
@@ -20,19 +22,48 @@ export class NotificationsComponent implements OnInit {
   notifications= [];
   trashNotifi: any[];
   filteredNotifications = [];
+  pharmacyId: any
   constructor(private router:Router,
+    private pb: PubnubService,
+    public pubnub: PubNubAngular
     //public afAuth: AngularFireAuth, 
     // public af: AngularFireDatabase
   )
      {
-      //  this.af.list('/messages', ref => {
-      //   let q = ref.limitToLast(25).orderByKey();
-      //   return q;
-      // });
-      // this.user = this.afAuth.authState;
+      localStorage.getItem('pharmacyId')
      }
 
   ngOnInit() {
+  //   console.log(this.pubnub);
+    
+
+  //  this.pubnub.publish({ channel: 'channel_1252', message: 'Hello!' }, (response) => {
+  //     console.log(response);
+
+  //     this.pubnub.history({ channel: 'channel_1252' }).then((response) => {
+  //       console.log(response);
+  //     });
+  //   });
+
+  // this.pubnub.subscribe({ channels: ['channel_1252']});
+  // this.pb.history('channel_1252', (response) => {
+  //   var a;
+  //   // console.log(a);
+    
+  // }) ;
+  
+  //    this.pubnub.history(
+  //      {
+  //          channel :'channel_1252',
+  //          reverse: true
+  //         //  count : 9
+  //      },
+  //      function (status, response) {
+  //          console.log(response);
+  //      }
+  //  );
+  
+  
     
     this.brands = [
       { name: '--All--', value: 'AllOrders' },

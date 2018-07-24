@@ -24,18 +24,12 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     
     this.router.events.subscribe( (e) => {
-      this.RegisteredDetailsService();
+      // this.RegisteredDetailsService();
       if(e instanceof NavigationEnd) {
-        console.log(e.url == '/')
-        console.log(e.url.split('/')[1])
-        console.log( e.url.split('/')[1] == 'login')
-         console.log(e.url.split('/')[1] == 'register')
-         console.log((e.url.split('')[1] == ''))
-        
-        if ((e.url.split('/')[1] == 'login') || (e.url.split('/')[1] == 'register')  || (e.url == '/')) {
+        if ((e.url.split('/')[1] == 'login') || (e.url.split('/')[1] == 'register')  || (e.url == '/') || (e.url.split('/')[1] == 'forgot-password') || (e.url.split('/')[1] == 'change-password') ) {
           this.nav = [];
           this.showButton = false;
-          console.log(this.showButton)
+          console.log("123")
          
         }else {
           this.RegisteredDetailsService();

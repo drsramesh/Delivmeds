@@ -11,8 +11,6 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 import { User } from '../Interface/createUser';
 // services
-import { StateService } from '../services/state.service';
-import { EmailRegistrationService }from '../services/email-registration.service';
 import { promise } from 'protractor';
 import { DelivMedsAuthService } from '../services/deliv-meds-auth.service';
 import { TokenService } from '../services/token.service';
@@ -22,6 +20,7 @@ import { PreloadService } from '../services/preload.service'
 import { DISABLED } from '@angular/forms/src/model';
 import { LoginComponent } from '../login/login.component';
 import { AUTH_PROVIDERS } from 'angular2-jwt';
+import {MessageService} from 'primeng/components/common/messageservice';
 
 
 
@@ -54,18 +53,19 @@ export class RegisterComponent implements OnInit {
 
   //autocomplete
   country: any[]
+  visible:boolean = false;
+  focusGain:boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private toasts: ToastsManager,
-    private StateService: StateService,
     private user: UserService,
-    private emailService: EmailRegistrationService,
     private auth: DelivMedsAuthService,
     private tokenService: TokenService,
     private router: Router,
-    private loader: PreloadService
+    private loader: PreloadService,
+    private messageService: MessageService
   ) {
     this.signInForm = this.fb.group({
       pharmacyName: new FormControl(null, Validators.required),
@@ -94,10 +94,26 @@ export class RegisterComponent implements OnInit {
   filterCountrySingle(event) {
     console.log(event);
      let query = event.query;
-
+    //  this.http.get(environment.host + 'zipcodes/get/' + this.signInForm.value.zipcode.code ).subscribe((res: any) => {
+      
+    //   if(res.statusCode === 401) {
+    //     this.signInForm.patchValue({city: "" ,state: ""});
+      
+    //   } else {
+    //     console.log(this.signInForm.value.zipcode);
+    //         console.log(JSON.stringify(res));
+    //      this.zipCodeServices = res;
+    //       console.log(this.zipCodeServices);
+    //       this.signInForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
+    //   }
+      
+    //       })
      this.http.get(environment.host + 'zipcodes/serviceable/' + this.signInForm.value.zipcode ).subscribe(country => {
+       console.log(country)
        if(country['statusCode']==401){
         this.filteredCountriesSingle=[];
+        this.msgs = [];
+        this.signInForm.patchValue({city: "" ,state: ""});
         this.msgs.push({severity: 'error', summary: 'Error', detail: 'Zipcode not available '})
        }else{
         this.filteredCountriesSingle=[]
@@ -110,27 +126,33 @@ export class RegisterComponent implements OnInit {
 }
 
 zipcodeServiceTab(country) {
-   
-  this.http.get(environment.host + 'zipcodes/get_serviceable/' + country ).subscribe((res: any) => {
+
+  if(this.signInForm.value.zipcode == '' || this.signInForm.value.zipcode == null){
+    this.signInForm.patchValue({city: "" ,state: ""});
+  }
+   else{
+  this.http.get(environment.host + 'zipcodes/get/' + country ).subscribe((res: any) => {
     console.log(res);
     
 if(res.statusCode === 401) {
 //alert('zipcode is not servicable')
 this.signInForm.patchValue({city: "" ,state: ""});
-
+this.msgs = [];
+this.msgs.push({severity: 'error', summary: 'Error', detail: 'Zipcode is not servicable '})
 } else {
   this.signInForm.value.zipcode = country
  this.zipCodeServices = res;
   console.log(this.zipCodeServices);
   this.signInForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
-}
+}  
 
   })
+}
 }
 
 
   zipcodeService(event) { 
-    this.http.get(environment.host + 'zipcodes/get_serviceable/' + this.signInForm.value.zipcode.code ).subscribe((res: any) => {
+    this.http.get(environment.host + 'zipcodes/get/' + this.signInForm.value.zipcode.code ).subscribe((res: any) => {
       
 if(res.statusCode === 401) {
   this.signInForm.patchValue({city: "" ,state: ""});
@@ -149,7 +171,6 @@ if(res.statusCode === 401) {
     
 // sign in functionality
    signUp(signInForm) {
-     this.msgs = [];
      console.log(this.signInForm.value);
      
     if (signInForm.valid) {
@@ -161,57 +182,57 @@ if(res.statusCode === 401) {
         password: signInForm.value.password,
         address: signInForm.value.address,
         street: signInForm.value.street || '',
-        zipcode: signInForm.value.zipcode.code,
+        zipcode: signInForm.value.zipcode,
          city: signInForm.value.city
         // dea: signInForm.value.eda
       };
       console.log("called");
+      console.log(params);
       
        this.loader.open();
       this.auth.signUp(params).subscribe((res: any) => {
         console.log(res);
-        // console.log(res.statusCode);
-        // console.log(res['statusCode']);
-        // console.log(res);
         if (res.statusCode == 200) {
           console.log(res);
-          this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully Registered.'});
-          //alert("success");
+         
+      
            this.loader.close();
-          //  this.tokenService.storeTokens(
-          //    res['authentication_token'],
-          //    res['refresh_token'],
-          //  );
-           this.user.createUser(res['user']);
-           console.log(res['user']);
+         
+           this.msgs = [];
           this.router.navigate(['/login']);
-          
-          // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
+          this.messageService.add({severity: 'success', summary: 'Success', detail: 'Thank you for signing up with DelivMeds. You will receive a confirmation email shortly. If you do not see this email in your Inbox, please check your Spam / Junk folder.'});
         } else if(res.statusCode != 200){
+          this.msgs = [];
           this.msgs.push({severity: 'error', summary: 'Error', detail: ' Email is already registered with different Pharmacy '});
           this.loginFailed = true;
-         // this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
-          //alert("failure");
+       
          this.loader.close();
         }
         else {
+          this.msgs = [];
           this.msgs.push({severity: 'error', summary: 'Error', detail: 'registration unsuccesfull'});
           this.loginFailed = true;
-          //this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
-          //alert("failure");
           this.loader.close();
         }
       }, (err) => {
         this.loader.close();
+        this.msgs = [];
         this.msgs.push({severity: 'error', summary: 'Error', detail: 'server error'});
-         //this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
-        // alert("server error");
       }
       );
     } else {
       this.setFormTouched(this.signInForm);
     }
   }
+
+  focusMethod(){
+      // console.log("Focused")
+      this.focusGain = true;
+  }
+  focusMethod1(){
+    // console.log("Focused")
+    this.focusGain = false;
+}
 
   setFormTouched(form_obj: any) {
     Object.keys(form_obj.controls).forEach(field => {

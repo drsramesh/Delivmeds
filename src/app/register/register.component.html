@@ -1,114 +1,86 @@
-<p-growl [(value)]="msgs" [life]=1000></p-growl>
+<p-growl [(value)]="msgs" life="3000"></p-growl>
 <div class="login text-center">
     <figure class="logo">
-        <img src="assets/images/logo.png" alt="">
+        <img src="assets/images/LOGO.svg" alt="">
     </figure>
     <div class="sign-form">
         <form [formGroup]="signInForm" (ngSubmit)="signUp(signInForm)">
             <div class="sign-pass">
-                <span class="ui-float-label form-control">
-                            <input id="pharmacyName" type="text" size="30" pInputText formControlName= "pharmacyName"  maxlength="100" required >
-                             <span class="error" *ngIf="signInForm.get('pharmacyName').touched  && signInForm.hasError('required', 'pharmacyName')" style="color:red"> Businessname is Required</span>
-                <span class="error" *ngIf="signInForm.get('pharmacyName').touched  && signInForm.hasError('required','maxlength')" style="color:red"> Businessname must be less than 100 digits</span>
-                <label for="float-input" class="">Business Name (Trade Name)*</label>
-                </span>
+                <div class="ui-float-label form-control">
+                    <input id="pharmacyName" type="text" size="30" pInputText formControlName="pharmacyName" maxlength="25" required>
+                    <span class="error" *ngIf="signInForm.get('pharmacyName').touched  && signInForm.hasError('required', 'pharmacyName')" style="color:red"> Business Name is required</span>
+                    <!-- <span class="error" *ngIf="signInForm.get('pharmacyName').touched  && signInForm.hasError('required','maxlength')" style="color:red"> Business name must be less than 25 digits</span> -->
+                    <span class="error" *ngIf="!signInForm.get('pharmacyName').valid && signInForm.get('pharmacyName').touched && signInForm.hasError('maxlength', 'pharmacyName')" style="color:red">Business Name max of 25 characters</span>
+                    <label for="float-input" class="">Business Name (Trade Name)*</label>
+                </div>
+                <div class="ui-float-label form-control">
+                    <input id="dea" type="text" size="30" formControlName="deaNumber" pInputText minlength="9" maxlength="9" required>
+                    <span class="error" *ngIf="signInForm.get('deaNumber').touched  && signInForm.hasError('required', 'deaNumber')" style="color:red"> DEA Number is required</span>
+                    <span class="error" *ngIf="signInForm.hasError('minlength')" style="color:red">DEA number must have 9 digits</span>
+                    <span class="error" *ngIf="!signInForm.get('deaNumber').valid && signInForm.get('deaNumber').touched && signInForm.hasError('minlength', 'deaNumber')" style="color:red">DEA Number must be 9 characters</span>
+                    <label for="float-input" class="">DEA Number*</label>
+                </div>
 
-                <span class="ui-float-label form-control">
-                    <input id="dea" type="text" size="30"  formControlName="deaNumber"  pInputText maxlength="9" required > 
-                    <span class="error" *ngIf="signInForm.get('deaNumber').touched  && signInForm.hasError('required', 'deaNumber')" style="color:red"> DEA is Required</span>
-                <label for="float-input" class="">DEA Number*</label>
-                </span>
                 <!-- pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" -->
-                <span class="ui-float-label form-control">
-                 <input id="phoneNo"   name="phoneNo"  type="tel" size="30" pInputText  formControlName= "phoneNo"      
-                  [textMask] = "{mask: mask}" 
-                  > 
-                <span class="error" *ngIf=" !signInForm.get('phoneNo').valid && signInForm.get('phoneNo').touched &&  signInForm.hasError('required','phoneNo')" style="color:red"> Phone number is required</span>
-                <span class="error" *ngIf=" !signInForm.get('phoneNo').valid && signInForm.get('phoneNo').touched &&  signInForm.hasError('minLength')" style="color:red"> Phone number  required 10 digits</span>
-                <label for="float-input" class="">Phone Number*</label>
-                </span>
+                <div class="ui-float-label form-control">
+                    <input id="phoneNo" name="phoneNo" type="tel" size="30" pInputText formControlName="phoneNo" [textMask]="{mask: mask}">
+                    <span class="error" *ngIf=" !signInForm.get('phoneNo').valid && signInForm.get('phoneNo').touched &&  signInForm.hasError('required','phoneNo')" style="color:red"> Phone Number is required</span>
+                    <span class="error" *ngIf=" !signInForm.get('phoneNo').valid && signInForm.get('phoneNo').touched &&  signInForm.hasError('minLength')" style="color:red"> Phone Number  must be 10 digits</span>
+                    <span class="error" *ngIf="!signInForm.get('phoneNo').valid && signInForm.get('phoneNo').touched && signInForm.hasError('minlength', 'phoneNo')" style="color:red">Phone Number  must be 10 digits</span>
+                    <label for="float-input" class="">Phone Number*</label>
+                </div>
+                <div class="ui-float-label form-control">
+                    <input id="email" name="email" pattern="^(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*\s*[,]?\b)*$" type="email" class="" size="30" pInputText formControlName="email" required="required">
 
-                <span class="ui-float-label form-control">
-                                    <input id="email" name="email"  pattern="^(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*\s*[,]?\b)*$"  type="email" class="" size="30"  pInputText  formControlName="email" required="required"
-                                    > 
-                    
-                                    <span class="error" *ngIf=" !signInForm.get('email').valid && signInForm.get('email').touched && signInForm.hasError('required', 'email')" style="color:red"> 
+                    <span class="error" *ngIf=" !signInForm.get('email').valid && signInForm.get('email').touched && signInForm.hasError('required', 'email')" style="color:red"> 
                                             Email is required</span>
-                <span class="error" *ngIf=" !signInForm.get('email').valid && signInForm.get('email').touched && signInForm.hasError('isEmailUnique', 'email')" style="color:red"> 
+                    <span class="error" *ngIf=" !signInForm.get('email').valid && signInForm.get('email').touched && signInForm.hasError('isEmailUnique', 'email')" style="color:red"> 
                                         This email has been registered already</span>
-                <span class="error" *ngIf=" signInForm.get('email').touched && signInForm.hasError('pattern', 'email')" style="color:red">Valid email is required</span>
-                <label for="float-input" class="">Email Address*</label>
-                </span>
+                    <span class="error" *ngIf=" signInForm.get('email').touched && signInForm.hasError('pattern', 'email')" style="color:red">Valid email is required</span>
+                    <label for="float-input" class="">Email Address*</label>
+                </div>
+                <!-- ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$ -->
+                <div class="ui-float-label form-control">
+                    <input id="password" name="password" (focus)="visible = !visible" (blur)="visible = !visible" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})" minlength="8" maxlength="20" type="password" class="" size="30" pInputText formControlName="password" required="required">
+                    <span class="error" *ngIf=" !signInForm.get('password').valid && signInForm.get('password').touched && signInForm.hasError('required', 'password')" style="color:red"> 
+                                                Password is required</span>
+                    <span class="error" *ngIf="!signInForm.get('password').valid && signInForm.get('password').touched && signInForm.hasError('pattern', 'password')" style="color:red">Password is invalid</span>
+                    <label for="float-input" class="">Password*</label>
+                </div>
+            </div>
+            <p class="pass-error text-left" *ngIf="visible">
+                <span>Password must contain one lowercase, one uppercase, one number and should be 8 characters</span>
+            </p>
+            <div class="sign-pass">
+                <div class="ui-float-label form-control">
+                    <input id="address1" type="text" size="30" formControlName="address" pInputText required>
+                    <span class="error" *ngIf="signInForm.get('address').touched  && signInForm.hasError('required', 'address')" style="color:red"> Street Address is required</span>
+                    <label for="float-input" class=""> Street Address *</label>
+                </div>
+                <div class="ui-float-label form-control">
+                    <input id="street" type="text" size="30" formControlName="street" pInputText>
+                    <!-- <span class="error" *ngIf="signInForm.get('street').touched  && signInForm.hasError('required', 'street')" style="color:red"> Street is Required</span> -->
+                    <label for="float-input" class="">Apartment No (Optional)</label>
+                </div>
+                <div class="ui-float-label form-control">
+                    <p-autoComplete class="auto-complete" id="zipcode" type="tel" formControlName="zipcode" [(ngModel)]="country" [suggestions]="filteredCountriesSingle" (completeMethod)="zipcodeServiceTab(country)" (onSelect)="zipcodeService($event)" (onBlur)="zipcodeServiceTab(country)"
+                        placeholder="{{focusGain ? '' : 'Zipcode*'}}" field="name" [size]="30" [minLength]="1" minlength="3" maxlength="5" required (onFocus)="focusMethod()" (onBlur)="focusMethod1()"></p-autoComplete>
+                    <!-- <label for="float-input" class="zipcode-label">Zipcode</label> -->
+                    <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('required', 'zipcode')" style="color:red">zipcode is required</span>
+                    <!-- <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('minLength', 'zipcode')" style="color:red">Please enter a valid 5 digit zip code</span>  -->
 
-                <!-- <span class="ui-float-label form-control">
-                                    <input id="emailValidation" name="inemail" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  type="email" class="" size="30"  pInputText  formControlName="inemail" required="required"
-                                    > 
-                    
-                                    <span class="error" *ngIf=" !signInForm.get('inemail').valid && signInForm.get('inemail').touched && signInForm.hasError('required', 'inemail')" style="color:red"> 
-                                            Email is required</span>
-                                    <span class="error" *ngIf=" !signInForm.get('inemail').valid && signInForm.get('inemail').touched && signInForm.hasError('isEmailUnique', 'inemail')" style="color:red"> 
-                                        This email has been registered already</span>
-                                    <span class="error" *ngIf=" signInForm.get('inemail').touched && signInForm.hasError('pattern', 'inemail')" style="color:red">Valid email is required</span>
-                                    <label for="float-input" class="">Email Address with validations</label>
-                                </span> -->
-
-                <span class="ui-float-label form-control">
-                                        <input id="password" name="password" minlength="8"  maxlength="16" type="password" class="" size="30"  pInputText  formControlName="password" required="required"
-                                        > 
-                                        <span class="error" *ngIf=" !signInForm.get('password').valid && signInForm.get('password').touched && signInForm.hasError('required', 'password')" style="color:red"> 
-                                     Password is required</span>
-                <!-- <span class="error" *ngIf=" signInForm.get('password').touched && signInForm.hasError('pattern', 'password')" style="color:red">Password is invalid   
-                                        <p pTooltip="Password must contain one lowercase, one uppercase, one special character 1 number and total 8 charcters" tooltipPosition="top">!</p>
-                                        </span> -->
-                <span class="error" *ngIf=" !signInForm.get('password').valid && signInForm.get('password').touched && signInForm.hasError('minlength', 'password')" style="color:red">Password must have 8</span>
-                <label for="float-input" class="">Password*</label>
-                </span>
-                <span class="ui-float-label form-control">
-                                        <input id="address1" type="text" size="30"  formControlName="address" pInputText required> 
-                                        <span class="error" *ngIf="signInForm.get('address').touched  && signInForm.hasError('required', 'address')" style="color:red"> Street address is Required</span>
-                <label for="float-input" class="">Street Address *</label>
-                </span>
-                <span class="ui-float-label form-control">
-                                            <input id="street" type="text" size="30"  formControlName="street"  pInputText > 
-                                            <!-- <span class="error" *ngIf="signInForm.get('street').touched  && signInForm.hasError('required', 'street')" style="color:red"> Street is Required</span> -->
-                <label for="float-input" class="">Apartment No</label>
-                </span>
-                <!-- <!-- \d{3}(-\d{4})? -->
-
-                <span class="ui-float-label form-control">
-                                                <p-autoComplete  class="auto-complete" id="zipcode" type= "tel" formControlName="zipcode"  [(ngModel)]="country" [suggestions]="filteredCountriesSingle" (completeMethod)="filterCountrySingle($event)" (onSelect)="zipcodeService($event)" (onBlur)="zipcodeServiceTab(country)" placeholder="Zipcode*" field="name" [size]="30"
-                                                [minLength]="1" minlength="3" maxlength="5" required></p-autoComplete>
-                                                <!-- <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('required', 'zipcode')" style="color:red">zipcode is required</span>                -->
-                <!-- <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('minLength', 'zipcode')" style="color:red">Please enter a valid 5 digit zip code</span> -->
-                <!-- <label for="float-input" class="">Zipcode</label> -->
-                </span>
-
-                <span class="ui-float-label form-control">
-                                        <input  [readonly]="true" id="city" class="" type="text"  size="30"  formControlName="city" pInputText required >
-                                        <span class="error" *ngIf="signInForm.get('city').touched  && signInForm.hasError('required', 'city')" style="color:red"> City is Required</span>
-                <label for="float-input" class="">City</label>
-                </span>
-                <span class="ui-float-label form-control">
-                                            <input  [readonly]="true" id="state" class="" type="text"  size="30"  formControlName="state" pInputText required>
-                                            <span class="error" *ngIf="signInForm.get('state').touched  && signInForm.hasError('required', 'state')" style="color:red"> State is Required</span>
-                <label for="float-input" class="">State</label>
-                </span>
-
-                <!-- auto complete -->
-                <!-- <input id="zipcode" type="number"  formControlName="zipcode"  (keyup) = "zipcodeService()" minlength="3" maxlength="10" required pInputText> 
-                                                <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('required', 'zipcode')" style="color:red">zipcode is required</span>
-                                                <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('minLength', 'zipcode')" style="color:red">Please enter a valid 5 digit zip code</span> -->
-                <!-- <span *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('maxlength', 'zipcode')" style="color:red">zipcode must be 5 digits </span> -->
-                <!-- [disabled]="isDisabled()" <" pattern (\d{5}([\-]\d{4})?)" span *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched && signInForm.hasError('maxlength')" style="color:red">zipcode must be  is 6 characters</span> -->
-                <!-- <label for="float-input" class="">Zip Code</label> -->
-                <!-- response:     {{filteredCountriesSingle}} -->
-                <!-- <p-autoComplete  id="zipcode"  formControlName="zipcode" [(ngModel)]="country" [suggestions]="filteredCountriesSingle" (completeMethod)="filterCountrySingle($event)"  field="name" [size]="30"   placeholder="Countries" [minLength]="1"></p-autoComplete> -->
-
-                <!-- <p-autoComplete   id="zipcode"  formControlName="zipcode"  [(ngModel)]="country" [suggestions]="filteredCountriesSingle" (completeMethod)="filterCountrySingle($event)" field="name" [size]="30"
-    placeholder="Countries" [minLength]="1"></p-autoComplete> -->
-
-                <!-- <span style="margin-left:10px">Country: {{country ? country.name||country : 'none'}}</span>    -->
-
+                    <label for="float-input" class="zip-label" *ngIf="focusGain">Zipcode*</label>
+                </div>
+                <div class="ui-float-label form-control">
+                    <input [readonly]="true" id="city" class="" type="text" size="30" formControlName="city" pInputText required>
+                    <span class="error" *ngIf="signInForm.get('city').touched  && signInForm.hasError('required', 'city')" style="color:red"> City is Required</span>
+                    <label for="float-input" class="">City</label>
+                </div>
+                <div class="ui-float-label form-control">
+                    <input [readonly]="true" id="state" class="" type="text" size="30" formControlName="state" pInputText required>
+                    <span class="error" *ngIf="signInForm.get('state').touched  && signInForm.hasError('required', 'state')" style="color:red"> State is Required</span>
+                    <label for="float-input" class="">State</label>
+                </div>
             </div>
 
             <p class="login-btn">
