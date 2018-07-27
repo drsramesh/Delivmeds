@@ -12,6 +12,8 @@ import { EmailverificationComponent } from './emailverification/emailverificatio
 import { DelivMedsLoginGaurdService } from './services/auth-guard-service'
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { AuthLoginGuardService } from './services/auth-login-guard.service';
+
 const routes: Routes = [
       { path: '', redirectTo: '/login', pathMatch: 'full' },
       // {path:'**', component: LoginComponent},

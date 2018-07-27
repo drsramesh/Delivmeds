@@ -57,6 +57,7 @@ import {DialogModule} from 'primeng/dialog';
 import { PubNubAngular } from 'pubnub-angular2';
 import { DelivMedsLoginGaurdService } from './services/auth-guard-service';
 import {AppInitService } from './app-init.service'
+import {RadioButtonModule} from 'primeng/radiobutton';
 
 // import {AngularFireModule} from 'angularFire2';
 
@@ -120,6 +121,7 @@ export function init_app(appLoadService: AppInitService, pb: PubnubService) {
   //  AngularFireAuthModule,
     TooltipModule,
     ProgressSpinnerModule,
+    RadioButtonModule,
     ImageViewerModule.forRoot()
  // AngularFireModule.initializeApp(config)
   

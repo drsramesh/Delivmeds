@@ -34,36 +34,6 @@ export class NotificationsComponent implements OnInit {
      }
 
   ngOnInit() {
-  //   console.log(this.pubnub);
-    
-
-  //  this.pubnub.publish({ channel: 'channel_1252', message: 'Hello!' }, (response) => {
-  //     console.log(response);
-
-  //     this.pubnub.history({ channel: 'channel_1252' }).then((response) => {
-  //       console.log(response);
-  //     });
-  //   });
-
-  // this.pubnub.subscribe({ channels: ['channel_1252']});
-  // this.pb.history('channel_1252', (response) => {
-  //   var a;
-  //   // console.log(a);
-    
-  // }) ;
-  
-  //    this.pubnub.history(
-  //      {
-  //          channel :'channel_1252',
-  //          reverse: true
-  //         //  count : 9
-  //      },
-  //      function (status, response) {
-  //          console.log(response);
-  //      }
-  //  );
-  
-  
     
     this.brands = [
       { name: '--All--', value: 'AllOrders' },
@@ -72,9 +42,6 @@ export class NotificationsComponent implements OnInit {
       { name: 'Rejected Orders', value: 'Rejected' },
       { name: 'Completed Orders', value: 'Delivered' }
   ];
-  //this.msgService.getPermission()
-  //this.msgService.receiveMessage()
- // this.message = this.msgService.currentMessage
   this.notifications = [
     {
       "label":'Waiting for Delevery',
@@ -118,9 +85,16 @@ export class NotificationsComponent implements OnInit {
   }
 
   delete(id){
-    let i=this.trashNotifi.indexOf(id)
-    this.trashNotifi.splice(i,1)
- console.log(this.notifications.splice(i,1))
+    let i=this.filteredNotifications.indexOf(id)
+      if(i==-1){
+        this.trashNotifi.push(id)
+      }
+      else {
+        this.trashNotifi.splice(id,)
+      }
+    
+    // this.trashNotifi.splice(i,1)
+//  console.log(this.notifications.splice(i,1))
   }
 
   sample(event) {

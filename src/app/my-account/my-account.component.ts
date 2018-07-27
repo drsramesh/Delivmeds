@@ -81,7 +81,6 @@ export class MyAccountComponent implements OnInit {
  selectedInsuranceProviders = [];
  fromTime: string[] =[];
  week: WeekDay;
- week1: any;
  previousVal: any;
  currentVal: any;
  // toTime: [ ];
@@ -114,22 +113,49 @@ export class MyAccountComponent implements OnInit {
  
  //this.userdetails.setUser(res['user'])
  this.weekdays= [
+ 
+ 
   {
-  'name':'Weekdays',
-  'dayOfWeek': 5
-  },
-  {
-  'name':'WeekEnds',
-  'dayOfWeek': 2
-  },
-  {
-  'name':'saturday',
+  'name':'Sunday',
   'dayOfWeek': 1
   },
+ 
   {
-  'name':'sunday',
-  'dayOfWeek': 0
-  }
+	'name':'Monday',
+	'dayOfWeek': 2
+  },
+  {
+	'name':'Tuesday',
+	'dayOfWeek': 3
+  },
+  {
+	'name':'Wednesday',
+	'dayOfWeek': 4
+   },
+   {
+	'name':'Thursday',
+	'dayOfWeek': 5
+},
+{
+	'name':'Friday',
+	'dayOfWeek': 6
+},
+{
+	'name':'Saturday',
+	'dayOfWeek': 7
+},
+{
+    'name':'Weekdays',
+	'dayOfWeek': 8
+},
+{
+	'name':'WeekEnds',
+	'dayOfWeek': 9
+},
+{
+	'name':'Complete Week',
+	'dayOfWeek': 10
+},
 
  ]
  
@@ -279,9 +305,18 @@ if(data['pharmacyBusinessHours']){
  this.user= true
  }
  accountEdit(){
- this.userInformation.pharmacyName;
- 
- this.accouEdit = true
+	this.country=this.userInformation.zipcode
+	this.editForm.patchValue({
+		pharmacyName: this.userInformation.pharmacyName,
+		phoneNo: this.userInformation.phoneNo,
+		email: this.userInformation.email,
+		address: this.userInformation.address,
+		street: this.userInformation.street,
+		zipcode: {'name':this.country },
+		city : this.userInformation.city,
+		state: this.userInformation.state
+		})
+	this.accouEdit = true
  }
 
  details = [];
@@ -294,7 +329,7 @@ if(data['pharmacyBusinessHours']){
  phoneNo: editForm.value.phoneNo || this.userInformation.phoneNo,
  address: editForm.value.address || this.userInformation.address,
  email: this.userInformation.email,
- street: editForm.value.street || this.userInformation.street,
+ street: editForm.value.street,
  zipcode: editForm.value.zipcode.name || editForm.value.zipcode,
  city : editForm.value.city || this.userInformation.city,
  state: editForm.value.state || this.userInformation.state
@@ -311,11 +346,7 @@ if(data['pharmacyBusinessHours']){
  this.userInformation.state = params.state;
  
  this.accouEdit= false
- 
  });
- 
-
- 
  }  else {
   this.setFormTouched(this.editForm);
  }
@@ -378,18 +409,13 @@ if(-1< min && min<10){
  hour1 = hour1 ? hour1 : 12; // the hour '0' should be '12'
  this.timeValue1 = `${hour1}:${sMin1}` + " "+ ampm;
 	let pushingElement = this.timeValue + " to " + this.timeValue1 + " ; " + week_time;
-	console.log(this.timeValue);
 	if(this.timeValue1<= this.timeValue){
 		this.msgs = [];
 		// this.msgs.push({severity: 'error', summary: 'To Time is less than From Time', detail: ''});
 		this.msgs.push({severity: 'error', summary: 'Error', detail: 'To Time must be greater than From Time'});
-// 		this.date7 =""
-// this.date8 =""	
-// this.week = this.weekdays[0]
 	} else {
 	
 	let index = this.updatePharmacy.indexOf(pushingElement);
-
 	if (index == -1)
 	{
 		let obj = {
@@ -399,16 +425,18 @@ if(-1< min && min<10){
 			}
 		this.updatePharmacy.push(pushingElement);
 		this.pharmacyTiming.push(obj)
+		
 this.date7 =""
-this.date8 =""	
-this.week = this.weekdays[0]
+this.date8 =""
+this.week = this.weekdays[8]	
+
 	}	 
 	   else {
 		this.msgs = [];
 		this.msgs.push({severity: 'error', summary: 'Error', detail: 'Time slot already exist'});
-		this.date7 =""
+this.date7 =""
 this.date8 =""	
-this.week = this.weekdays[0]
+ this.week = this.weekdays[0]
 	}
  }
 }
@@ -437,6 +465,9 @@ this.week = this.weekdays[0]
 		}	else {
 			this.msgs = [];
 			this.msgs.push({severity: 'error', summary: 'Error', detail: 'Time slot already exist'});
+			this.date7 =""
+			this.date8 =""	
+			 this.week = this.weekdays[0]
 		}	
  }
  deleteUser(index){
@@ -490,11 +521,11 @@ this.week = this.weekdays[0]
  };
  if(this.userInformation.pickup == false && this.userInformation.delivery == false){
 	 this.msgs = [];
-	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Delivery type'});
+	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Delivery type'});
  } 
  else if (this.pharmacyTiming.length <1 ) {
 	this.msgs = [];
-	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Pharmacy Timing details'});
+	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Pharmacy Timing details'});
  }
  else{
  this.auth.updateDetails(profilepageObj).subscribe((res: any) => {
@@ -570,22 +601,20 @@ pharmacyInsuranceProviders: insuranceId,
  
   if(this.userInformation.pickup === false && this.userInformation.delivery === false){
 	this.msgs = [];
-	 this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Delivery Type'}); 
-  } 
-    else if (this.pharmacyTiming.length <1 && this.userInformation.pharmacyBusinessHours.length<1) {
+	 this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Delivery Type'}); 
+  }  else if (this.pharmacyTiming.length <1 && this.userInformation.pharmacyBusinessHours.length<1 && this.userInformation.pharmacyBusinessHours.length == 0 && this.pharmacyTiming.length) {
 		this.msgs = [];
-  	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please provide atleast one Pharmacy Timing details'});
-   }
- else {
+  	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Pharmacy Timing details'});
+   } else {
  this.auth.updateDetails(profilepageObj).subscribe((res: any) => {
  if (res.statusCode == 200) {
 	this.loader.close();
 	this.msgs = [];
+	
+	this.router.navigate(['/orders']);
 	this.messageService.add({severity: 'success', summary: 'Success', detail: 'Successfully updated.'});
-    this.router.navigate(['/orders']);
  
- } 
- else if(res.statusCode == 400){
+ }  else if(res.statusCode == 400){
 	this.msgs = [];
  this.msgs.push({severity: 'error', summary: 'Please provide atleast one  Service Offer  ', detail: 'Update unsuccessful'});
  this.loader.close(); 
@@ -689,5 +718,20 @@ addProviders(){
  
  
  })
+}
+
+cancelUserDetails(){
+	 this.country=this.userInformation.zipcode
+	this.accouEdit = false;
+	this.editForm.patchValue({
+		pharmacyName: this.userInformation.pharmacyName,
+		phoneNo: this.userInformation.phoneNo,
+		email: this.userInformation.email,
+		address: this.userInformation.address,
+		street: this.userInformation.street,
+		zipcode: {'name':this.country },
+		city : this.userInformation.city,
+		state: this.userInformation.state
+		})
 }
 }

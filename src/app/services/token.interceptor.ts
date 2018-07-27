@@ -32,7 +32,8 @@ import { DelivMedsAuthService } from "./deliv-meds-auth.service";
 export class TokenInterceptor implements HttpInterceptor {
   constructor(
     private _injector: Injector,
-    private _tokenService: TokenService
+    private _tokenService: TokenService,
+    private router: Router,
   ) { }
 
   // 
@@ -58,13 +59,18 @@ export class TokenInterceptor implements HttpInterceptor {
         
          }
        };
-    }
+    } 
+    // else {
+
+    //    this.router.navigate(['/login']);
+    // }
     const request = req.clone(headers);
 
 
     return <any>next
       .handle(request)
        .map((event: HttpEvent<any>) => {
+
          if (event instanceof HttpResponse) {
             if (request.headers.keys()[0] == "refresh_token") {
              this._tokenService.storeTokens(
@@ -87,6 +93,7 @@ export class TokenInterceptor implements HttpInterceptor {
            const _auth = this._injector.get(DelivMedsAuthService);
            if (error.error.message === "Authentication token expired.") {
              console.log("Authentication token expired.");
+             
              
             //  const authReq = req.clone({
             //  //  headers: req.headers.set(

@@ -15,6 +15,7 @@ import { environment } from  '../../environments/environment';
 })
 export class HeaderComponent implements OnInit {
   nav: MenuItem[];
+  msgs = [];
   showButton: boolean = false;
   userInformation : any = [];
   constructor(private router: Router,
@@ -29,7 +30,6 @@ export class HeaderComponent implements OnInit {
         if ((e.url.split('/')[1] == 'login') || (e.url.split('/')[1] == 'register')  || (e.url == '/') || (e.url.split('/')[1] == 'forgot-password') || (e.url.split('/')[1] == 'change-password') ) {
           this.nav = [];
           this.showButton = false;
-          console.log("123")
          
         }else {
           this.RegisteredDetailsService();
@@ -52,6 +52,14 @@ export class HeaderComponent implements OnInit {
           
         }
       });
+    
+  }
+
+  logout(){
+      // this.userService.logout().subscribe((res:any)=>{
+        localStorage.clear();
+        this.msgs = [];
+        this.router.navigate(["/login"])
     
   }
 

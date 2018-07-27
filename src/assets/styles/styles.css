@@ -54,6 +54,10 @@
         font-size: 12px;
     }
     
+    .pointer {
+        cursor: pointer;
+    }
+    
     .ui-float-label input.ng-dirty.ng-invalid~label {
         color: #ff0000;
     }
@@ -67,6 +71,17 @@
         bottom: -15px;
         top: inherit;
         right: 0;
+    }
+    
+    .ui-chkbox-box.ui-state-active,
+    .ui-radiobutton-box.ui-state-active {
+        border: 1px solid #7bc466;
+        background: #7bc466;
+        box-shadow: none;
+    }
+    
+    .ui-radiobutton-icon {
+        margin-top: -0.7px;
     }
     
     .position-rel {
@@ -400,9 +415,44 @@
     }
     /* registerpage----------------- */
     
+    .dea-number {
+        padding: 5px 0;
+        color: #898989;
+    }
+    
+    .dea-number .radio-confirm {
+        margin-top: 5px;
+    }
+    
+    .dea-number .radio-confirm span:nth-child(2) {
+        display: inline-block;
+        padding-left: 10px;
+    }
+    
     .primary-timeings {
         display: inline-block;
         width: 45%;
+    }
+    
+    .ui-button.ui-button-secondary.ui-state-default.btn-secondary-green.btn-disabled:hover {
+        background: none;
+        color: #7bc466;
+        border-color: #ccc;
+        cursor: no-drop !important;
+    }
+    
+    .medication-list .order-cancel.btn-disabled:hover {
+        background: #fff;
+        color: #aca6a6;
+        border-color: #aca6a6;
+        cursor: no-drop !important;
+    }
+    
+    .btn-group-green.btn-disabled:hover {
+        background: #7bc466;
+        color: #fff;
+        border-color: #7bc466;
+        cursor: no-drop !important;
     }
     
     .pass-error {
@@ -448,6 +498,10 @@
         background: #fff;
     }
     /* Headerpage--------------- */
+    
+    .growl-msgs .ui-growl {
+        z-index: 99999 !important;
+    }
     
     .header {
         margin-bottom: 20px;
@@ -911,6 +965,7 @@
         margin-left: 10px;
         margin-top: 24px;
         cursor: pointer;
+        background: #fff;
     }
     
     .medication-list .order-cancel:hover {

@@ -48,18 +48,6 @@ export class HomeComponent implements OnInit {
   private pubnub:PubNubAngular ) { }
 
   ngOnInit() {
-    // this.pubnub.addListener({
-    //   status: function(st) {
-    //       if (st.category === "PNConnectedCategory") {
-    //         console.info('notifications connected')
-    //       }
-    //   },
-    //   message: function(message) {
-    //     console.log(message)
-    //       this.msgs = [];
-    //       this.msgs.push({severity: 'success', summary: 'Success', detail: 'Notification Received.'});
-    //   }
-    // });
 
 this.OrderList();
 
@@ -81,16 +69,6 @@ this.OrderList();
         ];
         // console.log(this.cols);
   }
-//   onYearChange(event, dt) {
-//     console.log(dt);
-//     if (this.yearTimeout) {
-//         clearTimeout(this.yearTimeout);
-//     }
-
-//     this.yearTimeout = setTimeout(() => {
-//         dt.filter(event.value, 'year', 'gt');
-//     }, 250);
-// }
 // pages :boolean
 OrderList() {
   this.loader.open();
@@ -99,7 +77,10 @@ OrderList() {
       this.loader.close();
       console.log('No orders Found');
       } else {
-            //  console.log(JSON.stringify(res));
+            // console.log(JSON.stringify(res));
+           
+
+            
          this.cars = res['object']['orders'];
          this.filterableCars = res['object']['orders'];
          this.loader.close();
@@ -114,55 +95,71 @@ OrderList() {
 );
   
 }
+display: boolean = false;
+car_one: any;
+showDialog(car){
+ console.log(car);
+// this.Delivered(car)
+ this.display = true;
+ this.car_one = car
+}
 
-
-
-//  viewDetail(id){
-//      console.log("button clicked");
-//      console.log(id);
-//      this.router.navigate(['/order-view',550]);
-//     //  const header = {'authentication_token': localStorage.getItem('authentication_token')};
-//     //  if (id != null || undefined)
-//     //  {
-//     //   localStorage.setItem('orderId', id) ;
-//     //   console.log(localStorage.getItem('orderId'));
-//     //   this.router.navigate(['/order-view']);
-      
-//     //  }
-//  }
-
- Delivered(id){
+ Delivered(car){
+  //  alert('hi')
+   console.log(car);
+   
    let params = {
 
-    orderId:id,
+    orderId:car.id,
      status: 7
    }
+   console.log(params);
+   
   this.auth.statusOrder(params).subscribe((res:any) => {
     console.log(params);
     console.log(res);
+    this.display = false
     this.OrderList();
   });  
   
  }
+
+ display1: boolean = false;
+ car_two: any;
+ showDialog1(car){
+  console.log(car);
+  // this.ReadyForPickup(car);
+  this.display1 = true;
+  this.car_two = car
+ }
+
  ReadyForPickup(car){
-   console.log(car);
+
    let params = {
     orderId:car.id,
      status: 6
    }
+   console.log(params);
+   
   this.auth.statusOrder(params).subscribe((res:any) => {
-    console.log(params);
+    // console.log(params);
     console.log(res);
+    this.display1 = false
     this.OrderList();
    
   });
  }
+ Refresh(){
+  this.display1 = false
+  this.OrderList();
 
- visible: boolean = true;
- updateVisibility(): void {
-   this.visible = false;
-   setTimeout(() => this.visible = true, 0);
  }
+
+  visible: boolean = true;
+//  updateVisibility(): void {
+//    this.visible = false;
+//    setTimeout(() => this.visible = true, 0);
+//  }
 sample(event) {
 
 

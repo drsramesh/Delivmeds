@@ -39,15 +39,21 @@ totalOrderPrice(params){
 return this._http.post(environment.host + 'order/pharmacy', params);
 }
 
+//Change Password
+changePassword(params){ 
+  const header = {'authentication_token': localStorage.getItem ('authentication_token')};
+  return this._http.post(environment.host + '/pharmacy/change_password', params);
+}
+
 // update token call checking for auth token if not will send refresh token
-updateRefreshToken() {
-const params = this._tokenService.getTokens();
-let header = {};
-if (params['refresh_token'] !== null) {
-  header = {'refresh_token': localStorage.getItem('refresh_token')};
-}
-return this._http.post(environment.host + 'users/update_refresh_token', { }, { headers: header});
-}
+// updateRefreshToken() {
+// const params = this._tokenService.getTokens();
+// let header = {};
+// if (params['refresh_token'] !== null) {
+//   header = {'refresh_token': localStorage.getItem('refresh_token')};
+// }
+// return this._http.post(environment.host + 'users/update_refresh_token', { }, { headers: header});
+// }
 
 // Checking whether any user logged in or not
 isAuthenticated() {
@@ -56,7 +62,7 @@ if (params['authentication_token'] !== null) {
    const promise = new Promise(
   (resolve, reject) => {
      resolve(true);
-     this._router.navigate(["/orders"]);
+    //  this._router.navigate(["/orders"]);
   }
 );
 return promise;
@@ -72,11 +78,10 @@ return promise;
 
 }
 
-
 // Check for email availabilty in sign up
-emailAvailability(params) {
-return this._http.get(environment.host + 'users/email_availability', {params: params});
-}
+// emailAvailability(params) {
+// return this._http.get(environment.host + 'users/email_availability', {params: params});
+// }
 
 // Confirming email for login
 confirmEmail(params) {
@@ -110,8 +115,8 @@ return this._http.post(environment.host + 'pharmacy/update_basic_profile',  para
 
 
 // forgot password call
-forgotPassword(params) {
-return this._http.post(environment.host + 'users/forgot_password', params);
+forgotPassword(params) { 
+return this._http.post(environment.host + 'pharmacy/forgot_password?email='+params.email,{});
 }
 // Resetting password
 resetPassword(params) {
@@ -119,8 +124,7 @@ return this._http.post(environment.host + 'users/reset_password', params);
 }
 // Logout, clear tokens and redirect to login page
 logout() {
-const header = {'authentication_token': localStorage.getItem ('authentication_token'),
-'refresh_token': localStorage.getItem('refresh_token')};
+const header = {'authentication_token': localStorage.getItem ('authentication_token')};
 this._http.post(environment.host + 'users/sign_out', { headers: header}).subscribe((res) => {
   this._tokenService.removeTokens();
   this._userService.destroyUser();

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, } from '@angular/router';
 import { Http } from '@angular/http';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { PreloadService } from '../services/preload.service'
@@ -15,6 +15,7 @@ import {MessageService} from 'primeng/components/common/messageservice';
 export class ForgotPasswordComponent implements OnInit {
   signInForm: FormGroup;
   msgs = [];
+  confirmKey:any;
 
   constructor(
     private fb: FormBuilder,
@@ -22,7 +23,8 @@ export class ForgotPasswordComponent implements OnInit {
     private router: Router,
     private auth: DelivMedsAuthService,
     private loader: PreloadService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private activatedRoute:ActivatedRoute
   ) { 
     this.signInForm = this.fb.group({
       signinEmail: new FormControl(null, Validators.required)
@@ -32,32 +34,38 @@ export class ForgotPasswordComponent implements OnInit {
   ngOnInit() {
   }
   signIn(signInForm) {
+
     if (signInForm.valid) {
       const params = {
         email: signInForm.value.signinEmail,
-        password: signInForm.value.signinPassword
       };
+     
+      
+    
        this.loader.open();
-      this.auth.signIn(params).subscribe((res: any) => {
-        if (res.statusCode === 200) {
+      this.auth.forgotPassword(params).subscribe((res: any) => {
+        if (res.code === 1) {
           this.msgs = [];
-          this.messageService.add({severity: 'success', summary: 'Success', detail: 'Successfully sent you password to your  register mail id'}); 
+          this.messageService.add({severity: 'success', summary: 'Success', detail: 'Successfully sent your password to your register mail id'}); 
           this.loader.close();
+          this.router.navigate(['/login']);
           
           // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
         }
        else if(res.statusCode === 401){
           this.msgs = [];
-          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email id is not correct'});
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email id is not registered'});
            this.loader.close();
+
         }
       }, (err) => {
         this.loader.close();
-       
-        // this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
+        this.msgs = [];
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server Error'});
       }
       );
-    } 
+
+}
     else {
       this.setFormTouched(this.signInForm);
     }

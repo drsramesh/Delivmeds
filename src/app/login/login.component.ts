@@ -63,18 +63,12 @@ submitted: boolean;
       };
        this.loader.open();
       this.auth.signIn(params).subscribe((res: any) => {
+        console.log(res);
         if (res.statusCode === 200  && res.profileCompleted === true) {
-          this.msgs = [];
-          // this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
+          this.msgs = []; 
           this.messageService.add({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
-          //alert('success')
           localStorage.setItem('pharmacyId', res.pharmacyId)
             this.pb.subscribe("channel_"+res.pharmacyId)
-            // this.pubnub.subscribe({
-            
-            //      channels: ['channel_1252' ] ,
-            //      withPresence: true
-            //  });
 
              
            this.loader.close();
@@ -83,7 +77,7 @@ submitted: boolean;
            // res['refresh_token'],
           );
           this.router.navigate(['/orders']);
-          // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
+         
         }
         else if(res.statusCode === 200  && res.profileCompleted === false) {
           
@@ -97,17 +91,24 @@ submitted: boolean;
            // res['refresh_token'],
           );
         
-        // this.user.setUser(res['user']); emailVerified
+      
           this.router.navigate(['/my-account']);
-        } else if(res.statusCode === 401){
+        } else if(res.statusCode === 401 && res.errors[0] ==="Please verify your email before you login"){
           this.msgs = [];
-          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again or  your Email id is not verified'});
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'your Email id is not verified'});
            this.loader.close();
 
-        }else {
+        }
+        // else if(res.statusCode === 401 && res.errors ===""){
+        //   this.msgs = [];
+        //   this.msgs.push({severity: 'error', summary: 'Error', detail: 'your Email id is not verified'});
+        //    this.loader.close();
+
+        // }
+        else {
           //alert('faliure');
           this.msgs = [];
-          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again'});
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentials. Please try again'});
           this.loginFailed = true;
           this.loading = false;
          // this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });

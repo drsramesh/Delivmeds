@@ -38,8 +38,4 @@ InsuranceDetails(params){
    destroyUser() {
     return this.httpClient.delete(environment.host + 'logout', {});
    }
-
-  //  getServiceOfferings(auth_TOKEN): Observable <any> {
-  //   return this.httpClient.post(environment.host + 'set_user', reqBody);
-  // }
 }

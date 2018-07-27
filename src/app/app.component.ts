@@ -49,8 +49,20 @@ ngOnInit() {
 }
 
 orderView(event){
-  this.router.navigate(['/order-view/'+ event['message']['summary']]);
-
+  if(localStorage.getItem('authentication_token') !== null){ 
+    this.router.navigate(['/order-view/'+ event['message']['summary']]);
+    console.log(this.msgs)
+    this.msgs.splice(this.msgs.indexOf(event),1);
+    console.log(this.msgs);
+  }
+  else {
+    // this.msgs.push({severity: 'info', summary: 'Info Message', detail:'You are logged out please login'});
+    // this.msgs.push({severity: 'info', summary: 'Error', detail: 'your Email id is not verified'});
+    this.msgs= [];
+  this.router.navigate(['/login']);
+  }
+ 
+  
 }
 
 

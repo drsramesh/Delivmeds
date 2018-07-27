@@ -1,4 +1,4 @@
-<p-growl [(value)]="msgs" life="3000"></p-growl>
+<p-growl [(value)]="msgs" life="7000" class="growl-msgs"></p-growl>
 <div class="my-account">
 
     <h3 class="panel-head">{{userInformation.pharmacyName }} <a class="pull-right" (click)=accountEdit()><i class="fa fa-pencil icons-gray" aria-hidden="true"></i>
@@ -12,8 +12,8 @@
         <p><span class="account-icons"><i class="fa fa-phone icons-gray" aria-hidden="true"></i></span>{{userInformation.phoneNo}}</p>
         <p><span class="account-icons"><i class="fa fa-envelope icons-gray" aria-hidden="true"></i></span>{{userInformation.email}}</p>
         <!-- <p><span class="account-icons"><i class="fa fa-clock-o" aria-hidden="true"></i></span>9:00 am to 10:00 pm</p> -->
-        <p><span class="account-icons"><i class="fa fa-map-marker icons-gray" aria-hidden="true"></i></span>{{userInformation.address}} {{userInformation.street}}, {{userInformation.city}}, {{userInformation.state}} {{userInformation.zipcode}} <a class="change-password"
-                routerLink="/change-password">Change Password</a> </p>
+        <p><span class="account-icons"><i class="fa fa-map-marker icons-gray" aria-hidden="true"></i></span>{{userInformation.address}} {{userInformation.street}}, {{userInformation.city}}, {{userInformation.state}} {{userInformation.zipcode}} </p>
+        <p> <a class="change-password" routerLink="/change-password">Change Password</a> </p>
         <button pButton type="submit" (click)="addUser()" label="Add User" class="btn-group-green mg-tp"></button>
         <div class="des-chips">
             <span class="choose-chips" *ngFor="let users of addNewUser; let i = index"> {{users}}
@@ -48,7 +48,7 @@
                     <div class="ui-g ui-row">
                         <div class="ui-g-3">
 
-                            <p-calendar class="primary-timeings pull-left" dataType="number" placeholder="From Time" [(ngModel)]="date7" #newPharmacy [timeOnly]="true" hourFormat="12"></p-calendar>
+                            <p-calendar class="primary-timeings pull-left" placeholder="From Time" [(ngModel)]="date7" #newPharmacy [timeOnly]="true" hourFormat="12"></p-calendar>
                             <!-- <p-calendar [(ngModel)]="date7" [timeOnly]="true"></p-calendar> {{date7 | hh:mm}} -->
 
                             <span class="pull-left time-to">To</span>
@@ -191,14 +191,14 @@
                 <input [readonly]="true" id="emailid" type="text" size="30" pInputText [value]="userInformation.email">
             </div>
             <div class="form-group  position-rel ui-g-6">
-                <h3 class="first">Street Address *</h3>
+                <h3 class="first">Address Line 1 *</h3>
                 <input id="address1" type="text" size="30" formControlName="address" required pInputText name="address" [value]="userInformation.address">
                 <span class="error error-down" *ngIf="editForm.get('address').touched && editForm.hasError('required', 'address')" style="color:red"> Street Address is Required</span>
             </div>
             <div class="form-group form-field position-rel  ui-g-6">
                 <!-- type="text" [(ngModel)]="editdetails.street" name="street" -->
                 <!-- #street = "ngModel" pInputText value = {{userInformation.street}} -->
-                <h3 class="first">Apartment No (Optional)</h3>
+                <h3 class="first">Address Line 2 (Optional)</h3>
                 <input id="address2" type="text" size="30" pInputText formControlName="street" name="street" [value]="userInformation.street">
                 <!-- <span class="error" *ngIf="editForm.get('street').touched && editForm.hasError('required', 'street')" style="color:red"> Street is Required</span> -->
             </div>
@@ -210,7 +210,7 @@
                 <p-autoComplete class="auto-complete" id="zipcode" type="tel" formControlName="zipcode" [(ngModel)]="country" [suggestions]="filteredCountriesSingle" (completeMethod)="filterCountrySingle($event)" (onSelect)="zipcodeService($event)" (onBlur)="zipcodeServiceTab(country)"
                     placeholder="Zipcode" field="name" [size]="30" [minLength]="3" maxlength="5" required></p-autoComplete>
 
-                <span class="error error-down" *ngIf=" !editForm.get('zipcode').valid && editForm.get('zipcode').touched && editForm.hasError('required', 'zipcode')" style="color:red">zipcode is required</span>
+                <span class="error error-down" *ngIf=" !editForm.get('zipcode').valid && editForm.get('zipcode').touched && editForm.hasError('required', 'zipcode')" style="color:red">zip code is required</span>
                 <!-- <span class="error error-down" *ngIf="  editForm.get('zipcode').touched && editForm.hasError('minLength', 'zipcode')" style="color:red">Please enter a valid 5 digit zip code</span> -->
             </div>
             <div class="form-group form-field ui-g-6">
@@ -225,7 +225,7 @@
     </div>
     <div class="pull-right">
         <button type="button" class="btn-group-green" pButton (click)="editUserDetails(editForm)" label="Update"></button>
-        <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="editUserDetails(editForm)" label="Cancel"></button>
+        <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="cancelUserDetails()" label="Cancel"></button>
 
     </div>
     <div class="clearfix"></div>

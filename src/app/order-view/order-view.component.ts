@@ -103,21 +103,25 @@ private route: ActivatedRoute) {
 }
 
 
-orderRejectedCompletey: string = " ";
+orderRejectedCompletey: string = "";
 
 addReason1() {
- console.log("reason deleted")
- 
- let params = {
- orderId:this.orderDetails.id,
- comments:this.orderRejectedCompletey,
- status: 3
+ if(this.reasonForm1.valid){
+  let params = {
+    orderId:this.orderDetails.id,
+    comments:this.orderRejectedCompletey,
+    status: 3
+    }
+   
+    this.auth.statusOrder(params).subscribe((res:any) => {
+    this.display1 = false; 
+    this.router.navigate(['/orders']);
+    });
+ }else {
+  this.msgs = [];
+  this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please enter the reason'});
  }
-
- this.auth.statusOrder(params).subscribe((res:any) => {
- this.display1 = false; 
- this.router.navigate(['/orders']);
- });
+ 
 
 }
 
@@ -138,14 +142,16 @@ print(): void {
 
 showDialog1(){
  this.display1 = true;
+
  
 }
 
-weekdata: string = " ";
+weekdata: string = "";
 greyImage: boolean = false;
 delitm;
 showDialog(i, details) {
   this.reasonForm.reset();
+  this.reasonForm.setValue = null;
  this.weekdata = "";
  this.display = true;
  this.deletedIndex = i;
@@ -169,27 +175,56 @@ addRowWithValues(orderItems) {
 }
 
 
-
+temp(i,details) {
+  if(this.invoiceForm.controls.itemRows["controls"][i]["controls"]["status"].value  ==2){
+     this.invoiceForm.controls.itemRows['controls'][i]['controls']['cost'].setValue(0);
+     this.invoiceForm.controls.itemRows['controls'][i]['controls']['quantity'].setValue(0);
+    this.previewOfUpdateClicked();
+    this.invoiceForm.controls.itemRows["controls"].splice(i,1);
+    // this.invoiceForm.controls.itemRows['controls'][i]['controls']['cost'].setValue(0);
+    // this.invoiceForm.controls.itemRows['controls'][i]['controls']['quantity'].setValue(1);
+    //this.previewOfUpdateClicked();
+  } else {
+    this.showDialog(i, details)
+  }
+}
 
 deleteRow() {
-  this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["cost"].setValidators([])
-  this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["quantity"].setValidators([])
-  this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["cost"].updateValueAndValidity();
-  this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["quantity"].updateValueAndValidity();
+console.log(this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]);
 
- let params = {
- orderId:this.orderDetails.id,
- orderItemId:this.delitm,
- comments:this.weekdata,
- status: 3
- }
- this.weekdata="";
- this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['status'].setValue(3);
-  this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['cost'].setValue(0);
-  this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['quantity'].setValue(1);
-  this.previewOfUpdateClicked();
- this.display = false;
+
+  
+   this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["cost"].setValidators([])
+   this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["quantity"].setValidators([])
+   this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["cost"].updateValueAndValidity();
+   this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["quantity"].updateValueAndValidity();
+ 
+
+ if(this.reasonForm.valid) {
+   let params = {
+     orderId:this.orderDetails.id,
+     orderItemId:this.delitm,
+     comments:this.weekdata,
+     status: 3
+     }
+    console.log(params);
+      this.auth.statusOrder(params).subscribe((res:any) => { 
+        console.log(res);
+        this.weekdata="";
+        });
+        this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['status'].setValue(3);
+        this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['cost'].setValue(0);
+        this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['quantity'].setValue(1);
+       this.previewOfUpdateClicked();
+       this.display = false;
+  
+   
+    } else {
+     this.msgs = [];
+     this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please enter the reason'});
+    }
 }
+
 
 private specialKeys: Array<number> = [46, 8, 9, 27, 13, 110, 190, 35, 36, 37, 39];
 
@@ -254,6 +289,7 @@ if(this.sum ==0 || this.sumAfterDiscount == 0){
     this.msgs = [];
    this.msgs.push({severity: 'error', summary: 'Error', detail: "Total value can't be zero"});
   }
+
  else if(this.invoiceForm.valid) {
  orders = this.invoiceForm.value.itemRows.map(element =>{
  return {
@@ -283,6 +319,8 @@ this.router.navigate(['/orders']);
  }
  
  else {
+   console.log(this.invoiceForm);
+   
    this.setFormTouched(this.invoiceForm);
    this.msgs = [];
  this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please enter Quantity and Cost fields'});
@@ -344,6 +382,7 @@ showcopay: Boolean = false
  const id = this.route.snapshot.paramMap.get('id');
  this.loader.open();
  this.http.get(environment.host + 'order/pharmacy/' + id, {headers: header}).subscribe((res: any) => {
+   
 
  if(res.statusCode === 401) {
  //alert('zipcode is not servicable')

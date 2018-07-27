@@ -20,7 +20,7 @@ initializeApp(): Observable<any>{
   if(localStorage.getItem('authentication_token') !== null){ 
     let pb = this.injector.get(PubnubService)
     pb.subscribe("channel_"+ localStorage.getItem('pharmacyId'))
-  if(window.location.pathname === '/order-view' || window.location.pathname === '/my-account' || window.location.pathname === '/notifications'){
+  if(window.location.pathname === '/order-view' || window.location.pathname === '/my-account' ||  window.location.pathname === 'order-view/:id' || window.location.pathname === '/notifications' || window.location.pathname === '/forgot-password' || window.location.pathname === '/change-password'){
   this.injector.get(Router).navigate(['/orders']);
   }
   return;

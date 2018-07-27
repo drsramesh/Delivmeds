@@ -21,6 +21,7 @@ import { DISABLED } from '@angular/forms/src/model';
 import { LoginComponent } from '../login/login.component';
 import { AUTH_PROVIDERS } from 'angular2-jwt';
 import {MessageService} from 'primeng/components/common/messageservice';
+import {RadioButtonModule} from 'primeng/radiobutton';
 
 
 
@@ -31,6 +32,8 @@ import {MessageService} from 'primeng/components/common/messageservice';
 })
 export class RegisterComponent implements OnInit {
   signInForm: FormGroup;
+  val1: string;
+  val2: string;
   filteredCountriesSingle: any=[];
   createuser: any = {};
   msgs = [];
@@ -75,7 +78,7 @@ export class RegisterComponent implements OnInit {
       password: new FormControl(null, Validators.required),
       address: new FormControl(null, Validators.required),
       street: new FormControl(null),
-      
+       deliveryType : new FormControl('true'),
       zipcode: new FormControl(null, Validators.required),
       city: new FormControl(null, Validators.required),
        state: new FormControl(null, Validators.required)
@@ -123,6 +126,16 @@ export class RegisterComponent implements OnInit {
         })
        }
      })
+}
+
+display: boolean = false;
+register:boolean = true
+
+showDialog1() {
+    this.display = true;
+    console.log("clicked");
+    // this.register = false;
+    
 }
 
 zipcodeServiceTab(country) {
@@ -204,6 +217,12 @@ if(res.statusCode === 401) {
         } else if(res.statusCode != 200){
           this.msgs = [];
           this.msgs.push({severity: 'error', summary: 'Error', detail: ' Email is already registered with different Pharmacy '});
+          this.loginFailed = true;
+       
+         this.loader.close();
+        } else if(res.statusCode == 401 && res.errors[0] === "Enter valid address"){
+          this.msgs = [];
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Enter valid address '});
           this.loginFailed = true;
        
          this.loader.close();

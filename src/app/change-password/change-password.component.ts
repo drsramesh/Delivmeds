@@ -43,58 +43,33 @@ export class ChangePasswordComponent implements OnInit {
     
    if (signInForm.valid) {
      const params = {
+      
+     
       //  email: signInForm.value.signinEmail,
-      oldpassword: signInForm.value.oldpassword,
-      newpassword: signInForm.value.newpassword,
-      confirmpassword: signInForm.value.confirmpassword,
+      oldPassword: signInForm.value.oldpassword,
+      newPassword: signInForm.value.newpassword,
+      confirmPassword: signInForm.value.confirmpassword,
      };
+     console.log(params)
       this.loader.open();
-     this.auth.signIn(params).subscribe((res: any) => {
+     this.auth.changePassword(params).subscribe((res: any) => {
        if (res.statusCode === 200 ) {
          this.msgs = [];
-         this.messageService.add({severity: 'success', summary: 'Success', detail: ' Password updated Successfully'});         
-        // localStorage.setItem('pharmacyId', res.pharmacyId)
-        //   this.pb.subscribe("channel_"+res.pharmacyId)
-           // this.pubnub.subscribe({
-           
-           //      channels: ['channel_1252' ] ,
-           //      withPresence: true
-           //  });
-
-            
+         this.messageService.add({severity: 'success', summary: 'Success', detail: ' Password changed Successfully'});                
           this.loader.close();
-        // this.tokenService.storeTokens(
-           res['authentication_token']
-          // res['refresh_token'],
-        // );
          this.router.navigate(['/orders']);
          // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
        }
-       else if(res.statusCode === 200  && res.profileCompleted === false) {
-         
-         //alert('faliure');
+      else if(res.statusCode === 401){
          this.msgs = [];
-         this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
-          this.loader.close();
-         // localStorage.setItem('pharmacyId', res.pharmacyId)
-       
-       // this.user.setUser(res['user']); emailVerified
-         this.router.navigate(['/my-account']);
-       } else if(res.statusCode === 401){
-         this.msgs = [];
-         this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again or  your Email id is not verified'});
+         this.msgs.push({severity: 'error', summary: 'Error', detail: 'All fields are mandatory'});
           this.loader.close();
 
-       }else {
-         //alert('faliure');
-         this.msgs = [];
-         this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentails. Please try again'});
-        // this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
-         this.loader.close();
        }
      }, (err) => {
        this.loader.close();
-     
+       this.msgs = [];
+       this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server Error'});
        // this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
      }
      );
