@@ -16,6 +16,7 @@ import { matchPassword } from '../common.validators';
 export class ChangePasswordComponent implements OnInit {
   signInForm: FormGroup;
   focusGain:boolean = false;
+  visible:boolean = false;
   msgs = [];
   constructor(
     private fb: FormBuilder,

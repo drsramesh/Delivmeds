@@ -8,21 +8,24 @@
     <form action="" [formGroup]="signInForm" (ngSubmit)=" signIn(signInForm)">
         <div class="sign-pass">
             <span class="ui-float-label form-control">
-                    <input id="email"  name="signinEmail" pattern="^(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*\s*[,]?\b)*$"  type="email" class="" size="30"  pInputText  formControlName="signinEmail" required> 
-                    <span class="error" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('required', 'signinEmail')" style="color:red"> 
-                            Email is required</span>
-            <span class="error" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('pattern', 'signinEmail')" style="color:red">Valid email is required</span>
+                    <input id="email"  pattern="^(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*\s*[,]?\b)*$"  type="email" class="" size="30"  pInputText  formControlName="signinEmail" required> 
+              <span class="error" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched " style="color:red"> 
+                          <span *ngIf="signInForm.hasError('required', 'signinEmail')">Email is required</span>
+            <span *ngIf="signInForm.hasError('pattern', 'signinEmail')" style="color:red">Valid email is required</span>
+            </span>
             <label for="float-input" class="">Email Address</label>
             <!-- pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}" -->
             </span>
             <span class="ui-float-label form-control">
                         <input id="password" name="signinPassword"  minlength="8" type="password" class="" size="30"  pInputText  formControlName="signinPassword" required="required"
                         > 
-                        <span class="error" *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched && signInForm.hasError('required', 'signinPassword')" > 
-                                Password is required</span>
-            <span class="error" *ngIf=" signInForm.get('signinPassword').touched && signInForm.hasError('pattern', 'signinPassword')" style="color:red">Password is invalid   
+                        <span class="error" *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched " style="color:red" > 
+                               <span *ngIf ="signInForm.hasError('required', 'signinPassword')">  Password is required</span>
+            <span *ngIf="signInForm.hasError('pattern', 'signinPassword')" style="color:red">Password is invalid</span>
+            </span>
+            <!-- <span class="error" *ngIf=" signInForm.get('signinPassword').touched && " >   
                         <p class ="error-test" pTooltip="Password must contain one lowercase, one uppercase, one special character 1 number and total 8 charcters" tooltipPosition="top"> !</p>
-                        </span>
+                        </span> -->
             <!-- <span class= "error" *ngIf= "signInForm.hasError('minlength')" style="color:red">Password must have 8 digits</span> -->
             <label for="float-input" class="">Password</label>
             </span>

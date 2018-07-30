@@ -20,6 +20,8 @@ import { runInThisContext } from 'vm';
 import { PreloadService } from '../services/preload.service'
 import { Password } from 'primeng/primeng';
 import {MessageService} from 'primeng/components/common/messageservice';
+import { LoginComponent } from '../login/login.component';
+
 
 
 
@@ -372,9 +374,11 @@ if(data['pharmacyBusinessHours']){
  
  
  }
-
+ timeValue_ampm :any;
+ timeValue1_ampm :any;
  pharmacyTiming = [];
- addPharmacy(newPharmacy: string, newPharmacy1: string, newPharmacy2: string) {
+ newPharmcay2 = [];
+ addPharmacy(newPharmacy: string, newPharmacy1: string, newPharmacy2) {
  if(!((newPharmacy) && (newPharmacy1 ) && (newPharmacy2))){
 	this.msgs = [];
 	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please enter the Pharmacy Timings'});
@@ -393,7 +397,10 @@ if(-1< min && min<10){
  var ampm = hour >= 12 ? 'PM' : 'AM';
  hour = hour % 12;
  hour = hour ? hour : 12; // the hour '0' should be '12'
- this.timeValue = `${hour}:${sMin}` + " " +ampm; 
+ this.timeValue = `${hour}:${sMin}`; 
+ this.timeValue_ampm = ampm;
+ console.log(ampm);
+ 
  //this.timeValue = `${hour}:${min}`
 
  //second field
@@ -404,24 +411,45 @@ if(-1< min && min<10){
 }else {
 	sMin1 = min1 + ''
 }
- var ampm = hour1 >= 12 ? 'PM' : 'AM';
+ var ampm1 = hour1 >= 12 ? 'PM' : 'AM';
  hour1 = hour1 % 12;
  hour1 = hour1 ? hour1 : 12; // the hour '0' should be '12'
- this.timeValue1 = `${hour1}:${sMin1}` + " "+ ampm;
-	let pushingElement = this.timeValue + " to " + this.timeValue1 + " ; " + week_time;
-	if(this.timeValue1<= this.timeValue){
-		this.msgs = [];
-		// this.msgs.push({severity: 'error', summary: 'To Time is less than From Time', detail: ''});
-		this.msgs.push({severity: 'error', summary: 'Error', detail: 'To Time must be greater than From Time'});
-	} else {
+ this.timeValue1 = `${hour1}:${sMin1}`;
+ this.timeValue1_ampm = ampm1;
+ console.log(ampm1);
+ console.log(this.timeValue);
+ console.log(this.timeValue1);
+ 
+ 
+ 
+	let pushingElement = this.timeValue.concat(" "+this.timeValue_ampm) + " to " + this.timeValue1.concat(" "+this.timeValue1_ampm) + " ; " + week_time;
+	console.log(pushingElement);
+	console.log(this.timeValue1_ampm);
+	console.log(this.timeValue_ampm);
 	
+	
+	if(this.timeValue1_ampm == this.timeValue_ampm){
+	
+		this.msgs = [];
+			// this.msgs.push({severity: 'error', summary: 'To Time is less than From Time', detail: ''});
+			this.msgs.push({severity: 'error', summary: 'Error', detail: 'To Time must be greater than From Time'});
+		
+		// if(this.timeValue1 <= this.timeValue && this.timeValue1 >= this.timeValue){
+			
+		// 	console.log("1234");
+			
+		// 	this.msgs = [];
+		// 	// this.msgs.push({severity: 'error', summary: 'To Time is less than From Time', detail: ''});
+		// 	this.msgs.push({severity: 'error', summary: 'Error', detail: 'To Time must be greater than From Time'});
+		// }
+	}else {
 	let index = this.updatePharmacy.indexOf(pushingElement);
 	if (index == -1)
 	{
 		let obj = {
 			dayOfWeek: this.weekvalue,
-			opens: this.timeValue,
-			closes: this.timeValue1
+			opens: this.timeValue.concat(" "+this.timeValue_ampm),
+			closes: this.timeValue1.concat(" "+this.timeValue1_ampm)
 			}
 		this.updatePharmacy.push(pushingElement);
 		this.pharmacyTiming.push(obj)
@@ -436,7 +464,7 @@ this.week = this.weekdays[8]
 		this.msgs.push({severity: 'error', summary: 'Error', detail: 'Time slot already exist'});
 this.date7 =""
 this.date8 =""	
- this.week = this.weekdays[0]
+ this.week = this.weekdays[8]
 	}
  }
 }
@@ -602,7 +630,7 @@ pharmacyInsuranceProviders: insuranceId,
   if(this.userInformation.pickup === false && this.userInformation.delivery === false){
 	this.msgs = [];
 	 this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Delivery Type'}); 
-  }  else if (this.pharmacyTiming.length <1 && this.userInformation.pharmacyBusinessHours.length<1 && this.userInformation.pharmacyBusinessHours.length == 0 && this.pharmacyTiming.length) {
+  }else if (this.pharmacyTiming.length <1 && this.userInformation.pharmacyBusinessHours.length<1 && this.pharmacyTiming.length == undefined &&  this.pharmacyTiming.length ==0) {
 		this.msgs = [];
   	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Pharmacy Timing details'});
    } else {
@@ -721,7 +749,7 @@ addProviders(){
 }
 
 cancelUserDetails(){
-	 this.country=this.userInformation.zipcode
+	this.country=this.userInformation.zipcode
 	this.accouEdit = false;
 	this.editForm.patchValue({
 		pharmacyName: this.userInformation.pharmacyName,

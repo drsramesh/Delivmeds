@@ -48,8 +48,10 @@ export class HomeComponent implements OnInit {
   private pubnub:PubNubAngular ) { }
 
   ngOnInit() {
-
-this.OrderList();
+    if (localStorage.getItem("authentication_token") !== null) {
+    //  console.log("authentication Token");
+      
+      this.OrderList();
 
         this.brands = [
             { name: 'All Orders', value: 'AllOrders' },
@@ -67,6 +69,12 @@ this.OrderList();
             { field: 'status', header: 'Status' },
             {field: 'time', header: ''},
         ];
+      
+    }else {
+      this.router.navigate(['/login'])
+    }
+
+
         // console.log(this.cols);
   }
 // pages :boolean
@@ -164,7 +172,7 @@ sample(event) {
 
 
   this.filterableCars = [];
-  console.log(event.value.value);
+  // console.log(event.value.value);
   
  
   switch (event.value.value) {
@@ -185,7 +193,7 @@ sample(event) {
     break;
 
     case 1 :
-   console.log(this.filterableCars.length);
+  //  console.log(this.filterableCars.length);
    
     for(let i = 0;i < this.cars.length;i++)
       {

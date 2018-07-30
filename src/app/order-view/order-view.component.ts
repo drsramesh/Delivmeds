@@ -94,7 +94,7 @@ private route: ActivatedRoute) {
  return this._fb.group({
  medicalName: [orderItem.drug],
  quantity: [orderItem.quantity,Validators.required],
- cost: [orderItem.unitPrice || '',(orderItem.status==3 ? '': Validators.required)],
+ cost: [orderItem.unitPrice || '',(orderItem.status==3? '': Validators.required)],
  id: [orderItem.id ],
  status:[orderItem.status],
  copay:[orderItem.copayPrice || '' ],
@@ -176,30 +176,28 @@ addRowWithValues(orderItems) {
 
 
 temp(i,details) {
+  this.deletedIndex = i
+  
   if(this.invoiceForm.controls.itemRows["controls"][i]["controls"]["status"].value  ==2){
-     this.invoiceForm.controls.itemRows['controls'][i]['controls']['cost'].setValue(0);
+     this.invoiceForm.controls.itemRows['controls'][i]['controls']['cost'].setValue(1);
      this.invoiceForm.controls.itemRows['controls'][i]['controls']['quantity'].setValue(0);
+     this.invoiceForm.controls.itemRows["controls"].splice(i,1)
+     this.invoiceForm.value.itemRows.splice(i,1);
     this.previewOfUpdateClicked();
-    this.invoiceForm.controls.itemRows["controls"].splice(i,1);
-    // this.invoiceForm.controls.itemRows['controls'][i]['controls']['cost'].setValue(0);
-    // this.invoiceForm.controls.itemRows['controls'][i]['controls']['quantity'].setValue(1);
-    //this.previewOfUpdateClicked();
+    
   } else {
     this.showDialog(i, details)
   }
 }
 
-deleteRow() {
-console.log(this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]);
-
-
-  
+deleteRow(i) {
+  this.deletedIndex = i
+console.log(this.invoiceForm.controls.itemRows["controls"][i]["controls"]);
    this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["cost"].setValidators([])
    this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["quantity"].setValidators([])
    this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["cost"].updateValueAndValidity();
    this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["controls"]["quantity"].updateValueAndValidity();
  
-
  if(this.reasonForm.valid) {
    let params = {
      orderId:this.orderDetails.id,
@@ -213,8 +211,8 @@ console.log(this.invoiceForm.controls.itemRows["controls"][this.deletedIndex]["c
         this.weekdata="";
         });
         this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['status'].setValue(3);
-        this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['cost'].setValue(0);
-        this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['quantity'].setValue(1);
+        this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['cost'].setValue(1);
+        this.invoiceForm.controls.itemRows['controls'][this.deletedIndex]['controls']['quantity'].setValue(0);
        this.previewOfUpdateClicked();
        this.display = false;
   
@@ -230,7 +228,6 @@ private specialKeys: Array<number> = [46, 8, 9, 27, 13, 110, 190, 35, 36, 37, 39
 
 onlyValues(event) {
   
-
   var key = window.event ? event.keyCode : event.which;
 
   if (this.specialKeys.indexOf(event.which) > -1) {
@@ -283,6 +280,7 @@ sumAfterDiscount = 0;
 
  updateButtonClicked(itemRows){ 
  // console.log(itemRows);
+ console.log(this.invoiceForm);
  
   let orders = [];
 if(this.sum ==0 || this.sumAfterDiscount == 0){
@@ -318,9 +316,7 @@ this.router.navigate(['/orders']);
 });
  }
  
- else {
-   console.log(this.invoiceForm);
-   
+ else { 
    this.setFormTouched(this.invoiceForm);
    this.msgs = [];
  this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please enter Quantity and Cost fields'});
@@ -365,11 +361,10 @@ Delivered(){
  
 }
 
-
-
  setFormTouched(form_obj: any) {
  Object.keys(form_obj.controls).forEach(field => {
  const control = form_obj.get(field);
+ console.log(control);
  control.markAsTouched({ onlySelf: true });
  });
  }

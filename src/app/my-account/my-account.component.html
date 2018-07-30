@@ -1,4 +1,4 @@
-<p-growl [(value)]="msgs" life="7000" class="growl-msgs"></p-growl>
+<p-growl [(value)]="msgs" life="5000" class="growl-msgs"></p-growl>
 <div class="my-account">
 
     <h3 class="panel-head">{{userInformation.pharmacyName }} <a class="pull-right" (click)=accountEdit()><i class="fa fa-pencil icons-gray" aria-hidden="true"></i>
@@ -129,24 +129,30 @@
             <div class="form-group form-field position-rel">
                 <h3 class="first">First Name</h3>
                 <input id="firstname" type="text" size="30" pInputText formControlName="firstName" required>
-                <span class="error" *ngIf=" !signInForm.get('firstName').valid && signInForm.get('firstName').touched && signInForm.hasError('required', 'firstName')" style="color:red"> 
- First Name is required</span>
+                <span class="error error-down" *ngIf=" !signInForm.get('firstName').valid && signInForm.get('firstName').touched " style="color:red"> 
+        <span *ngIf="signInForm.hasError('required', 'firstName')"> First Name is required</span>
+
+                </span>
+
             </div>
             <div class="form-group form-field position-rel">
                 <h3 class="first">Last Name</h3>
                 <input id="lastname" type="text" size="30" pInputText formControlName="lastName" required>
-                <span class="error" *ngIf=" !signInForm.get('lastName').valid && signInForm.get('lastName').touched && signInForm.hasError('required', 'lastName')" style="color:red"> 
- Last Name is required</span>
+                <span class="error error-down" *ngIf=" !signInForm.get('lastName').valid && signInForm.get('lastName').touched " style="color:red"> 
+        <span *ngIf="signInForm.hasError('required', 'lastName')"> Last Name is required</span>
+
+                </span>
             </div>
             <div class="form-group form-field position-rel">
                 <h3 class="first">Email</h3>
                 <input id="email" name="signinEmail" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" type="email" class="" size="30" pInputText formControlName="signinEmail" required>
-
-                <span class="error" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('required', 'signinEmail')" style="color:red"> 
- Email is required</span>
-                <span class="error" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched && signInForm.hasError('pattern', 'signinEmail')" style="color:red">Valid email is required</span>
+                <span class="error error-down" *ngIf=" !signInForm.get('signinEmail').valid && signInForm.get('signinEmail').touched " style="color:red"> 
+                        <span *ngIf="signInForm.hasError('required', 'signinEmail')">Email is required</span>
+                <span *ngIf="signInForm.hasError('pattern', 'signinEmail')" style="color:red">Valid email is required</span>
+                </span>
 
             </div>
+
             <!-- <div class="form-group form-field position-rel">
                 <h3 class="first">Password</h3>
                 <input id="password" name="signinPassword" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}" maxlength="8" type="password" class="" size="30" pInputText formControlName="signinPassword" required="required">
@@ -176,24 +182,35 @@
             <div class="form-group position-rel ui-g-6">
                 <h3 class="first">Business Name (Trade Name)*</h3>
                 <input id="businessname" type="text" size="30" formControlName="pharmacyName" pInputText required [value]="userInformation.pharmacyName">
-                <span class="error error-down" *ngIf=" !editForm.get('pharmacyName').valid && editForm.get('pharmacyName').touched && editForm.hasError('required', 'pharmacyName')" style="color:red">
-                Business Name is required</span>
+                <span class="error error-down" *ngIf=" !editForm.get('pharmacyName').valid  && editForm.get('pharmacyName').touched " style="color:red"> 
+                        <span *ngIf="editForm.hasError('required', 'pharmacyName')">Business Name is required</span>
+
+                </span>
             </div>
             <div class="form-group position-rel ui-g-6">
                 <h3 class="first">Phone Number*</h3>
 
                 <input id="phonenumber" type="text" size="30" formControlName="phoneNo" pInputText minLength="10" [textMask]="{mask: mask}" required [value]="userInformation.phoneNo">
-                <span class="error error-down" *ngIf=" !editForm.get('phoneNo').valid && editForm.get('phoneNo').touched && editForm.hasError('required','phoneNo')" style="color:red"> phone Number is required</span>
-                <span class="error error-down" *ngIf=" !editForm.get('phoneNo').valid && editForm.get('phoneNo').touched && editForm.hasError('minLength')" style="color:red"> phone Number must be required 10 digits</span>
+
+                <span class="error error-down" *ngIf=" !editForm.get('phoneNo').valid && editForm.get('phoneNo').touched " style="color:red"> 
+                        <span *ngIf="editForm.hasError('required', 'phoneNo')">Phone Number is required</span>
+                <span *ngIf="editForm.hasError('minLength', 'phoneNo')" style="color:red"> Phone Number  must be 10 digits</span>
+                </span>
+
             </div>
             <div class="form-group  position-rel ui-g-6">
                 <h3 class="first">Email*</h3>
                 <input [readonly]="true" id="emailid" type="text" size="30" pInputText [value]="userInformation.email">
             </div>
+
             <div class="form-group  position-rel ui-g-6">
                 <h3 class="first">Address Line 1 *</h3>
                 <input id="address1" type="text" size="30" formControlName="address" required pInputText name="address" [value]="userInformation.address">
-                <span class="error error-down" *ngIf="editForm.get('address').touched && editForm.hasError('required', 'address')" style="color:red"> Street Address is Required</span>
+                <!-- <span class="error error-down" *ngIf="editForm.get('address').touched && editForm.hasError('required', 'address')" style="color:red"> Street Address is Required</span> -->
+                <span class="error error-down" *ngIf="  editForm.get('address').touched " style="color:red"> 
+                        <span *ngIf="editForm.hasError('required', 'address')">Address Line 1 is required</span>
+
+                </span>
             </div>
             <div class="form-group form-field position-rel  ui-g-6">
                 <!-- type="text" [(ngModel)]="editdetails.street" name="street" -->
@@ -210,16 +227,30 @@
                 <p-autoComplete class="auto-complete" id="zipcode" type="tel" formControlName="zipcode" [(ngModel)]="country" [suggestions]="filteredCountriesSingle" (completeMethod)="filterCountrySingle($event)" (onSelect)="zipcodeService($event)" (onBlur)="zipcodeServiceTab(country)"
                     placeholder="Zipcode" field="name" [size]="30" [minLength]="3" maxlength="5" required></p-autoComplete>
 
-                <span class="error error-down" *ngIf=" !editForm.get('zipcode').valid && editForm.get('zipcode').touched && editForm.hasError('required', 'zipcode')" style="color:red">zip code is required</span>
+                <!-- <span class="error error-down" *ngIf=" !editForm.get('zipcode').valid && editForm.get('zipcode').touched && editForm.hasError('required', 'zipcode')" style="color:red">zip code is required</span> -->
+
+                <span class="error error-down" *ngIf="  editForm.get('zipcode').touched " style="color:red"> 
+                        <span *ngIf="editForm.hasError('required', 'zipcode')">Zipcode is Required</span>
+
+                </span>
+
                 <!-- <span class="error error-down" *ngIf="  editForm.get('zipcode').touched && editForm.hasError('minLength', 'zipcode')" style="color:red">Please enter a valid 5 digit zip code</span> -->
             </div>
             <div class="form-group form-field ui-g-6">
                 <h3 class="first">City*</h3>
                 <input id="city" [readonly]="true" type="text" formControlName="city" size="30" pInputText [value]="userInformation.city">
+                <span class="error error-down" *ngIf="  editForm.get('city').touched " style="color:red"> 
+                        <span *ngIf="editForm.hasError('required', 'city')">City is Required</span>
+
+                </span>
             </div>
             <div class="form-group form-field ui-g-6">
                 <h3 class="first">State*</h3>
                 <input id="state" [readonly]="true" type="text" formControlName="state" size="30" pInputText [value]="userInformation.state">
+                <span class="error error-down" *ngIf="  editForm.get('state').touched " style="color:red"> 
+                        <span *ngIf="editForm.hasError('required', 'state')">State is Required</span>
+
+                </span>
             </div>
         </form>
     </div>

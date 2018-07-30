@@ -1,4 +1,4 @@
-<p-growl [(value)]="msgs" life="5000" class="growl-msgs"></p-growl>
+<p-growl [(value)]="msgs" life="3000" class="growl-msgs"></p-growl>
 <div class="order-view">
     <div class="" *ngIf="orderDetails">
         <div class="panel-heading">
@@ -26,9 +26,13 @@
 
 
                     <!-- <ngx-image-viewer class="order-viewer" ></ngx-image-viewer> -->
-                    <div class="price-value">
+                    <div class="price-value" *ngIf="orderDetails.status ==1">
                         <p>Cost Details</p>
                         <span>Cost (Medication): ${{sum | number}} </span>
+                    </div>
+                    <div class="price-value" *ngIf="orderDetails.status ==2 ||orderDetails.status ==3 ||orderDetails.status ==4 ||orderDetails.status ==5 || orderDetails.status ==6 || orderDetails.status ==7">
+                        <p>Cost Details</p>
+                        <span class="payble-green">$ {{ orderDetails.grandTotal}}</span>
                     </div>
                     <div class="payable text-center" *ngIf="orderDetails.status ==1">
                         <p>Payable Amount</p>
@@ -63,7 +67,6 @@
                         <form [formGroup]="invoiceForm">
                             <div formArrayName="itemRows">
                                 <div class="form-group" [ngClass]=" { 'reject-order' : itemrow.get('status').value==3}" *ngFor="let itemrow of invoiceForm.controls.itemRows.controls; let i=index" [formGroupName]="i">
-
                                     <div class="form-name">
                                         <!-- <input [hidden] formControlName="status" class="form-control" pInputText> -->
                                         <h3 class="first">Medication Name</h3>
@@ -73,13 +76,13 @@
                                     </div>
                                     <div class="form-qty">
                                         <h3 class="first">Quantity</h3>
-                                        <span class="hideform"><input formControlName="quantity" maxlength="5" type="text" (keypress)="onlyValues1($event)"   class="form-control" (input)="previewOfUpdateClicked()" size="30" pInputText></span>
+                                        <span class="hideform"><input formControlName="quantity" maxlength="5" type="text" (keypress)="onlyValues1($event)"  class="form-control" (input)="previewOfUpdateClicked()" size="30" pInputText></span>
                                         <!-- <span *ngIf=" invoiceForm.get('quantity').touched && invoiceForm.hasError('required', 'quantity')" style="color:red"> Quantity is required</span> -->
                                     </div>
                                     <div class="form-cost">
                                         <h3 class="first">Cost</h3>
                                         <span class="dolor-icon hideform">
-                                            <input formControlName="cost" type="number" min=0.01 (keypress) = "onlyValues($event)" class="form-control"  (input)="previewOfUpdateClicked()" size="30"  pInputText>
+                                            <input formControlName="cost" type="text" maxlength="10" min=0 (keypress) = "onlyValues($event)" class="form-control"  (input)="previewOfUpdateClicked()" size="30"  pInputText>
                                         <!-- <span *ngIf="!invoiceForm.get('cost').valid && invoiceForm.get('cost').touched && invoiceForm.hasError('required')" style="color:red">  Cost is required</span> -->
                                         <i class="fa fa-usd" aria-hidden="true"></i>
                                         </span>
@@ -111,10 +114,6 @@
                                             <p-dialog header="Reject Medication Item" class="medication-list" [(visible)]="display" name="reason1" formControlName="reason1" required ngDefaultControl [(ngModel)]="weekdata" [modal]="true" [responsive]="true" [width]="600" [minWidth]="200" [minY]="70">
                                                 <textarea class="btn-full text-area commenttext-box" rows="5" cols="30" placeholder="Enter Reason" pInputTextarea required maxlength="250"></textarea>
                                                 <p-footer>
-                                                    <!-- <div *ngIf="invoiceForm.controls.itemRows.controls.length > 1 ;let i=index">
- {{i}}
- <button type="button" class="btn-group-green" pButton (click)=" deleteRow() " label="Submit "></button>
- </div> -->
                                                     <div>
                                                         <button type="button" class="btn-group-green" pButton (click)=" deleteRow(i) " label="Submit "></button>
                                                     </div>
@@ -126,13 +125,13 @@
                                     </div>
                                     <div *ngIf="orderDetails.status==1 ">
                                         <!-- <button *ngIf="invoiceForm.controls.itemRows.controls.length> 1" (click)="deleteRow(i)" class="btn btn-danger"> x</button> -->
-                                        <button (click)="temp(i, itemrow)" class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                        <button (click)="temp(i, itemrow)" *ngIf="invoiceForm.controls.itemRows.controls.length > 1" class="order-cancel"><i class="fa fa-times" aria-hidden="true"></i></button>
                                         <form [formGroup]="reasonForm">
                                             <p-dialog header="Reject Medication Item" class="medication-list" [(visible)]="display" name="reason1" formControlName="reason1" required ngDefaultControl [(ngModel)]="weekdata" [modal]="true" [responsive]="true" [width]="600" [minWidth]="200" [minY]="70">
                                                 <textarea class="btn-full text-area commenttext-box" rows="5" cols="30" placeholder="Enter Reason" pInputTextarea required maxlength="250"></textarea>
                                                 <!-- <span *ngIf=" reasonForm.get('reason1').touched  signInForm.hasError('required', 'reason1')" style="color:red">Valid email is required</span> -->
                                                 <p-footer>
-                                                    <button type="button" class="btn-group-green" pButton *ngIf="invoiceForm.controls.itemRows.controls.length > 0" (click)="deleteRow(i)" label="Submit"></button>
+                                                    <button type="button" class="btn-group-green" pButton (click)="deleteRow(i)" label="Submit"></button>
                                                     <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="display=false" label="Cancel"></button>
 
                                                 </p-footer>

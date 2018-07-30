@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-notification-details',
@@ -7,13 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotificationDetailsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router:Router) { }
 imageDefault = [];
  
   ngOnInit() {
-    // this.imageDefault = [
-    //   // 'assets/images/default.png'
-    //  ];
+    if (localStorage.getItem("authentication_token") !== null) {
+      console.log('Not Null');
+      
+    }
+    else{
+      this.router.navigate(['\login'])
+    }
   }
 
 }

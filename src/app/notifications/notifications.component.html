@@ -4,7 +4,8 @@
         </span></h3>
         <div class="pull-right order-filter">
             <span class="search"><i class="fa fa-search"></i>
-                <input type="text" class="order-search" pInputText size="50" placeholder="Search" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:100%">
+                <!-- (input)="dt.filterGlobal($event.target.value, 'contains')" -->
+                <input type="text" class="order-search" pInputText size="50" placeholder="Search"  style="width:100%">
                 </span>
             <p-dropdown class="drop-down order-dropdown" [options]="brands" [style]="{'width':'100%'}" placeholder="-- All --" (onChange)="sample($event)" optionLabel="name"></p-dropdown>
         </div>
@@ -18,7 +19,3 @@
         </div>
     </div>
 </div>
-<!-- <h1> {{(message | async)? notification.title }} </h1>
-<p> {{(message | async)? notification.body }} </p>
-
-{{ message | async | json }} -->

@@ -34,42 +34,51 @@ export class NotificationsComponent implements OnInit {
      }
 
   ngOnInit() {
-    
-    this.brands = [
-      { name: '--All--', value: 'AllOrders' },
-      { name: 'New Orders', value: 'New' },
-      { name: 'Active Orders', value: 'Active' },
-      { name: 'Rejected Orders', value: 'Rejected' },
-      { name: 'Completed Orders', value: 'Delivered' }
-  ];
-  this.notifications = [
-    {
-      "label":'Waiting for Delevery',
-      "id": 1
-    },
-    {
-      "label":'Awating for payment confirmation',
-      "id": 2
-    },
-    {
-      "label":'Transit',
-      "id": 3
-    },
-    {
-      "label":'New',
-      "id": 4
-    },
-    {
-      "label":'Rejected',
-      "id": 5
-    },
-    {
-      "label":'Delivered',
-      "id": 6
+    if (localStorage.getItem("authentication_token") !== null) {
+      this.filteredNotifications = [].concat(this.notifications);
+      this.trashNotifi = [];
+      this.brands = [
+        { name: '--All--', value: 'AllOrders' },
+        { name: 'New Orders', value: 'New' },
+        { name: 'Active Orders', value: 'Active' },
+        { name: 'Rejected Orders', value: 'Rejected' },
+        { name: 'Completed Orders', value: 'Delivered' }
+    ];
+    this.notifications = [
+      {
+        "label":'Waiting for Delevery',
+        "id": 1
+      },
+      {
+        "label":'Awating for payment confirmation',
+        "id": 2
+      },
+      {
+        "label":'Transit',
+        "id": 3
+      },
+      {
+        "label":'New',
+        "id": 4
+      },
+      {
+        "label":'Rejected',
+        "id": 5
+      },
+      {
+        "label":'Delivered',
+        "id": 6
+      }
+    ];
     }
-  ];
-  this.filteredNotifications = [].concat(this.notifications);
-  this.trashNotifi = [];
+    else{
+      this.router.navigate(['\login'])
+    }
+
+    
+  
+
+
   }
   notification(){
     this.router.navigate(['/notification-details']);
