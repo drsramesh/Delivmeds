@@ -10,7 +10,7 @@ export class TokenService {
   // store tokens once sign in
   storeTokens(authentication_token) {
       localStorage.setItem('authentication_token', authentication_token);
-      console.log(authentication_token);
+    //   console.log(authentication_token);
     //  var auth =  auth_token as string;
     //   console.log(auth)
      //  localStorage.setItem('refresh_token', refresh_token);

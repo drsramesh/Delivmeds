@@ -3,7 +3,7 @@
 
 <div class="login text-center">
     <figure class="logo">
-        <img src="assets/images/LOGO.svg" alt="">
+        <img src="assets/images/Logo.png" alt="">
     </figure>
     <form action="" [formGroup]="signInForm" (ngSubmit)=" signIn(signInForm)">
         <div class="sign-pass">
@@ -17,11 +17,12 @@
             <!-- pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}" -->
             </span>
             <span class="ui-float-label form-control">
-                        <input id="password" name="signinPassword"  minlength="8" type="password" class="" size="30"  pInputText  formControlName="signinPassword" required="required"
+                        <input id="password" name="signinPassword"  [type]="show  ? 'text' : 'password'" class="" size="30"  pInputText  formControlName="signinPassword" required="required"
                         > 
-                        <span class="error" *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched " style="color:red" > 
+                        <span (click)="password()" class="fa password-eye" [ngClass]="{'fa-eye': !show ,'fa-eye-slash': show}"></span>
+            <span class="error" *ngIf=" !signInForm.get('signinPassword').valid && signInForm.get('signinPassword').touched " style="color:red"> 
                                <span *ngIf ="signInForm.hasError('required', 'signinPassword')">  Password is required</span>
-            <span *ngIf="signInForm.hasError('pattern', 'signinPassword')" style="color:red">Password is invalid</span>
+            <!-- <span *ngIf="signInForm.hasError('minlength', 'signinPassword')" style="color:red">Password is incorrect</span> -->
             </span>
             <!-- <span class="error" *ngIf=" signInForm.get('signinPassword').touched && " >   
                         <p class ="error-test" pTooltip="Password must contain one lowercase, one uppercase, one special character 1 number and total 8 charcters" tooltipPosition="top"> !</p>

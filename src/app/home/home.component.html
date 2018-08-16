@@ -1,21 +1,25 @@
 <p-growl [(value)]="msgs" class="growl-msgs" life="7000"></p-growl>
-<p-table *ngIf="visible" class="orders-table" #dt sortField="id" sortOrder=-1 [columns]="cols" [value]="filterableCars" [rows]="10">
+<!-- <p-table class="orders-table" #dt [columns]="cols" [value]="Orders" [paginator]="false" [rows]="10"></p-table> -->
+<!-- <div class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" (scrolled)="OrderList()" [scrollWindow]="false" (scrolledUp)="OrderList()"> -->
+<p-table *ngIf="visible" class="orders-table" #dt [columns]="cols" [value]="filterableOrders" sortField="id" [rows]="10" sortOrder=-1>
+
+    <!-- <div infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50" (scrolled)="onScroll()"> -->
+    <!-- sortField="id" [rows]="10" sortOrder=-1 -->
     <ng-template pTemplate="caption">
+
         <h3 class="pull-left">All Orders</h3>
-        <div class="pull-right order-filter">
+        <div class="pull-right order-filter" *ngIf="visible">
             <span class="search"><i class="fa fa-search"></i>
-                    <input type="text" class="order-search" pInputText size="50" placeholder="Search" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:100%">
+                <input type="text" class="order-search" pInputText size="50" placeholder="Search"  (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:100%" >
+                                <!-- <input type="text"  class="order-search" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto"> -->
                     </span>
-            <p-dropdown class="drop-down order-dropdown" [options]="brands" [style]="{'width':'100%'}" (onChange)="sample($event)" optionLabel="name"></p-dropdown>
+            <p-dropdown class="drop-down order-dropdown" [options]="listOfOrderTypes" [style]="{'width':'100%'}" (onChange)="sample($event)" optionLabel="name"></p-dropdown>
         </div>
+
         <div class="clearfix"></div>
     </ng-template>
-    <ng-template pTemplate="header" let-columns *ngIf="cars">
+    <ng-template pTemplate="header" let-columns *ngIf="Orders">
         <tr>
-            <!-- <th *ngFor="let col of orderDetails.customerResponse.customerMembers[0].insurances [paginator]="pages" columns" [pSortableColumn]="col.field">
-                {{col.header}}
-                <p-sortIcon [field]="col.field"></p-sortIcon>
-            </th> -->
             <th style="width: 130px">
                 Order ID
             </th>
@@ -28,152 +32,136 @@
             <th style="width: 200px">
                 Order Date
             </th>
-            <th>
+            <th style="width:450px">
                 Status
             </th>
-            <th style="width:250px">
+            <th style="width:150px">
+                &nbsp;
+            </th>
+            <th style="width:350px">
                 &nbsp;
             </th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-i="index" let-car let-columns="columns">
+    <ng-template pTemplate="body" let-Order let-columns="columns">
         <tr>
-            <td style="width: 130px" routerLink="/order-view/{{car.id}}">
-                {{car.id}}
+            <td style="width: 130px" routerLink="/order-view/{{Order.id}}">
+                {{Order.id}}
             </td>
-            <td style="width: 160px" routerLink="/order-view/{{car.id}}">
-                <!-- <label *ngIf="car.prescriptionNo == ''"> Waiting For customer Response</label> -->
-
+            <td style="width: 160px" routerLink="/order-view/{{Order.id}}">
                 <div>
-                    {{car.prescriptionNo !== null? car.prescriptionNo : 'N/A' }}
+                    {{Order.prescriptionNo !== null? Order.prescriptionNo : 'N/A' }}
                 </div>
             </td>
-
-
-
-            <td style="width: 200px" routerLink="/order-view/{{car.id}}">
-
-                <div *ngIf="car.customerResponse.customerMembers && car.customerResponse.customerMembers.length>0; else patientData ">
-                    {{car.customerResponse.customerMembers[0].firstName}}{{car.customerResponse.customerMembers[0].lastName}}
+            <td style="width: 200px" routerLink="/order-view/{{Order.id}}">
+                {{Order.patientName}}
+                <!-- <div *ngIf="Order.customerResponse.customerMembers && Order.customerResponse.customerMembers.length>0; else patientData ">
+                    {{Order.customerResponse.customerMembers[0].firstName}}{{Order.customerResponse.customerMembers[0].lastName}}
                 </div>
-                <!-- <div *ngIf="car.customerResponse">
-                    {{car.customerResponse.firstName}}{{car.customerResponse.lastName}}
-                </div> -->
                 <ng-template #patientData>
-                    <div> {{car.customerResponse.firstName}} {{car.customerResponse.lastName}}
+                    <div> {{Order.customerResponse.firstName}} {{Order.customerResponse.lastName}}
                     </div>
-                </ng-template>
-                <!-- <div *ngIf=" car.customerResponse.customerMembers[0].relationshipName ==='Pet'" {{car.customerResponse.customerMembers[0]}}>
-                    {{car.customerResponse.customerMembers[0].firstName}}{{car.customerResponse.customerMembers[0].lastName}}({{car.customerResponse.customerMembers[0].relationshipName}})
-                </div> -->
+                </ng-template> -->
 
             </td>
-            <td style="width: 200px" routerLink="/order-view/{{car.id}}">
-                {{car.createdOn}}
+            <td style="width: 200px" routerLink="/order-view/{{Order.id}}">
+                {{Order.createdOn }}
             </td>
-            <td>
+            <td style="width:450px" routerLink="/order-view/{{Order.id}}">
 
-                <!-- <button pButton type="button" label="New"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-                <label *ngIf="car.status == 1"> New <span  *ngIf ="car.refill == true" class="order-refill">Refill</span></label>
-
-
-                <!-- <button pButton type="button"  label="Waiting For customer"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-                <label *ngIf="car.status == 2"> Awaiting Patient Order Confirmation </label>
-
-
-
-                <!-- <button  pButton type="button"   label="Rejected"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-                <label *ngIf="car.status == 3"> Rejected</label>
-
-
-                <!-- <button  pButton type="button"   label="Rejected by customer"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-                <label *ngIf="car.status == 4"> Rejected</label>
-
-
-                <label *ngIf="car.status == 5 && car.deliveryType==1"> Filling Pending</label>
-                <!-- <label *ngIf="car.status == 5 && car.deliveryType==1"> Filling Pending</label> -->
-                <label *ngIf="car.status == 5 && car.deliveryType==2 "> Filling Pending</label>
-                <!-- <!-- <label *ngIf="car.status == 5  && car.deliveryType==1">Waiting For payment</label> -->
-                <!-- <label *ngIf="car.status == 5  && car.deliveryType==2">Paid</label> -->
-                <!-- <button  pButton type="button"   label="Ready For pickup"  class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-
-
-
-
-                <!-- <label *ngIf="car.status == 6 && car.deliveryType==1 "> Awaiting for Pickup </label> -->
-                <label *ngIf="car.status == 6 && car.deliveryType==1 "> Awaiting for Pickup </label>
-                <label *ngIf="car.status == 6  && car.deliveryType==2"> Awaiting for Pickup</label>
-
-
-                <label *ngIf="car.status == 7">Delivered</label>
+                <label *ngIf="Order.status == 1"> New <span  *ngIf ="Order.refill == true" class="order-refill">Refill</span></label>
+                <label *ngIf="Order.status == 2"> Awaiting Patient Order Confirmation </label>
+                <label *ngIf="Order.status == 3"> Rejected</label>
+                <label *ngIf="Order.status == 4"> Rejected</label>
+                <label *ngIf="Order.status == 5"> Filling Pending</label>
+                <!-- <label *ngIf="Order.status == 5 && Order.deliveryType==2 "> Filling Pending</label> -->
+                <label *ngIf="Order.status == 6"> Awaiting for Pickup </label>
+                <!-- <label *ngIf="Order.status == 6  && Order.deliveryType==2"> Awaiting for Pickup</label> -->
+                <label *ngIf="Order.status == 7">Delivered on {{Order.lastModifiedOn}}</label>
             </td>
-            <td>
-                <div>
-                    <div *ngIf="car.status == 5 &&  car.deliveryType==1 && car.payNow ==false">
 
-                        <button pButton type="button" (click)="ReadyForPickup(car)" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
+            <!-- <input type="hidden" [(ngModel)]="Order_one" /> {{Order_one}} -->
+            <td style="width:150px">
+
+                &nbsp;
+            </td>
+            <!-- {{Order.customerResponse.phone}} -->
+            <!-- {{Order| json}} -->
+            <td style="max-width:350px">
+                <p class="orders-loading" *ngIf="Order.loading"> <i class="fa fa-spinner fa-2x fa-spin"></i></p>
+                <div class="display-inline">
+                    <div *ngIf="Order.status == 5 &&  Order.deliveryType==1 && Order.paymentDone ==false">
+
+                        <button pButton type="button" (click)="ReadyForPickup(Order)" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
 
                     </div>
-                    <div *ngIf="car.status == 5 &&  car.deliveryType==1 && car.payNow ==true ">
 
-                        <button pButton type="button" (click)="showDialog1(car)" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
-                        <p-dialog header="" [(visible)]="display1" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
-                            <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{car.customerResponse.phone}}  </span>
-                            <p-footer>
-                                <input type="hidden" [(ngModel)]="car_two" />
-                                <button type="button" pButton icon="pi pi-check" (click)="ReadyForPickup(car_two)" label="Paid"></button>
-                                <button type="button" pButton icon="pi pi-check" (click)="display1=false" label="Not Paid"></button>
-                            </p-footer>
-                        </p-dialog>
+                    <div *ngIf="Order.status == 5 &&  Order.deliveryType==1 && Order.paymentDone ==true ">
+
+                        <button pButton type="button" (click)="showDialog1(Order)" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
+
                     </div>
-                    <div *ngIf="car.status == 5 &&  car.deliveryType==2">
 
-                        <button pButton type="button" (click)="ReadyForPickup(car)" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
+                    <div *ngIf="Order.status == 5 &&  Order.deliveryType==2 && Order.paymentDone ==true ">
+                        <button pButton type="button" (click)="showDialog1(Order)" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
 
                     </div>
                 </div>
-                <div>
-                    <div *ngIf="car.status == 6 &&  car.deliveryType==2 ">
 
-                        <button pButton type="button" (click)="Delivered(car)" label="Delivered" class="ui-button-secondary btn-secondary-green pull-right"></button>
-
+                <div class="display-inline">
+                    <div *ngIf="Order.status == 6 &&  Order.deliveryType==2 ">
+                        <button pButton type="button" (click)="Delivered(Order)" label="Delivered" class="ui-button-secondary btn-secondary-green pull-right"></button>
                     </div>
-                    <div *ngIf="car.status == 6 && car.deliveryType==1  && car.payNow ==true">
-                        <button pButton type="button" (click)="showDialog(car)" label="Delivered" class="ui-button-secondary btn-secondary-green pull-right"></button>
-                        <!-- <button pButton type="button" (click)="Delivered(car)" label="Delivered" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-                        <p-dialog header="" [(visible)]="display" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
-                            <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{orderDetails.customerResponse.phone}}? </span>
 
-                            <p-footer>
-                                <input type="hidden" [(ngModel)]="car_one" />
-                                <button type="button" pButton icon="pi pi-check" (click)="Delivered(car_one)" label="Ok"></button>
-                                <button type="button" pButton icon="pi pi-check" (click)="display=false" label="No"></button>
-                            </p-footer>
-                        </p-dialog>
+                    <div *ngIf="Order.status == 6 && Order.deliveryType==1  && Order.paymentDone ==true">
+                        <button pButton type="button" (click)="Delivered(Order)" label="Delivered" class="ui-button-secondary btn-secondary-green pull-right"></button>
                     </div>
-                    <div *ngIf="car.status == 6 && car.deliveryType==1  && car.payNow ==false">
-                        <button pButton type="button" (click)="showDialog(car)" label="Delivered" class="ui-button-secondary btn-secondary-green pull-right"></button>
-                        <p-dialog header="" [(visible)]="display" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
-                            <span>Patient choose to pay at Register. Had you received prescription amount?  </span>
-                            <p-footer>
-                                <input type="hidden" [(ngModel)]="car_one" />
-                                <button type="button" pButton icon="pi pi-check" (click)="Delivered(car_one)" label="Paid"></button>
-                                <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Not Paid"></button>
-                            </p-footer>
-                        </p-dialog>
+
+                    <div *ngIf="Order.status == 6 && Order.deliveryType==1 && Order.paymentDone ==false">
+                        <button pButton type="button" (click)="showDialog(Order)" label="Delivered" class="ui-button-secondary btn-secondary-green pull-right"></button>
+
                     </div>
                 </div>
-
             </td>
+            <!-- <td>
+
+            </td> -->
+
         </tr>
     </ng-template>
-    <ng-template pTemplate="emptymessage" *ngIf="filterableCars.length ==0">
-        <tr class="empty-order">
-            <td colspan="7">
-                <p class="text-center"> No Orders Found </p>
-            </td>
-        </tr>
 
-    </ng-template>
 
 </p-table>
+<!-- </div> -->
+
+<p-dialog header="Confirmation" class="pop-dailouge" [(visible)]="display" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+    <span>Patient choose to pay at Register. Had you received prescription amount?   </span>
+    <p-footer>
+        <input type="hidden" [(ngModel)]="Order_one" />
+        <button type="button" pButton icon="pi pi-check" (click)="Delivered(Order_one)" label="Paid"></button>
+        <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Not Paid"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Confirmation" [(visible)]="display1" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+    <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{Order_two?.customerResponse?.mobile_number | slice:0:3}}-{{Order_two?.customerResponse?.mobile_number | slice:3:6}}-{{Order_two?.customerResponse?.mobile_number | slice:6:10}} ?  </span>
+    <!-- <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{Order_two?.customerResponse?.mobile_number }} ?  </span> -->
+    <p-footer>
+        <!-- <input type="hidden" [(ngModel)]="Order_two" /> -->
+        <button type="button" pButton icon="pi pi-check" (click)="ReadyForPickup(Order_two)" label="Paid"></button>
+        <button type="button" pButton icon="pi pi-check" (click)="display1=false" label="Not Paid"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Confirmation" [(visible)]="display1" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+    <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{Order_two?.customerResponse?.mobile_number | slice:0:3}}-{{Order_two?.customerResponse?.mobile_number | slice:3:6}}-{{Order_two?.customerResponse?.mobile_number | slice:6:10}} ?  </span>
+    <!-- <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{Order_two?.customerResponse?.mobile_number }} ?  </span> -->
+    <p-footer>
+        <!-- <input type="hidden" [(ngModel)]="Order_two" /> -->
+        <button type="button" pButton icon="pi pi-check" (click)="ReadyForPickup(Order_two)" label="Paid"></button>
+        <button type="button" pButton icon="pi pi-check" (click)="display1=false" label="Not Paid"></button>
+    </p-footer>
+</p-dialog>
+<div class="text-center no-orders" *ngIf="loading == true && Orders.length ==0 && filterableOrders.length ==0">
+    No Orders Found
+</div>

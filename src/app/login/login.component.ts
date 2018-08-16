@@ -23,6 +23,7 @@ import { PubnubService } from '../pubnub.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  show: boolean;
 signInForm: FormGroup;
 loginFailed: Boolean = false;
 data: any = { };
@@ -41,11 +42,13 @@ submitted: boolean;
      private pubnub: PubNubAngular,
      private pb: PubnubService,
      private messageService: MessageService,
-  )  {
+  )  
+  {
       this.signInForm = this.fb.group({
         signinEmail: new FormControl(null, Validators.required),
         signinPassword: new FormControl(null, Validators.required),
       });
+      this.show = false;
   }
 
   ngOnInit() {
@@ -63,7 +66,7 @@ submitted: boolean;
       };
        this.loader.open();
       this.auth.signIn(params).subscribe((res: any) => {
-        console.log(res);
+        // console.log(res);
         if (res.statusCode === 200  && res.profileCompleted === true) {
           this.msgs = []; 
           this.messageService.add({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
@@ -82,7 +85,9 @@ submitted: boolean;
         else if(res.statusCode === 200  && res.profileCompleted === false) {
           
           //alert('faliure');
+        
           this.msgs = [];
+          this.router.navigate(['/my-account']);
           this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
            this.loader.close();
            localStorage.setItem('pharmacyId', res.pharmacyId)
@@ -92,10 +97,10 @@ submitted: boolean;
           );
         
       
-          this.router.navigate(['/my-account']);
+         
         } else if(res.statusCode === 401 && res.errors[0] ==="Please verify your email before you login"){
           this.msgs = [];
-          this.msgs.push({severity: 'error', summary: 'Error', detail: 'your Email id is not verified'});
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Delivmeds has sent a mail to your registered email id. Please verify your email ID and login.'});
            this.loader.close();
 
         }
@@ -108,7 +113,7 @@ submitted: boolean;
         else {
           //alert('faliure');
           this.msgs = [];
-          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentials. Please try again'});
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Invalid credentials. Please try again.'});
           this.loginFailed = true;
           this.loading = false;
          // this.toasts.error(res["message"], "Oops!", { 'showCloseButton': true });
@@ -134,4 +139,8 @@ submitted: boolean;
       control.markAsTouched({ onlySelf: true });
     });
   }
+
+  password() {
+    this.show = !this.show;
+}
 }

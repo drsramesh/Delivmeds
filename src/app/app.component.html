@@ -1,8 +1,9 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<p-growl [(value)]="msgs" class="growl-msgs" (onClick)="orderView($event)"></p-growl>
+<p-growl [(value)]="msgs" life="5000" class="growl-msgs" (onClick)="orderView($event)"></p-growl>
 <app-header></app-header>
 <ng4-loading-spinner [threshold]="500" [loadingText]="'Loading please wait.....'"></ng4-loading-spinner>
 
-<div class="container">
+<div class="container mid-section">
     <router-outlet></router-outlet>
 </div>
+<app-footer></app-footer>

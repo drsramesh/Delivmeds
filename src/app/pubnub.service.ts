@@ -20,6 +20,8 @@ export class PubnubService {
    
     this.pubnub.addListener({
       status: function(st) {
+        // console.log(st);
+        
           if (st.category === "PNConnectedCategory") {
             console.info('notifications connected')
           }
@@ -41,10 +43,18 @@ export class PubnubService {
   subscribe(channel){
     console.log(channel);
     
-    this.pubnub.subscribe({
-              
+    this.pubnub.subscribe({      
         channels: [channel] ,        
         triggerEvents: true, withPresence: true, autoload: 100
+    });
+
+  }
+
+  unSubscribe(channel){
+    console.log(channel);
+    this.pubnub.unsubscribe({          
+        channels: [channel]       
+        // triggerEvents: true, withPresence: true, autoload: 100
     });
 
   }

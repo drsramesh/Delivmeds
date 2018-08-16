@@ -7,6 +7,11 @@ import { TabMenu } from 'primeng/tabmenu';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 // import { HttpClient } from 'selenium-webdriver/http';
 import { environment } from  '../../environments/environment';
+import { PubnubService } from '../pubnub.service';
+import { PubNubAngular } from 'pubnub-angular2';
+import { Injectable,Injector,Inject } from '@angular/core';
+
+import { UserService } from '../services/user.service'
 
 @Component({
   selector: 'app-header',
@@ -19,7 +24,10 @@ export class HeaderComponent implements OnInit {
   showButton: boolean = false;
   userInformation : any = [];
   constructor(private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private pb: PubnubService,
+    public pubnub: PubNubAngular,
+    public injector: Injector,@Inject(UserService) private userService
 ) { }
 
   ngOnInit() {
@@ -27,7 +35,7 @@ export class HeaderComponent implements OnInit {
     this.router.events.subscribe( (e) => {
       // this.RegisteredDetailsService();
       if(e instanceof NavigationEnd) {
-        if ((e.url.split('/')[1] == 'login') || (e.url.split('/')[1] == 'register')  || (e.url == '/') || (e.url.split('/')[1] == 'forgot-password') || (e.url.split('/')[1] == 'change-password') ) {
+        if ((e.url.split('/')[1] == 'login') || (e.url.split('/')[1] == 'register')  || (e.url == '/') ||  (e.url.split('/')[1] == 'confirm-mail')|| (e.url.split('/')[1] == 'forgot-password') || (e.url.split('/')[1] == 'change-password') ||  (e.url.split('/')[1] == 'confirm-mail?key')) {
           this.nav = [];
           this.showButton = false;
          
@@ -57,9 +65,14 @@ export class HeaderComponent implements OnInit {
 
   logout(){
       // this.userService.logout().subscribe((res:any)=>{
-        localStorage.clear();
+        let pb = this.injector.get(PubnubService)
+        pb.unSubscribe("channel_"+ localStorage.getItem('pharmacyId'))
         this.msgs = [];
         this.router.navigate(["/login"])
+     
+        localStorage.clear();
+        // console.log("unsubscribe");
+        
     
   }
 

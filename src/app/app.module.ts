@@ -68,7 +68,16 @@ import { DirectiveDirective } from './directive.directive';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { SingleDotDirective } from './single-dot.directive';
 
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+
+
+import { InternationalPhoneNumberModule } from 'ngx-international-phone-number';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { FooterComponent } from './footer/footer.component';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ConfirmationService} from 'primeng/api';
 export function init_app(appLoadService: AppInitService, pb: PubnubService) {
 
   return () => appLoadService.initializeApp();
@@ -89,6 +98,8 @@ export function init_app(appLoadService: AppInitService, pb: PubnubService) {
     DirectiveDirective,
     ForgotPasswordComponent,
     ChangePasswordComponent,
+    SingleDotDirective,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
@@ -122,7 +133,13 @@ export function init_app(appLoadService: AppInitService, pb: PubnubService) {
     TooltipModule,
     ProgressSpinnerModule,
     RadioButtonModule,
-    ImageViewerModule.forRoot()
+    ImageViewerModule.forRoot(),
+    InternationalPhoneNumberModule,
+    InfiniteScrollModule,
+    Ng2SearchPipeModule,
+    ConfirmDialogModule,
+    
+    
  // AngularFireModule.initializeApp(config)
   
     // Ng4SpinnerModule// add it to the imports
@@ -141,7 +158,7 @@ export function init_app(appLoadService: AppInitService, pb: PubnubService) {
     PreloadService,
     PubNubAngular,
     MessageService,
-    
+    ConfirmationService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

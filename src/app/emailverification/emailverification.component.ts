@@ -1,6 +1,7 @@
 //Importing Internal modules
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
+import {MessageService} from 'primeng/components/common/messageservice';
 
 //Importing Third-party modules
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -32,31 +33,37 @@ export class EmailverificationComponent implements OnInit {
     private router:Router,
     private tokenService:TokenService,
     private userService:UserService,
+    private messageService: MessageService,
   private preLoader: PreloadService) { }
   //&& this.tokenService.getRefreshToken() === null
   //Checking if any logged in user if not we will validate token and redirect to login page
   ngOnInit() {
-    // console.log("asdfhsd;lsdgmkl;sd;gk")
-    //  if(this.tokenService.getAuthenticationToken() === null){
-      // console.log("asdfhsda")
+    console.log("123");
+    
+    if(this.tokenService.getAuthenticationToken() === null || (this.tokenService.getAuthenticationToken() !== null))
+    console.log(this.tokenService.getAuthenticationToken() === null);
+    {
       this.preLoader.open();
-      this.activatedRoute.queryParams
-      .subscribe(params => {
+      this.activatedRoute.queryParams.subscribe(params => {
         this.confirmKey = params['key'];
+        // alert(params['key'])
         console.log(this.confirmKey)
         if(this.confirmKey !== undefined){
           var confirmToken = {email_token:this.confirmKey};
           this.auth.confirmEmail(confirmToken).subscribe(
             (res:any) =>{ console.log(res)
               this.preLoader.close();
-              if(res.statuscode ===200){
+              if(res.code ==1){
                 this.msgs = [];
-                this.msgs.push({severity: 'success', summary: 'Success', detail: 'Email verified succesfully.'});
                 this.router.navigate(['/login']);
-              }else if(res.statuscode ===401) {
+                this.messageService.add({severity: 'success', summary: 'Success', detail: 'Your Email id has been verified now. Please login now with your registered email.'});
+              
+              }else if(res.statusCode ==401) {
                 this.msgs = [];
-                this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email not verified.'});
+                this.messageService.add({severity: 'error', summary: 'Error', detail: 'Email not verified.'});
                 this.router.navigate(['/login']);
+               
+               
               }
               else{
                 this.msgs = [];
@@ -64,19 +71,22 @@ export class EmailverificationComponent implements OnInit {
                  this.router.navigate(['/login']);
               }
             } ,
+          
             (err) => {
               this.preLoader.close();
              
             }
           )
         }
+      
         else{
           this.preLoader.close();
           this.msgs = [];
-          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server error'});
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server error.'});
           this.router.navigate(['/login']);
         }
       })
+    }
     // }
     // else{
     //   this.router.navigate(['/login']);

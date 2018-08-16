@@ -44,36 +44,41 @@ export class ChangePasswordComponent implements OnInit {
     
    if (signInForm.valid) {
      const params = {
-      
-     
       //  email: signInForm.value.signinEmail,
       oldPassword: signInForm.value.oldpassword,
       newPassword: signInForm.value.newpassword,
       confirmPassword: signInForm.value.confirmpassword,
      };
-     console.log(params)
+     if(params.oldPassword != params.newPassword) {
       this.loader.open();
      this.auth.changePassword(params).subscribe((res: any) => {
        if (res.statusCode === 200 ) {
          this.msgs = [];
-         this.messageService.add({severity: 'success', summary: 'Success', detail: ' Password changed Successfully'});                
+         this.messageService.add({severity: 'success', summary: 'Success', detail: ' Password changed Successfully.'});                
           this.loader.close();
          this.router.navigate(['/orders']);
          // this._redirection.navigateToDefaultRoute(res["user"]["role"]);
        }
       else if(res.statusCode === 401){
          this.msgs = [];
-         this.msgs.push({severity: 'error', summary: 'Error', detail: 'All fields are mandatory'});
+         this.msgs.push({severity: 'error', summary: 'Error', detail: 'Current Password is invalid.'});
           this.loader.close();
 
        }
      }, (err) => {
        this.loader.close();
        this.msgs = [];
-       this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server Error'});
+       this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server Error.'});
        // this.toasts.error('Server Error', 'Oops!', { 'showCloseButton': true });
      }
      );
+     }else {
+      this.msgs = [];
+      this.msgs.push({severity: 'error', summary: 'Error', detail: 'Current Password  and New password are same.'});
+     }
+     
+     console.log(params)
+
    } 
    else {
      this.setFormTouched(this.signInForm);

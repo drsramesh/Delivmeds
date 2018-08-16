@@ -19,14 +19,18 @@ initializeApp(): Observable<any>{
   localStorage.getItem('pharmacyId')
   if(localStorage.getItem('authentication_token') !== null){ 
     let pb = this.injector.get(PubnubService)
-    pb.subscribe("channel_"+ localStorage.getItem('pharmacyId'))
-  if(window.location.pathname === '/order-view' || window.location.pathname === '/my-account' ||  window.location.pathname === 'order-view/:id' || window.location.pathname === '/notifications' || window.location.pathname === '/forgot-password' || window.location.pathname === '/change-password'){
+    pb.subscribe("channel_"+ localStorage.getItem('pharmacyId')) || pb.subscribe("channel_dev_"+ localStorage.getItem('pharmacyId'))
+  if(window.location.pathname === '/order-view' || window.location.pathname === '/my-account' ||  window.location.pathname === 'order-view/:id' || window.location.pathname === '/notifications'  || window.location.pathname === '/change-password'){
   this.injector.get(Router).navigate(['/orders']);
   }
   return;
+  } else if( window.location.pathname === '/order-view/Success'){
+    console.log("sucess");
+    
   }
   else {
-  this.injector.get(Router).navigate(['/login']);
+    console.log("Failure")
+    // this.injector.get(Router).navigate(['/login']);
   }
   }
   }

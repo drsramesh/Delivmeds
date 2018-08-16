@@ -1,16 +1,16 @@
 <p-growl [(value)]="msgs" life="5000" class="growl-msgs"></p-growl>
 <div class="login text-center">
     <figure class="logo">
-        <img src="assets/images/LOGO.svg" alt="">
+        <img src="assets/images/Logo.png" alt="">
     </figure>
     <div class="sign-form">
         <form [formGroup]="signInForm" (ngSubmit)="signUp(signInForm)">
             <div class="sign-pass">
                 <div class="ui-float-label form-control">
-                    <input id="pharmacyName" type="text" size="30" pInputText formControlName="pharmacyName" maxlength="25" required>
+                    <input id="pharmacyName" type="text" size="30" pInputText formControlName="pharmacyName" maxlength="30" required>
                     <span class="error" *ngIf=" signInForm.get('pharmacyName').touched " style="color:red"> 
                             <span *ngIf="signInForm.hasError('required', 'pharmacyName')">Business Name is required</span>
-                    <span *ngIf="signInForm.hasError('maxlength', 'pharmacyName')" style="color:red">Business Name max of 25 characters</span>
+                    <span *ngIf="signInForm.hasError('maxlength', 'pharmacyName')" style="color:red">Business Name max of 30 characters</span>
                     </span>
                     <label for="float-input" class="">Business Name (Trade Name)*</label>
                 </div>
@@ -36,7 +36,7 @@
                     <span>
                            
                             <p-radioButton name="group1" value="false" label="No" formControlName="deliveryType" (onClick) = "showDialog1()" ></p-radioButton>
-                            <p-dialog header="" [(visible)]="display" [modal]="true"  [width]="350" [minWidth]="200" [minY]="70"  [baseZIndex]="10000">
+                            <p-dialog class="pop-dailouge" header="" [(visible)]="display" [modal]="true"  [width]="350" [minWidth]="200" [minY]="70"  [baseZIndex]="10000">
     <span>We're sorry, But we are in the process of setting up DelivMeds Delivery Services. So, you can't able to Register</span>
                     <p-footer>
                         <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Ok"></button>
@@ -48,13 +48,12 @@
             </div>
             <div class="sign-pass">
                 <div class="ui-float-label form-control">
-                    <input id="phoneNo" name="phoneNo" type="tel" size="30" pInputText formControlName="phoneNo" [textMask]="{mask: mask}">
+                    <input id="phoneNo" name="phoneNo" type="tel" size="30" pInputText minlength="14" [(ngModel)]='contact_number' formControlName="phoneNo" [textMask]="{mask: mask,guide: false}">
                     <span class="error" *ngIf=" !signInForm.get('phoneNo').valid && signInForm.get('phoneNo').touched " style="color:red"> 
                             <span *ngIf="signInForm.hasError('required', 'phoneNo')">Phone Number is required</span>
-                    <span *ngIf="signInForm.hasError('minLength', 'phoneNo')" style="color:red"> Phone Number  must be 10 digits</span>
+                    <span *ngIf="signInForm.hasError('minlength', 'phoneNo')" style="color:red"> Phone Number  must be 10 digits</span>
                     </span>
-
-
+                    <!-- <international-phone-number [(ngModel)]="contact_number" [maxlength]="13" [defaultCountry]="'us'" [required]="true" formControlName="phoneNo" [allowDropdown]="false" name="phoneNo"></international-phone-number> -->
                     <label for="float-input" class="">Phone Number*</label>
                 </div>
                 <div class="ui-float-label form-control">
@@ -67,10 +66,10 @@
                     <label for="float-input" class="">Email Address*</label>
                 </div>
                 <!-- ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$ -->
-                <div class="ui-float-label form-control">
-                    <input id="password" name="password" (focus)="visible = !visible" (blur)="visible = !visible" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})" minlength="8" maxlength="20" type="password" class="" size="30" pInputText formControlName="password" required="required">
-
-
+                <div class="ui-float-label form-control ">
+                    <input id="password" name="password" (focus)="visible = !visible" (blur)="visible = !visible" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})" minlength="8" maxlength="20" [type]="show  ? 'text' : 'password'" size="30" pInputText formControlName="password"
+                        required="required">
+                    <span (click)="password()" class="fa password-eye" [ngClass]="{'fa-eye': !show ,'fa-eye-slash': show}"></span>
                     <span class="error" *ngIf=" !signInForm.get('password').valid && signInForm.get('password').touched " style="color:red"> 
                             <span *ngIf="signInForm.hasError('required', 'password')">Password is required</span>
                     <span *ngIf="signInForm.hasError('pattern', 'password')" style="color:red">Password is invalid</span>
@@ -84,7 +83,7 @@
             </p>
             <div class="sign-pass">
                 <div class="ui-float-label form-control">
-                    <input id="address1" type="text" size="30" formControlName="address" pInputText required>
+                    <input id="address1" type="text" size="30" formControlName="address" maxlength="50" pInputText required>
 
                     <span class="error" *ngIf="  signInForm.get('address').touched " style="color:red"> 
                             <span *ngIf="signInForm.hasError('required', 'address')">Address Line 1 is required</span>
@@ -94,13 +93,13 @@
                     <label for="float-input" class=""> Address Line 1 *</label>
                 </div>
                 <div class="ui-float-label form-control">
-                    <input id="street" type="text" size="30" formControlName="street" pInputText>
+                    <input id="street" type="text" size="30" formControlName="street" maxlength="50" pInputText>
                     <!-- <span class="error" *ngIf="signInForm.get('street').touched  && signInForm.hasError('required', 'street')" style="color:red"> Street is Required</span> -->
-                    <label for="float-input" class="">Address Line 2(Optional)</label>
+                    <label for="float-input" class="">Address Line 2 (Optional)</label>
                 </div>
                 <div class="ui-float-label form-control">
-                    <p-autoComplete class="auto-complete" id="zipcode" type="tel" formControlName="zipcode" [(ngModel)]="country" [suggestions]="filteredCountriesSingle" (completeMethod)="zipcodeServiceTab(country)" (onSelect)="zipcodeService($event)" (onBlur)="zipcodeServiceTab(country)"
-                        placeholder="{{focusGain ? '' : 'Zipcode*'}}" field="name" [size]="30" [minLength]="1" minlength="3" maxlength="5" required (onFocus)="focusMethod()"></p-autoComplete>
+                    <p-autoComplete class="auto-complete" (keypress)="onlyValues1($event)" id="zipcode" type="tel" formControlName="zipcode" [(ngModel)]="country" [suggestions]="filteredCountriesSingle" (completeMethod)="zipcodeServiceTab(country)" (onSelect)="zipcodeService($event)"
+                        (onBlur)="zipcodeServiceTab(country);focusMethod1()" placeholder="{{focusGain ? '' : 'Zipcode*'}}" field="name" [size]="30" [minLength]="1" minlength="3" maxlength="5" required (onFocus)="focusMethod()"></p-autoComplete>
                     <!-- <label for="float-input" class="zipcode-label">Zipcode</label> -->
                     <!-- <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('required', 'zipcode')" style="color:red">Zip code is required</span> -->
                     <!-- <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('minLength', 'zipcode')" style="color:red">Please enter a valid 5 digit zip code</span>  -->

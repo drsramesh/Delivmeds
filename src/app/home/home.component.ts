@@ -15,6 +15,8 @@ import { DelivMedsAuthService } from '../services/deliv-meds-auth.service';
 import { Logs } from 'selenium-webdriver';
 //pub nub
 import { PubNubAngular } from 'pubnub-angular2';
+import { LazyLoadEvent } from 'primeng/api';
+import { PubnubService } from '../pubnub.service';
 
 
 interface SortEvent {
@@ -31,29 +33,42 @@ interface SortEvent {
 })
 export class HomeComponent implements OnInit {
 
-  cars: any  = [];
+  Orders: any  = [];
  msgs = [];
   cols: any[];
   colors: string;
-  brands: any[];
+  listOfOrderTypes: any[];
   columns: any[];
   yearFilter: number;
-  filterableCars = [];
+  filterableOrders = [];
   yearTimeout: any;
+  loading:boolean = false
 
+  totalRecords: number;
+  Order_two: any;
   constructor(  private http: HttpClient,
     private router: Router,
     private loader: PreloadService,
-    private auth: DelivMedsAuthService,
+    private auth: DelivMedsAuthService,private pb: PubnubService,
   private pubnub:PubNubAngular ) { }
 
   ngOnInit() {
+    this.pb.init((message) => {
+      // console.log("Home component")
+      console.log(message);
+      this.getOrderDetails(message['message']['map']['orderId']);
+      // console.log(message['message']['map']['orderId']);
+      
+      // this.msgs.push({severity: 'info', summary:message['message']['map']['orderId'], detail: message['message']['map']['message'],isRoute:true});
+      
+    });
+
     if (localStorage.getItem("authentication_token") !== null) {
     //  console.log("authentication Token");
       
       this.OrderList();
 
-        this.brands = [
+        this.listOfOrderTypes = [
             { name: 'All Orders', value: 'AllOrders' },
             { name: 'New Orders', value: 1 },
             { name: 'Active Orders', value: 2 },
@@ -63,116 +78,153 @@ export class HomeComponent implements OnInit {
 
         this.cols = [
             { field: 'id', header: 'Order ID' },
-            { field: 'Prescription', header: 'Prescription ID' },
-            { field: 'PatientName', header: 'Patient Name' },
+            { field: 'prescriptionNo', header: 'Prescription ID' },
+            { field: 'patientName', header: 'Patient Name' },
             { field: 'OrderDate', header: 'Order Date' },
             { field: 'status', header: 'Status' },
             {field: 'time', header: ''},
         ];
+        
       
     }else {
       this.router.navigate(['/login'])
     }
-
-
-        // console.log(this.cols);
   }
-// pages :boolean
+
 OrderList() {
+  
   this.loader.open();
   this.http.get(environment.host + 'order/pharmacy').subscribe((res: any) => {
     if(res.statusCode === 401) {
       this.loader.close();
-      console.log('No orders Found');
+      console.log('No orders Found.');
       } else {
-            // console.log(JSON.stringify(res));
            
+         this.Orders = res['object']['orders'];
+          // console.log(JSON.stringify(this.Orders));   
+          // console.log(this.Orders)
+         this.filterableOrders = res['object']['orders'];
+         this.filterableOrders.forEach(function(order){
+          if(order.customerResponse.hasOwnProperty("customerMembers")){
+            order.patientName = order.customerResponse.customerMembers[0].firstName + " " + order.customerResponse.customerMembers[0].lastName
+          } else{
+            order.patientName = order.customerResponse.firstName + " " + order.customerResponse.lastName ;
+          }
+          
+         }) 
+       
+         this.filterableOrders.forEach(function(order){
+          //  console.log(order.customerResponse.phone);
+           
+          if(order.customerResponse.phone){
+          order.Phone = order.customerResponse.phone;
+          // console.log(order.Phone);
+            switch(order.Phone.substring(0,2)) { 
+              case "+9": { 
+                 //statements; 
+                //  console.log(order.Phone)
+                 order.customerResponse.mobile_number = order.Phone.substring(3,order.Phone.length);
+                //  console.log(order.customerResponse.mobile_number)
+                 break; 
+              } 
+              case "+1": { 
+                 //statements; 
+                 order.customerResponse.mobile_number = order.Phone.substring(2,order.Phone.length);
+                 break; 
+              } 
+              default: { 
+                 //statements; 
+                 order.customerResponse.mobile_number = order.Phone;
+                 break; 
+              } 
+           } 
+          
+          }
 
-            
-         this.cars = res['object']['orders'];
-         this.filterableCars = res['object']['orders'];
+         })
+         
          this.loader.close();
          
         }
+        this.loading = true;
   }, (err) => {
     this.loader.close();
     this.msgs = [];
-    this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server Error'})
+    this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server Error.'})
   }
 
 );
   
 }
 display: boolean = false;
-car_one: any;
-showDialog(car){
- console.log(car);
-// this.Delivered(car)
+Order_one: any;
+showDialog(Order){
+ console.log(Order);
+// this.Delivered(Order)
  this.display = true;
- this.car_one = car
+ this.Order_one = Order
+
+ 
 }
 
- Delivered(car){
+ Delivered(Order){
+  Order.loading = true;
   //  alert('hi')
-   console.log(car);
+   console.log(Order);
    
    let params = {
 
-    orderId:car.id,
+    orderId:Order.id,
      status: 7
-   }
-   console.log(params);
-   
-  this.auth.statusOrder(params).subscribe((res:any) => {
-    console.log(params);
-    console.log(res);
-    this.display = false
-    this.OrderList();
-  });  
-  
- }
-
- display1: boolean = false;
- car_two: any;
- showDialog1(car){
-  console.log(car);
-  // this.ReadyForPickup(car);
-  this.display1 = true;
-  this.car_two = car
- }
-
- ReadyForPickup(car){
-
-   let params = {
-    orderId:car.id,
-     status: 6
    }
    console.log(params);
    
   this.auth.statusOrder(params).subscribe((res:any) => {
     // console.log(params);
     console.log(res);
+    Order.status = res.object.status;
+    this.display = false
+    //  this.OrderList();
+    Order.loading = false;
+  });  
+  
+ }
+
+ display1: boolean = false;
+ 
+ showDialog1(Order){
+
+  // this.ReadyForPickup(Order);
+  this.display1 = true;
+  this.Order_two = Order
+  console.log(this.Order_two);
+
+  
+ }
+
+ ReadyForPickup(Order){
+  Order.loading = true;
+
+
+   let params = {
+    orderId:Order.id,
+     status: 6
+   } 
+  this.auth.statusOrder(params).subscribe((res:any) => {
+    // console.log(params);
+    Order.status = res.object.status;
     this.display1 = false
-    this.OrderList();
+    Order.loading = false;
+    // this.OrderList();
    
   });
  }
- Refresh(){
-  this.display1 = false
-  this.OrderList();
 
- }
+
 
   visible: boolean = true;
-//  updateVisibility(): void {
-//    this.visible = false;
-//    setTimeout(() => this.visible = true, 0);
-//  }
 sample(event) {
-
-
-  this.filterableCars = [];
-  // console.log(event.value.value);
+  this.filterableOrders = [];
   
  
   switch (event.value.value) {
@@ -180,37 +232,36 @@ sample(event) {
 
     case "AllOrders":
      
-      for(let i = 0;i < this.cars.length;i++)
+      for(let i = 0;i < this.Orders.length;i++)
       
       {
       
-        if ((this.cars[i].status !=3)  && ((this.cars[i].status !=4)))
+        if ((this.Orders[i].status !=3)  && ((this.Orders[i].status !=4)))
         {
-          this.filterableCars.push(this.cars[i]);
+          this.filterableOrders.push(this.Orders[i]);
         }
       }
-      console.log(this.cars);
+
     break;
 
-    case 1 :
-  //  console.log(this.filterableCars.length);
-   
-    for(let i = 0;i < this.cars.length;i++)
+    case 1 :  
+    for(let i = 0;i < this.Orders.length;i++)
+    
       {
      
-        if (this.cars[i].status ==1)
+        if (this.Orders[i].status ==1)
         {
-          this.filterableCars.push(this.cars[i]);
+          this.filterableOrders.push(this.Orders[i]);
         }
   }
   break;
 
   case 2 :
-    for(let i = 0;i < this.cars.length;i++)
+    for(let i = 0;i < this.Orders.length;i++)
       {
-        if ((this.cars[i].status ==2 ||  this.cars[i].status ==5 || this.cars[i].status ==6) )
+        if ((this.Orders[i].status ==2 ||  this.Orders[i].status ==5 || this.Orders[i].status ==6) )
         {
-          this.filterableCars.push(this.cars[i]);
+          this.filterableOrders.push(this.Orders[i]);
           
           
         }
@@ -218,20 +269,20 @@ sample(event) {
   break;
 
   case 3 :
-    for(let i = 0;i < this.cars.length;i++)
+    for(let i = 0;i < this.Orders.length;i++)
       {
-        if ((this.cars[i].status ==3) || (this.cars[i].status ==4) )
+        if ((this.Orders[i].status ==3) || (this.Orders[i].status ==4) )
         {
-          this.filterableCars.push(this.cars[i]);
+          this.filterableOrders.push(this.Orders[i]);
         }
   }
   break;
 
   case 4 :
-    for(let i = 0;i < this.cars.length;i++)
+    for(let i = 0;i < this.Orders.length;i++)
       {
-        if (this.cars[i].status ==7){
-        this.filterableCars.push(this.cars[i]);
+        if (this.Orders[i].status ==7){
+        this.filterableOrders.push(this.Orders[i]);
         }
     }
     break;
@@ -266,9 +317,41 @@ deleteOrder() {
 
 count2(index){
   console.log("button0");
-  this.cars.splice(index,1);
-  this.filterableCars.splice(index,1);
+  this.Orders.splice(index,1);
+  this.filterableOrders.splice(index,1);
   
+}
+
+ onScroll() {
+  console.log('scrolled!!');
+}
+onScrollUp() {
+  console.log('scrolled up!!');
+}
+
+
+getOrderDetails(id){
+  const header = {'authentication_token': localStorage.getItem('authentication_token')};
+
+ this.http.get(environment.host + 'order/pharmacy/' + id, {headers: header}).subscribe((res: any) => {
+  //  console.log(res);
+  //  console.log(res.object.status);
+  // Order.status = res.object.status;
+  if(res.object.status ==1) {
+   if(res['object'].customerResponse.hasOwnProperty('customerMembers')){
+         res['object'].patientName = res['object'].customerResponse.customerMembers[0].firstName + " " +  res['object'].customerResponse.customerMembers[0].lastName
+        }else  {
+         res['object'].patientName = res['object'].customerResponse.firstName + " " + res['object'].customerResponse.lastName ;
+      }
+      this.Orders.unshift(res.object)
+      // this.filterableOrders.unshift(res.object)
+    }else {
+      this.Orders[this.Orders.map(object=>object.id).indexOf(id)].status = res.object.status;
+    }
+  
+
+ 
+ })
 }
 
 }

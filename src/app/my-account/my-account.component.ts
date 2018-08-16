@@ -21,7 +21,10 @@ import { PreloadService } from '../services/preload.service'
 import { Password } from 'primeng/primeng';
 import {MessageService} from 'primeng/components/common/messageservice';
 import { LoginComponent } from '../login/login.component';
+import { isUndefined } from 'util';
 
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ConfirmationService} from 'primeng/api';
 
 
 
@@ -29,7 +32,7 @@ import { LoginComponent } from '../login/login.component';
  selector: 'app-my-account',
  templateUrl: './my-account.component.html',
  styleUrls: ['./my-account.component.css'],
- providers:[editUserDetails]
+ providers:[editUserDetails,ConfirmationService]
 })
 export class MyAccountComponent implements OnInit {
  
@@ -58,14 +61,16 @@ export class MyAccountComponent implements OnInit {
  pharmacyname: string[];
  
  constructor(private fb: FormBuilder,
+	private fb1: FormBuilder,
  private http: HttpClient,
  private auth: DelivMedsAuthService,
  private router: Router,
  private editdetails: editUserDetails,
  private loader: PreloadService,
  private userdetails: UserService,
- private messageService: MessageService) {
- this.signInForm = this.fb.group({
+ private messageService: MessageService,private confirmService:ConfirmationService) {
+ this.signInForm = this.fb1.group({
+
  signinEmail: new FormControl(null, Validators.required),
  firstName: new FormControl(null, Validators.required),
  lastName: new FormControl(null, Validators.required)
@@ -95,82 +100,89 @@ export class MyAccountComponent implements OnInit {
 
  
  
- ngOnInit() {
- this.RegisteredDetailsService();
- this.serviceOfferingsService();
- this.addProviders();
- // this.zipcodeService();
- this.profilepageObj = this.userInformation
- this.editForm = this.fb.group({
- pharmacyName: new FormControl(null, Validators.required),
- phoneNo: new FormControl(null, Validators.required),
- address: new FormControl(null, Validators.required),
- street: new FormControl(null),
- zipcode: new FormControl(null, Validators.required),
- email: new FormControl(null),
- city: new FormControl(null),
- state: new FormControl(null)
- });
+ ngOnInit() { 
+	if (localStorage.getItem("authentication_token") !== null) {
+		this.RegisteredDetailsService();
+		this.serviceOfferingsService();
+		this.addProviders();
+		// this.zipcodeService();
+		this.profilepageObj = this.userInformation
+		this.editForm = this.fb.group({
+		pharmacyName: new FormControl(null, Validators.required),
+		phoneNo: new FormControl(null, Validators.required),
+		email: new FormControl(this.userInformation.email),
+		address: new FormControl(null, Validators.required),
+		street: new FormControl(null),
+		zipcode: new FormControl(null, Validators.required),
+		city: new FormControl(null),
+		state: new FormControl(null)
+		});
+	   
+		
+		//this.userdetails.setUser(res['user'])
+		this.weekdays= [
+		
+		
+		 
+		
+	// 	 {
+	// 	   'name':'Monday',
+	// 	   'dayOfWeek': 2
+	// 	 },
+	// 	 {
+	// 	   'name':'Tuesday',
+	// 	   'dayOfWeek': 3
+	// 	 },
+	// 	 {
+	// 	   'name':'Wednesday',
+	// 	   'dayOfWeek': 4
+	// 	  },
+	// 	  {
+	// 	   'name':'Thursday',
+	// 	   'dayOfWeek': 5
+	//    },
+	//    {
+	// 	   'name':'Friday',
+	// 	   'dayOfWeek': 6
+	//    },
 
- 
- //this.userdetails.setUser(res['user'])
- this.weekdays= [
- 
- 
-  {
-  'name':'Sunday',
-  'dayOfWeek': 1
-  },
- 
-  {
-	'name':'Monday',
-	'dayOfWeek': 2
-  },
-  {
-	'name':'Tuesday',
-	'dayOfWeek': 3
-  },
-  {
-	'name':'Wednesday',
-	'dayOfWeek': 4
-   },
-   {
-	'name':'Thursday',
-	'dayOfWeek': 5
-},
-{
-	'name':'Friday',
-	'dayOfWeek': 6
-},
-{
-	'name':'Saturday',
-	'dayOfWeek': 7
-},
-{
-    'name':'Weekdays',
-	'dayOfWeek': 8
-},
-{
-	'name':'WeekEnds',
-	'dayOfWeek': 9
-},
-{
-	'name':'Complete Week',
-	'dayOfWeek': 10
-},
-
- ]
+	   
+	   {
+		   'name':'Weekdays',
+		   'dayOfWeek': 1
+	   },
+	   {
+		'name':'Saturday',
+		'dayOfWeek': 2
+	},
+	{
+		'name':'Sunday',
+		'dayOfWeek': 3
+		},
+	//    {
+	// 	   'name':'WeekEnds',
+	// 	   'dayOfWeek': 9
+	//    },
+	//    {
+	// 	   'name':'Complete Week',
+	// 	   'dayOfWeek': 10
+	//    },
+	   
+		]
+	} else {
+	 this.router.navigate(['/login'])
+	}
  
  }
 
  
- filterCountrySingle(event) {
+ filterCountrySingle(event) { 
  let query = event.query;
  this.http.get(environment.host + 'zipcodes/serviceable/' + this.editForm.value.zipcode ).subscribe(country => {
  if(country['statusCode']==401){
  this.filteredCountriesSingle=[];
  this.msgs = [];
- this.msgs.push({severity: 'error', summary: 'Error', detail: 'Zipcode not available '})
+ this.msgs.push({severity: 'error', summary: 'Error', detail: 'Zipcode not available. '})
  }else{
  this.filteredCountriesSingle=[]
  country['object'].forEach(country=>{
@@ -184,27 +196,58 @@ export class MyAccountComponent implements OnInit {
  })
 }
 
-zipcodeServiceTab(country) {
-   
-	this.http.get(environment.host + 'zipcodes/get_serviceable/' + country ).subscribe((res: any) => {
+onlyValues1(event){
+    var key = window.event ? event.keyCode : event.which;
 
+if (event.keyCode == 8|| event.keyCode == 37 || event.keyCode == 39 ) {
+return true;
+}
+else if ( key < 48 || key > 57 ) {
+return false;
+}
+else return true;
+};
+
+timeValues(event){
+    var key = window.event ? event.keyCode : event.which;
+
+if (event.keyCode == 8|| event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 58 ) {
+return true;
+}
+else if ( key < 48 || key > 57 ) {
+return false;
+}
+else return true;
+};
+
+  zipcodeServiceTab(country) {
+
+	if(this.editForm.value.zipcode == '' || this.editForm.value.zipcode == null){
+	  this.editForm.patchValue({city: "" ,state: ""});
+	}
+	 else{
+	this.http.get(environment.host + 'zipcodes/get/' + country ).subscribe((res: any) => {
+	  console.log(res);
 	  
   if(res.statusCode === 401) {
   //alert('zipcode is not servicable')
-  this.signInForm.patchValue({city: "" ,state: ""});
-  
+  this.editForm.patchValue({city: "" ,state: ""});
+  this.msgs = [];
+//   this.msgs.push({severity: 'error', summary: 'Error', detail: 'Zipcode does not exist '})
   } else {
-	this.signInForm.value.zipcode = country
+	this.editForm.value.zipcode = country
+  
    this.zipCodeServices = res;
 	this.editForm.patchValue({city: this.zipCodeServices.object.city ,state: this.zipCodeServices.object.state});
-  }
+  }  
   
 	})
+  }
   }
 
 zipcodeService(event) {
  
- this.http.get(environment.host + 'zipcodes/get_serviceable/' + this.editForm.value.zipcode.code ).subscribe((res: any) => {
+ this.http.get(environment.host + 'zipcodes/serviceable/' + this.editForm.value.zipcode.code ).subscribe((res: any) => {
 if(res.statusCode === 401) {
 //alert('zipcode is not servicable')
 this.editForm.patchValue({city: "" ,state: ""});
@@ -255,6 +298,7 @@ if(data['pharmacyBusinessHours']){
  if(data['pharmacyServices']){
  this.updatedInformation.push(data['pharmacyServices']);
  this.tempKeys = Object.values(this.updatedInformation[0]);
+ this.tempKeys = Object.keys(this.updatedInformation[0]).map(itm => this.updatedInformation[0][itm]);
  this.tempValues = Object.keys(this.updatedInformation[0]);
  let index = this.tempValues;
  this.tempValues.forEach(element => {
@@ -304,6 +348,7 @@ if(data['pharmacyBusinessHours']){
  }
 
  addUser(){
+	this.signInForm.reset()
  this.user= true
  }
  accountEdit(){
@@ -346,7 +391,8 @@ if(data['pharmacyBusinessHours']){
  this.userInformation.zipcode = params.zipcode;
  this.userInformation.city = params.city;
  this.userInformation.state = params.state;
- 
+ this.msgs =[];
+ this.msgs.push({severity: 'success', summary: 'Success', detail: 'Details has been updated successfully.'});
  this.accouEdit= false
  });
  }  else {
@@ -374,6 +420,11 @@ if(data['pharmacyBusinessHours']){
  
  
  }
+
+
+ 
+ time : any;
+ time1: any;
  timeValue_ampm :any;
  timeValue1_ampm :any;
  pharmacyTiming = [];
@@ -381,13 +432,16 @@ if(data['pharmacyBusinessHours']){
  addPharmacy(newPharmacy: string, newPharmacy1: string, newPharmacy2) {
  if(!((newPharmacy) && (newPharmacy1 ) && (newPharmacy2))){
 	this.msgs = [];
-	this.msgs.push({severity: 'error', summary: 'Error', detail: 'please enter the Pharmacy Timings'});
+	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please enter complete details in Pharmacy Timings.'});
  } 
  else {
  let week_time =this.weekdata
  let currentVal = newPharmacy2
  let hour = new Date(newPharmacy).getHours(); 
  let min = new Date(newPharmacy).getMinutes();
+let sHour = "", sHour1 = ''
+
+
  let sMin = '',sMin1 = '';
 if(-1< min && min<10){
 	sMin = "0" +min;
@@ -397,15 +451,22 @@ if(-1< min && min<10){
  var ampm = hour >= 12 ? 'PM' : 'AM';
  hour = hour % 12;
  hour = hour ? hour : 12; // the hour '0' should be '12'
- this.timeValue = `${hour}:${sMin}`; 
+
+ if(hour<10){
+	sHour = "0" +hour;
+	
+}else {
+	sHour = hour + '';
+}
+
+ this.timeValue = `${sHour}:${sMin}`; 
  this.timeValue_ampm = ampm;
- console.log(ampm);
- 
- //this.timeValue = `${hour}:${min}`
 
  //second field
  let hour1 = new Date(newPharmacy1).getHours();
  let min1 = new Date(newPharmacy1).getMinutes();
+
+
  if(-1< min1 && min1<10){
 	sMin1 = "0" +min1;
 }else {
@@ -414,35 +475,48 @@ if(-1< min && min<10){
  var ampm1 = hour1 >= 12 ? 'PM' : 'AM';
  hour1 = hour1 % 12;
  hour1 = hour1 ? hour1 : 12; // the hour '0' should be '12'
- this.timeValue1 = `${hour1}:${sMin1}`;
+  if(hour1<10){
+	sHour1 = "0" +hour1;	
+}else {
+	sHour1 = hour1 + '';
+}
+ this.timeValue1 = `${sHour1}:${sMin1}`;
  this.timeValue1_ampm = ampm1;
- console.log(ampm1);
- console.log(this.timeValue);
- console.log(this.timeValue1);
- 
- 
- 
-	let pushingElement = this.timeValue.concat(" "+this.timeValue_ampm) + " to " + this.timeValue1.concat(" "+this.timeValue1_ampm) + " ; " + week_time;
-	console.log(pushingElement);
-	console.log(this.timeValue1_ampm);
-	console.log(this.timeValue_ampm);
-	
-	
-	if(this.timeValue1_ampm == this.timeValue_ampm){
-	
-		this.msgs = [];
+ 	let pushingElement = this.timeValue.concat(" "+this.timeValue_ampm) + " to " + this.timeValue1.concat(" "+this.timeValue1_ampm) + " ; " + week_time;
+	if(this.timeValue_ampm ==this.timeValue1_ampm){ 
+		if(this.timeValue1 <= this.timeValue ){
+			console.log(this.timeValue1 <= this.timeValue);
+			this.msgs = [];
 			// this.msgs.push({severity: 'error', summary: 'To Time is less than From Time', detail: ''});
-			this.msgs.push({severity: 'error', summary: 'Error', detail: 'To Time must be greater than From Time'});
+			this.msgs.push({severity: 'error', summary: 'Error', detail: 'To Time must be greater than From Time.'});
+		} 
+		else{
+			let index = this.updatePharmacy.indexOf(pushingElement);
+			if (index == -1)
+			{
+				let obj = {
+					dayOfWeek: this.weekvalue,
+					opens: this.timeValue.concat(" "+this.timeValue_ampm),
+					closes: this.timeValue1.concat(" "+this.timeValue1_ampm)
+					}
+				this.updatePharmacy.push(pushingElement);
+				this.pharmacyTiming.push(obj)
+				
+		this.date7 =""
+		this.date8 =""
+		this.week = this.weekdays[8]	
 		
-		// if(this.timeValue1 <= this.timeValue && this.timeValue1 >= this.timeValue){
-			
-		// 	console.log("1234");
-			
-		// 	this.msgs = [];
-		// 	// this.msgs.push({severity: 'error', summary: 'To Time is less than From Time', detail: ''});
-		// 	this.msgs.push({severity: 'error', summary: 'Error', detail: 'To Time must be greater than From Time'});
-		// }
-	}else {
+			}	 
+			   else {
+				this.msgs = [];
+				this.msgs.push({severity: 'error', summary: 'Error', detail: 'Time slot already exist.'});
+		this.date7 =""
+		this.date8 =""	
+		 this.week = this.weekdays[8]
+			}
+		}
+	}
+	else {
 	let index = this.updatePharmacy.indexOf(pushingElement);
 	if (index == -1)
 	{
@@ -461,7 +535,7 @@ this.week = this.weekdays[8]
 	}	 
 	   else {
 		this.msgs = [];
-		this.msgs.push({severity: 'error', summary: 'Error', detail: 'Time slot already exist'});
+		this.msgs.push({severity: 'error', summary: 'Error', detail: 'Time slot already exist.'});
 this.date7 =""
 this.date8 =""	
  this.week = this.weekdays[8]
@@ -492,23 +566,60 @@ this.date8 =""
 			 
 		}	else {
 			this.msgs = [];
-			this.msgs.push({severity: 'error', summary: 'Error', detail: 'Time slot already exist'});
+			this.msgs.push({severity: 'error', summary: 'Error', detail: 'Time slot already exist.'});
 			this.date7 =""
 			this.date8 =""	
 			 this.week = this.weekdays[0]
 		}	
  }
  deleteUser(index){
+
  let i = this.addNewUser.indexOf
  this.addNewUser.splice(index,1)
+ this.display = false
 
  }
 
- deleteUser1(index){
-	let i = this.userInformation.pharmacyUsers.indexOf
-	this.userInformation.pharmacyUsers.splice(index,1)
-	this.users.splice(index,1)
-   
+ display: boolean = false;
+
+showDialog(){
+ console.log();
+// this.Delivered(Order)
+ this.display = true;
+}
+
+ deleteUser1(user,index){
+	 console.log(user);
+	 this.confirmService.confirm({
+		message: 'Are you sure that you want delete the user?',
+		accept: () => {
+			//Actual logic to perform a confirmation
+			const params = {
+				id: user.id,
+				 };
+				 console.log(params);
+				 
+			this.http.delete(environment.host + 'pharmacy/user?id='+params.id).subscribe((res: any)=> {
+				this.userInformation.pharmacyUsers.splice(index,1)
+				console.log(index);
+				
+				this.display1 = false
+			   
+			});
+		}
+	});
+	// let i = this.userInformation.pharmacyUsers.indexOf
+	// console.log(i);
+	
+	
+	}
+
+	display1: boolean = false;
+
+	showDialog1(){
+	 console.log();
+	// this.Delivered(Order)
+	 this.display1 = true;
 	}
 
  deletePharmacyTimings(index) {
@@ -549,33 +660,33 @@ this.date8 =""
  };
  if(this.userInformation.pickup == false && this.userInformation.delivery == false){
 	 this.msgs = [];
-	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Delivery type'});
+	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Delivery type.'});
  } 
  else if (this.pharmacyTiming.length <1 ) {
 	this.msgs = [];
-	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Pharmacy Timing details'});
+	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Pharmacy Timing details.'});
  }
  else{
  this.auth.updateDetails(profilepageObj).subscribe((res: any) => {
  
  if (res.statusCode == 200) {
  this.loader.close();
+
  this.msgs = [];
-//  this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully updated.'});
-  
-  this.router.navigate(['/orders']);
-  this.messageService.add({severity: 'success', summary: 'Success', detail: 'Successfully updated.'});
+ this.router.navigate(['/orders']);
+//  this.msgs.push({severity: 'success', summary: 'Success', detail: 'Successfully updated.'}); 
+  this.messageService.add({severity: 'success', summary: 'Success', detail: 'Your account has been updated successfully.'});
  } 
 
  else if(res.statusCode == 400){
 	this.msgs = [];
- this.msgs.push({severity: 'error', summary: ' Please provide atleast one Service offered', detail: 'Update unsuccessful'});
+ this.msgs.push({severity: 'error', summary: ' Please provide atleast one Service offered', detail: 'Update unsuccessful.'});
  this.loader.close(); 
  }
  }, (err) => {
  this.loader.close();
  this.msgs = [];
- this.msgs.push({severity: 'error', summary: 'Error', detail: 'server error'});
+ this.msgs.push({severity: 'error', summary: 'Error', detail: 'server error.'});
  }
  );
 }
@@ -586,6 +697,11 @@ ids1 = [];
  users =[];
 
  updateDetails() {
+
+	 if (this.pharmacyTiming == [] || this.userInformation.pharmacyBusinessHours == undefined) {
+		this.msgs = [];
+	  this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Pharmacy Timing details.'});
+	  }
  let id = this.selectedServices.map((e)=> {return e['id']})
  let insuranceId = this.selectedInsuranceProviders.map((e) => {return e['id']}) 
 
@@ -629,28 +745,29 @@ pharmacyInsuranceProviders: insuranceId,
  
   if(this.userInformation.pickup === false && this.userInformation.delivery === false){
 	this.msgs = [];
-	 this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Delivery Type'}); 
-  }else if (this.pharmacyTiming.length <1 && this.userInformation.pharmacyBusinessHours.length<1 && this.pharmacyTiming.length == undefined &&  this.pharmacyTiming.length ==0) {
+	 this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Delivery Type.'}); 
+  }
+  else if (this.pharmacyTiming.length <1 && this.userInformation.pharmacyBusinessHours.length<1 ) {
 		this.msgs = [];
-  	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Pharmacy Timing details'});
+  	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Pharmacy Timing details.'});
    } else {
  this.auth.updateDetails(profilepageObj).subscribe((res: any) => {
  if (res.statusCode == 200) {
 	this.loader.close();
+
 	this.msgs = [];
-	
 	this.router.navigate(['/orders']);
-	this.messageService.add({severity: 'success', summary: 'Success', detail: 'Successfully updated.'});
+	this.messageService.add({severity: 'success', summary: 'Success', detail: 'Your account has been updated successfully.'});
  
  }  else if(res.statusCode == 400){
 	this.msgs = [];
- this.msgs.push({severity: 'error', summary: 'Please provide atleast one  Service Offer  ', detail: 'Update unsuccessful'});
+ this.msgs.push({severity: 'error', summary: 'Please provide atleast one  Service Offer  ', detail: 'Update unsuccessful.'});
  this.loader.close(); 
  }
  }, (err) => {
  this.loader.close();
  this.msgs = [];
- this.msgs.push({severity: 'error', summary: 'Error', detail: 'server error'});
+ this.msgs.push({severity: 'error', summary: 'Error', detail: 'server error.'});
  }
  );
 }
@@ -710,9 +827,12 @@ email: this.userInformation.email,
  this.auth.newUser(params).subscribe((res:any) => { console.log(res)
  if(res.statusCode == 200){
   this.addNewUser.push(params.firstName + " " + params.lastName);
+  this.msgs =[];
+  this.msgs.push({severity: 'success', summary: 'Success', detail: 'User has been added successfully.'});
+this.signInForm.reset()
  }else if(res.statusCode ==401) {
 	this.msgs = [];
-  this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email already registered'});
+  this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email already registered.'});
  }
  });
  
@@ -722,6 +842,14 @@ email: this.userInformation.email,
 }
 }
 
+addButton(){
+	console.log("123");
+	
+	
+	this.user = false
+	this.signInForm.reset()
+}
+
 
 setFormTouched(form_obj: any) {
   Object.keys(form_obj.controls).forEach(field => {
@@ -729,10 +857,7 @@ setFormTouched(form_obj: any) {
     control.markAsTouched({ onlySelf: true });
   });
 }
-cancelButtonClicked() {
-
- 
-}
+cancelButtonClicked() {}
 
 addProviders(){
  const header = {'authentication_token': localStorage.getItem ('authentication_token')};

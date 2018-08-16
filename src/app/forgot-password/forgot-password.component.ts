@@ -46,7 +46,7 @@ export class ForgotPasswordComponent implements OnInit {
       this.auth.forgotPassword(params).subscribe((res: any) => {
         if (res.code === 1) {
           this.msgs = [];
-          this.messageService.add({severity: 'success', summary: 'Success', detail: 'Successfully sent your password to your register mail id'}); 
+          this.messageService.add({severity: 'success', summary: 'Success', detail: 'Successfully sent your password to your register mail id.'}); 
           this.loader.close();
           this.router.navigate(['/login']);
           
@@ -54,14 +54,14 @@ export class ForgotPasswordComponent implements OnInit {
         }
        else if(res.statusCode === 401){
           this.msgs = [];
-          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email id is not registered'});
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email id is not registered.'});
            this.loader.close();
 
         }
       }, (err) => {
         this.loader.close();
         this.msgs = [];
-          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server Error'});
+          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server Error.'});
       }
       );
 
