@@ -14,6 +14,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { AuthLoginGuardService } from './services/auth-login-guard.service';
 
+import { TermsConditionsComponent } from './terms-conditions/terms-conditions.component';
 const routes: Routes = [
       { path: '', redirectTo: '/login', pathMatch: 'full' },
       // {path:'**', component: LoginComponent},
@@ -29,7 +30,7 @@ const routes: Routes = [
        {path: 'order-view', component: OrderViewComponent},
        {path: 'forgot-password', component: ForgotPasswordComponent},
        {path: 'change-password', component: ChangePasswordComponent},
-       {path: 'order-view/:id', component: OrderViewComponent}
+       {path: 'order-view/:id', component: OrderViewComponent},
       //  ,children:[
       //   {path: 'order-view/:id', component: OrderViewComponent}
       // ]},
@@ -45,6 +46,8 @@ const routes: Routes = [
       // },
     
       // { path: '**', redirectTo: 'auth' }
+      {path:'confirm-mail/:key', component: EmailverificationComponent},
+      {path:'terms-conditions', component: TermsConditionsComponent},
 
 ];
 

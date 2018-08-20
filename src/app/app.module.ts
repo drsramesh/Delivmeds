@@ -85,6 +85,7 @@ export function init_app(appLoadService: AppInitService, pb: PubnubService) {
 
   return () => appLoadService.initializeApp();
 }
+import { TermsConditionsComponent } from './terms-conditions/terms-conditions.component';
 
 @NgModule({
   declarations: [
@@ -104,6 +105,7 @@ export function init_app(appLoadService: AppInitService, pb: PubnubService) {
     SingleDotDirective,
     FooterComponent,
     TimeDirective,
+    TermsConditionsComponent
   ],
   imports: [
     BrowserModule,

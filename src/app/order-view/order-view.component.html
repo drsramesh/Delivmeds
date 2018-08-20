@@ -40,7 +40,7 @@
                 </div>
                 <div class="prescription" *ngIf="orderDetails.status ==2 ||orderDetails.status ==3 ||orderDetails.status ==4 ||orderDetails.status ==5 || orderDetails.status ==6 || orderDetails.status ==7">
                     <p class="pull-left prescription-left">Prescription id: {{orderDetails.prescriptionNo !== null? orderDetails.prescriptionNo : 'N/A' }} ({{orderDetails.refill == false? 'New Rx': 'Refill Rx'}})</p>
-                    <span class="pull-left prescription-right">
+                    <span class="pull-left prescription-right reject-order-btn">
                     <button [disabled]="true" pButton type="button" (click)=" addNewRow(i)" label="Add" icon="fa fa-plus" class="ui-button-secondary btn-secondary-green btn-disabled"></button>
                     </span>
                     <div class="clearfix"></div>

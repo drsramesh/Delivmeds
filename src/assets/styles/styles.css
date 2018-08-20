@@ -1180,6 +1180,10 @@
         white-space: nowrap;
     }
     
+    .notifi-list .notifi-check .ui-chkbox {
+        margin-right: 0.65em;
+    }
+    
     .notifi-list .notifi-text {
         display: inline-block;
         padding-left: 20px;
@@ -1455,7 +1459,131 @@
         left: 0px;
         padding-left: 0px !important;
     }
+    /* .change-password:hover {
+        font-weight: 600
+    } */
     /* for print */
+    /* terms and conditions------------------ */
+    
+    .terms-conditions {
+        padding: 20px 0;
+    }
+    
+    .terms-conditions .terms-logo img {
+        width: 150px;
+    }
+    
+    .terms-list p {
+        text-align: justify;
+        font-size: 13px;
+    }
+    
+    .terms-list .text-line {
+        margin-top: 10px;
+    }
+    
+    .terms-list {
+        margin-bottom: 10px;
+    }
+    
+    .terms-conditions .terms-list .text-line {
+        margin-top: 10px;
+    }
+    
+    .null-text {
+        display: block;
+    }
+    /* responsive----------------- */
+    
+    @media screen and (max-width: 1200px) {
+        .container {
+            width: 970px;
+        }
+        .medication-list .form-dos {
+            margin-left: 8px;
+        }
+        .medication-list .order-cancel {
+            margin-left: 5px;
+        }
+    }
+    
+    @media screen and (max-width: 992px) {
+        .container {
+            width: 740px;
+        }
+        .header-logo .logo {
+            width: 140px;
+        }
+        .main-header .header-logo h3 {
+            font-size: 16px;
+            padding: 15px 0 0 25px;
+        }
+        .head-nav .ui-tabmenu-nav.ui-widget-header li {
+            margin: 0 10px;
+        }
+        .orders-table .ui-table .ui-table-thead>tr>th {
+            font-size: 12px;
+        }
+        .orders-table .ui-table .ui-table-tbody>tr>td:first-child,
+        .orders-table .ui-table .ui-table-thead>tr>th:first-child {
+            padding-left: 10px;
+        }
+        .ui-button.ui-button-secondary.ui-state-default.btn-secondary-green {
+            font-size: 12px;
+        }
+        .ui-button.ui-button-secondary.ui-state-default.btn-secondary-green .ui-button-text {
+            padding: 0px 0;
+            line-height: 16px;
+        }
+        .order-view .view-left {
+            width: 49%;
+        }
+        .order-view .view-right {
+            width: 48%;
+            padding-left: 20px;
+        }
+        .prescription .prescription-right .ui-button.ui-button-secondary.ui-state-default.btn-secondary-green .ui-button-icon-left {
+            left: -3px;
+        }
+        .reject-order-btn .ui-button.ui-button-secondary.ui-state-default.btn-secondary-green {
+            padding: 0 13px 0 25px;
+        }
+        .medication-list .first {
+            font-size: 11px;
+        }
+        .medication-list .form-name {
+            width: 38%;
+        }
+        .medication-list .form-qty {
+            width: calc(18% - 10px);
+        }
+        .medication-list .form-cost {
+            width: calc(20% - 17px);
+        }
+        .medication-list .dolor-icon {
+            height: 31px;
+            padding-left: 2px;
+        }
+        .medication-list .dolor-icon .ui-inputtext {
+            height: 31px;
+        }
+        .medication-list .dolor-icon i {
+            font-size: 16px;
+            padding: 0px 5px 0px 5px;
+        }
+        .medication-list .form-dos {
+            margin-left: 8px;
+        }
+        .medication-list .order-cancel {
+            margin-left: 3px;
+        }
+        .price-details .price-value {
+            padding: 15px 0px 15px 15px;
+        }
+        .medication-list .ui-dialog {
+            width: 650px !important;
+        }
+    }
     
     @media print {
         .noprint {
