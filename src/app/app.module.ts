@@ -62,6 +62,7 @@ import { MessagingService} from './messaging.service';
 
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { EmailverificationComponent } from './emailverification/emailverification.component';
+import { TermsConditionsComponent } from './terms-conditions/terms-conditions.component';
 
 // export const config = {
 //   apiKey: "AIzaSyBPdrOSKvYG9KVXGO_sh42ojg-hfapvwPg",
@@ -83,7 +84,8 @@ import { EmailverificationComponent } from './emailverification/emailverificatio
     NotificationsComponent,
     NotificationDetailsComponent,
     MyAccountComponent,
-    EmailverificationComponent
+    EmailverificationComponent,
+    TermsConditionsComponent
   ],
   imports: [
     BrowserModule,

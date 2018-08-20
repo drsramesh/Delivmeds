@@ -1,0 +1,14 @@
+<div class="terms-conditions">
+    <div class="terms-logo text-center">
+        <img src="assets/images/logo.png" alt="">
+    </div>
+    <div class="terms-list" *ngFor="let terms of conditions">
+        <h4>
+            {{terms.heading}}
+        </h4>
+        <p>
+            {{terms.text}}
+        </p>
+        <p *ngIf="terms.textLine" class="text-line">{{terms.textLine}}</p>
+    </div>
+</div>

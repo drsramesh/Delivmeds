@@ -10,7 +10,7 @@
         <p><span class="account-icons"><i class="fa fa-phone icons-gray" aria-hidden="true"></i></span>{{userInformation.phoneNo}}</p>
         <p><span class="account-icons"><i class="fa fa-envelope icons-gray" aria-hidden="true"></i></span>{{userInformation.email}}</p>
         <!-- <p><span class="account-icons"><i class="fa fa-clock-o" aria-hidden="true"></i></span>9:00 am to 10:00 pm</p> -->
-        <p><span class="account-icons"><i class="fa fa-map-marker icons-gray" aria-hidden="true"></i></span>{{userInformation.address}} {{userInformation.street}} {{userInformation.state}} {{userInformation.city}} </p>
+        <p><span class="account-icons"><i class="fa fa-map-marker icons-gray" aria-hidden="true"></i></span>{{userInformation.address}} {{userInformation.street}} {{userInformation.state}} {{userInformation.city}} <a class="change-password" href="">Change Password</a></p>
         <button pButton type="submit" (click)="addUser()" label="Add User" class="btn-group-green mg-tp"></button>
         <div class="des-chips">
             <span class="choose-chips" *ngFor="let users of addNewUser; let i = index"> {{users}}

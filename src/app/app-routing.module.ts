@@ -9,7 +9,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { NotificationDetailsComponent } from './notification-details/notification-details.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { EmailverificationComponent } from './emailverification/emailverification.component';
-
+import { TermsConditionsComponent } from './terms-conditions/terms-conditions.component';
 const routes: Routes = [
       { path: '', redirectTo: '/login', pathMatch: 'full' },
       // {path:'**', component: LoginComponent},
@@ -21,6 +21,7 @@ const routes: Routes = [
       {path:'notification-details', component: NotificationDetailsComponent},
       {path:'my-account', component: MyAccountComponent},
       {path:'confirm-mail/:key', component: EmailverificationComponent},
+      {path:'terms-conditions', component: TermsConditionsComponent},
 
 ];
 
