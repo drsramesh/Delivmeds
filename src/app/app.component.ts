@@ -42,7 +42,7 @@ export class AppComponent {
 }
 
 ngOnInit() {
-
+   if(localStorage.getItem('authentication_token') !== null){ 
     this.pb.init((message) => {
       console.log("App Component")
       console.log(message);
@@ -55,13 +55,17 @@ ngOnInit() {
             }else{
                 setTimeout(()=>{
              this.msgs.splice(index,1);
-           },7000)
+           },5000)
   
             }
              
           })
        
     });
+   }else {
+     console.log("Notification will not occured");
+     
+   }
 
 
 }

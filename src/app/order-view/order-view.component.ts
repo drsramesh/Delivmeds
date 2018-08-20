@@ -97,7 +97,7 @@ private route: ActivatedRoute) {
  console.log('changed event');
  }
  initItemRows(orderItem) {
-   console.log(orderItem);
+  //  console.log(orderItem);
    
  let formRows = [];
  return this._fb.group({
@@ -107,7 +107,7 @@ private route: ActivatedRoute) {
  id: [orderItem.id ],
  status:[orderItem.status],
  copay:[orderItem.copayPrice || '' ],
- comments:[orderItem.comments || '' ]
+ comments:[orderItem.comments || null]
  });
  
 }

@@ -138,28 +138,28 @@
     <span>Patient choose to pay at Register. Had you received prescription amount?   </span>
     <p-footer>
         <input type="hidden" [(ngModel)]="Order_one" />
-        <button type="button" pButton icon="pi pi-check" (click)="Delivered(Order_one)" label="Paid"></button>
-        <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Not Paid"></button>
+        <button type="button" class="btn-group-green" pButton (click)="Delivered(Order_one)" label="Paid"></button>
+        <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="display=false" label="Not Paid"></button>
     </p-footer>
 </p-dialog>
 
-<p-dialog header="Confirmation" [(visible)]="display1" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+<p-dialog header="Confirmation" class="pop-dailouge" [(visible)]="display1" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
     <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{Order_two?.customerResponse?.mobile_number | slice:0:3}}-{{Order_two?.customerResponse?.mobile_number | slice:3:6}}-{{Order_two?.customerResponse?.mobile_number | slice:6:10}} ?  </span>
     <!-- <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{Order_two?.customerResponse?.mobile_number }} ?  </span> -->
     <p-footer>
         <!-- <input type="hidden" [(ngModel)]="Order_two" /> -->
-        <button type="button" pButton icon="pi pi-check" (click)="ReadyForPickup(Order_two)" label="Paid"></button>
-        <button type="button" pButton icon="pi pi-check" (click)="display1=false" label="Not Paid"></button>
+        <button type="button" class="btn-group-green" pButton (click)="ReadyForPickup(Order_two)" label="Paid"></button>
+        <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="display1=false" label="Not Paid"></button>
     </p-footer>
 </p-dialog>
 
-<p-dialog header="Confirmation" [(visible)]="display1" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+<p-dialog header="Confirmation" class="pop-dailouge" [(visible)]="display1" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
     <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{Order_two?.customerResponse?.mobile_number | slice:0:3}}-{{Order_two?.customerResponse?.mobile_number | slice:3:6}}-{{Order_two?.customerResponse?.mobile_number | slice:6:10}} ?  </span>
     <!-- <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{Order_two?.customerResponse?.mobile_number }} ?  </span> -->
     <p-footer>
         <!-- <input type="hidden" [(ngModel)]="Order_two" /> -->
-        <button type="button" pButton icon="pi pi-check" (click)="ReadyForPickup(Order_two)" label="Paid"></button>
-        <button type="button" pButton icon="pi pi-check" (click)="display1=false" label="Not Paid"></button>
+        <button type="button" class="btn-group-green" pButton (click)="ReadyForPickup(Order_two)" label="Paid"></button>
+        <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="display1=false" label="Not Paid"></button>
     </p-footer>
 </p-dialog>
 <div class="text-center no-orders" *ngIf="loading == true && Orders.length ==0 && filterableOrders.length ==0">

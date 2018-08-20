@@ -53,17 +53,21 @@ export class HomeComponent implements OnInit {
   private pubnub:PubNubAngular ) { }
 
   ngOnInit() {
-    this.pb.init((message) => {
-      // console.log("Home component")
-      console.log(message);
-      this.getOrderDetails(message['message']['map']['orderId']);
-      // console.log(message['message']['map']['orderId']);
-      
-      // this.msgs.push({severity: 'info', summary:message['message']['map']['orderId'], detail: message['message']['map']['message'],isRoute:true});
-      
-    });
+  
 
     if (localStorage.getItem("authentication_token") !== null) {
+      this.pb.init((message) => {
+        // console.log("Home component")
+        console.log(message);
+        this.getOrderDetails(message['message']['map']['orderId']);
+  
+    //  console.log(message['message']['map']['orderId']);
+     
+        // console.log(message['message']['map']['orderId']);
+        
+        // this.msgs.push({severity: 'info', summary:message['message']['map']['orderId'], detail: message['message']['map']['message'],isRoute:true});
+        
+      });
     //  console.log("authentication Token");
       
       this.OrderList();
@@ -334,9 +338,6 @@ getOrderDetails(id){
   const header = {'authentication_token': localStorage.getItem('authentication_token')};
 
  this.http.get(environment.host + 'order/pharmacy/' + id, {headers: header}).subscribe((res: any) => {
-  //  console.log(res);
-  //  console.log(res.object.status);
-  // Order.status = res.object.status;
   if(res.object.status ==1) {
    if(res['object'].customerResponse.hasOwnProperty('customerMembers')){
          res['object'].patientName = res['object'].customerResponse.customerMembers[0].firstName + " " +  res['object'].customerResponse.customerMembers[0].lastName
@@ -346,12 +347,9 @@ getOrderDetails(id){
       this.Orders.unshift(res.object)
       // this.filterableOrders.unshift(res.object)
     }else {
+      if( this.Orders.length>0)
       this.Orders[this.Orders.map(object=>object.id).indexOf(id)].status = res.object.status;
     }
-  
-
- 
  })
 }
-
 }

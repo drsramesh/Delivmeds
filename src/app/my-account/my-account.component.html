@@ -50,13 +50,14 @@
                     <div class="ui-g ui-row">
                         <div class="ui-g-3">
 
-                            <p-calendar class="primary-timeings pull-left" placeholder="From Time" (keypress)="timeValues($event)" [(ngModel)]="date7" #newPharmacy [timeOnly]="true" hourFormat="12"></p-calendar>
+                            <p-calendar class="primary-timeings pull-left" placeholder="From Time" (keypress)="timeValues($event)" [stepHour]="1" [(ngModel)]="date7" [readonlyInput]="true" [stepMinute]="15" #newPharmacy [timeOnly]="true" hourFormat="12"></p-calendar>
                             <!-- <p-calendar [(ngModel)]="date7" [timeOnly]="true"></p-calendar> {{date7 | hh:mm}} -->
+                            <!-- <input class="primary-timeings pull-left" placeholder="From Time" (keypress)="timeValues($event)" [(ngModel)]="date7" #newPharmacy hourFormat="12"> -->
 
                             <span class="pull-left time-to">To</span>
                             <!-- <p-calendar [(ngModel)]="date8" [timeOnly]="true"></p-calendar> {{date8}} -->
 
-                            <p-calendar class="primary-timeings text-right pull-left" placeholder="To Time" (keypress)="timeValues($event)" [(ngModel)]="date8" #newPharmacy1 [timeOnly]="true" hourFormat="12"></p-calendar>
+                            <p-calendar class="primary-timeings text-right pull-left" placeholder="To Time" [stepHour]="1" [stepMinute]="15" (keypress)="timeValues($event)" [(ngModel)]="date8" [readonlyInput]="true" #newPharmacy1 [timeOnly]="true" hourFormat="12"></p-calendar>
                             <div class="clearfix"></div>
                         </div>
                         <div class="ui-g-2">
@@ -96,7 +97,7 @@
                 <div class="form-group text-left primary-block">
                     <h3 class="first">Delivery Type*</h3>
                     <p-checkbox class="notifi-check" [(ngModel)]="userInformation.pickup" label="Customer Pickup" binary="false" required></p-checkbox>
-                    <p-checkbox class="notifi-check" [(ngModel)]="userInformation.delivery" label="Door Delivery" binary="false" required></p-checkbox>
+                    <p-checkbox class="notifi-check" [(ngModel)]="userInformation.delivery" label="Door Delivery" binary="false" [disabled]="true" required></p-checkbox>
                     <!-- <p-checkbox class="notifi-check" [(ngModel)]="userInformation.delivery" label="Door Delivery(self)" binary="false"></p-checkbox> -->
                 </div>
                 <!-- <form action="" [formGroup] = "serviceForm"></form> -->
@@ -203,7 +204,7 @@
 
         <div class="form-group  position-rel ui-g-6">
             <h3 class="first">Address Line 1 *</h3>
-            <input id="address1" type="text" size="30" formControlName="address" required pInputText name="address" maxlength="50" [value]="userInformation.address">
+            <input id="address1" type="text" size="30" formControlName="address" required pInputText name="address" maxlength="100" [value]="userInformation.address">
             <!-- <span class="error error-down" *ngIf="editForm.get('address').touched && editForm.hasError('required', 'address')" style="color:red"> Street Address is Required</span> -->
             <span class="error error-down" *ngIf="  editForm.get('address').touched " style="color:red"> 
                         <span *ngIf="editForm.hasError('required', 'address')">Address Line 1 is required</span>
@@ -214,7 +215,7 @@
             <!-- type="text" [(ngModel)]="editdetails.street" name="street" -->
             <!-- #street = "ngModel" pInputText value = {{userInformation.street}} -->
             <h3 class="first">Address Line 2 (Optional)</h3>
-            <input id="address2" type="text" size="30" pInputText formControlName="street" name="street" maxlength="50" [value]="userInformation.street">
+            <input id="address2" type="text" size="30" pInputText formControlName="street" name="street" maxlength="100" [value]="userInformation.street">
             <!-- <span class="error" *ngIf="editForm.get('street').touched && editForm.hasError('required', 'street')" style="color:red"> Street is Required</span> -->
         </div>
         <!-- <span class="error" *ngIf=" !signInForm.get('zipcode').valid && signInForm.get('zipcode').touched && signInForm.hasError('required', 'zipcode')" style="color:red">zipcode is required</span>                -->
@@ -261,4 +262,9 @@
 </p-dialog>
 
 
-<p-confirmDialog></p-confirmDialog>
+<p-confirmDialog header="Confirmation" #cd>
+    <p-footer>
+        <button type="button" class="btn-group-green" pButton (click)="cd.accept()" label="Yes"></button>
+        <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="cd.reject()" label="No"></button>
+    </p-footer>
+</p-confirmDialog>

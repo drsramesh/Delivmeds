@@ -1,9 +1,9 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 
 @Directive({
-  selector: '[appSingleDot]'
+  selector: '[appTime]'
 })
-export class SingleDotDirective {
+export class TimeDirective {
 
   private regex: RegExp = new RegExp(/[0-9]/g);
   // Allow key codes for special events. Reflect :
@@ -39,8 +39,8 @@ return;
 else {
     event.preventDefault();
   }
-  let current: string = this.el.nativeElement.value;
-  let next: string = current.concat(event.key);
+  let current: string = this.el.nativeElement.value == undefined ? '' : this.el.nativeElement.value ;
+  let next: string = current +event.key;
   console.log(next);
   
   if ((next && !String(next).match(this.regex)) ||
@@ -58,8 +58,7 @@ else {
       
       let currentCursorPos: number;  
      console.log(this.elemRef.nativeElement.selectionStart);
-     
-      if (typeof this.elemRef.nativeElement.selectionStart == "number") {
+      if (typeof this.elemRef.nativeElement.selectionStart == "undefined") {
           currentCursorPos = this.elemRef.nativeElement.selectionStart ;
         
           
@@ -81,3 +80,6 @@ else {
     }
 }
 }
+
+
+ 

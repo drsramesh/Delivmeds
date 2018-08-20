@@ -45,7 +45,7 @@ export class PubnubService {
     
     this.pubnub.subscribe({      
         channels: [channel] ,        
-        triggerEvents: true, withPresence: true, autoload: 100
+        // triggerEvents: true, withPresence: true, autoload: 100
     });
 
   }

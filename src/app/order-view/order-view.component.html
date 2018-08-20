@@ -151,14 +151,17 @@
 
 
                                     </div>
-                                    <div class="form-comments ">
+                                    <!-- <div class="form-comments ">
                                         <p class="form-comments">
                                             <input class="brdr-none" formControlName="comments" pInputText readonly></p>
-                                        <!-- <span *ngIf=" invoiceForm.get('quantity').touched && invoiceForm.hasError('required', 'quantity')" style="color:red"> Quantity is required</span> -->
-                                    </div>
-                                    <!-- <div>
-                                        <p class="medicine-comments"><input formControlName="comments"></p>
-                                    </div> -->
+                                        <span *ngIf=" invoiceForm.get('quantity').touched && invoiceForm.hasError('required', 'quantity')" style="color:red"> Quantity is required</span>
+                                    </div>  -->
+                                    <div class="clearfix"></div>
+                                    <p class="note-comments" *ngIf="itemrow.get('comments').value">
+                                        {{'Note:' + ' ' +itemrow.get('comments').value}}
+                                    </p>
+
+
                                     <div class="clearfix"></div>
                                 </div>
                             </div>
@@ -209,22 +212,23 @@
 
                             <button pButton type="button" (click)="showDialog2()" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
                             <p-dialog header="Confirmation" class="pop-dailouge" [(visible)]="display2" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
-                                <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{orderDetails.customerResponse.phone | slice:0:3}}-{{orderDetails.customerResponse.phone | slice:3:6}}-{{orderDetails.customerResponse.phone | slice:6:10}}?  </span>
+                                <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{orderDetails.customerResponse.mobile_number | slice:0:3}}-{{orderDetails.customerResponse.mobile_number | slice:3:6}}-{{orderDetails.customerResponse.mobile_number | slice:6:10}}?  </span>
                                 <p-footer>
                                     <input type="hidden" [(ngModel)]="car_two" />
-                                    <button type="button" pButton icon="pi pi-check" (click)="ReadyForPickup()" label="Paid"></button>
-                                    <button type="button" pButton icon="pi pi-check" (click)="display2=false" label="Not Paid"></button>
+                                    <button type="button" class="btn-group-green" pButton (click)="ReadyForPickup()" label="Paid"></button>
+                                    <button type="button" pButton class="ui-button-secondary btn-secondary-green" (click)="display2=false" label="Not Paid"></button>
                                 </p-footer>
                             </p-dialog>
                         </div>
                         <div *ngIf="orderDetails.status == 5 &&  orderDetails.deliveryType==2 && orderDetails.paymentDone ==true ">
                             <button pButton type="button" (click)="showDialog2()" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
                             <p-dialog header="Confirmation" class="pop-dailouge" [(visible)]="display2" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
-                                <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{orderDetails.customerResponse.phone | slice:0:3}}-{{orderDetails.customerResponse.phone | slice:3:6}}-{{orderDetails.customerResponse.phone | slice:6:10}}?  </span>
+                                <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{orderDetails.customerResponse.mobile_number | slice:0:3}}-{{orderDetails.customerResponse.mobile_number | slice:3:6}}-{{orderDetails.customerResponse.mobile_number | slice:6:10}}?  </span>
                                 <p-footer>
                                     <input type="hidden" [(ngModel)]="car_two" />
-                                    <button type="button" pButton icon="pi pi-check" (click)="ReadyForPickup()" label="Paid"></button>
-                                    <button type="button" pButton icon="pi pi-check" (click)="display1=false" label="Not Paid"></button>
+                                    <button type="button" class="btn-group-green" pButton (click)="ReadyForPickup()" label="Paid"></button>
+                                    <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="display1=false" label="Not Paid"></button>
+
                                 </p-footer>
                             </p-dialog>
                             <!-- <button pButton type="button" (click)="ReadyForPickup(car)" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
@@ -256,8 +260,8 @@
                                 <span>Patient choose to pay at Register. Had you received prescription amount?  </span>
                                 <p-footer>
                                     <input type="hidden" [(ngModel)]="car_one" />
-                                    <button type="button" pButton icon="pi pi-check" (click)="Delivered()" label="Paid"></button>
-                                    <button type="button" pButton icon="pi pi-check" (click)="display3=false" label="Not Paid"></button>
+                                    <button type="button" class="btn-group-green" pButton (click)="Delivered()" label="Paid"></button>
+                                    <button type="button" class="ui-button-secondary btn-secondary-green" pButton (click)="display3=false" label="Not Paid"></button>
                                 </p-footer>
                             </p-dialog>
                         </div>
@@ -303,8 +307,8 @@
                 <div class="patient-details" *ngIf="orderDetails.customerResponse.customerMembers && orderDetails.customerResponse.customerMembers.length > 0">
                     <!-- <div *ngFor="let doctor of orderDetails.customerResponses.customerMembers"> -->
                     <p *ngIf="orderDetails.customerResponse.customerMembers[0].doctorName">Doctor: {{orderDetails.customerResponse.customerMembers[0].doctorName}} </p>
-                    <p *ngIf="orderDetails.customerResponse.customerMembers[0].doctorPhone">Doctor ContactNo: {{orderDetails.customerResponse.customerMembers[0].doctorPhone | slice:0:3}}-{{orderDetails.customerResponse.customerMembers[0].doctorPhone| slice:3:6}}-{{orderDetails.customerResponse.customerMembers[0].doctorPhone
-                        | slice:6:10}}
+                    <p *ngIf="orderDetails.customerResponse.customerMembers[0].doctorPhone">Doctor ContactNo: {{orderDetails.customerResponse.customerMembers[0].doctorPhone | slice:0:3}}-{{orderDetails.customerResponse.customerMembers[0].doctorPhone| slice:3:6}}-{{orderDetails.customerResponse.customerMembers[0].doctorPhone|
+                        slice:6:10}}
                     </p>
                     <!-- </div> -->
                     <!-- <div *ngFor="let doctor of orderDetails.customerResponses.customerMembers"> -->

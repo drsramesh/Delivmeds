@@ -6,10 +6,12 @@
 export const environment = {
   production: false,
   // for Dev
-          //  host: 'http://35.153.176.128/'
+        //     host: 'http://35.153.176.128/',
+        //       channel: 'channel_dev_'
   
   //for QA
-            host: 'http://54.210.195.158/'
+            host: 'http://54.210.195.158/',
+            channel: 'channel_'
             
    
 };

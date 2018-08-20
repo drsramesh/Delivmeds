@@ -83,7 +83,7 @@
             </p>
             <div class="sign-pass">
                 <div class="ui-float-label form-control">
-                    <input id="address1" type="text" size="30" formControlName="address" maxlength="50" pInputText required>
+                    <input id="address1" type="text" size="30" formControlName="address" maxlength="100" pInputText required>
 
                     <span class="error" *ngIf="  signInForm.get('address').touched " style="color:red"> 
                             <span *ngIf="signInForm.hasError('required', 'address')">Address Line 1 is required</span>
@@ -93,7 +93,7 @@
                     <label for="float-input" class=""> Address Line 1 *</label>
                 </div>
                 <div class="ui-float-label form-control">
-                    <input id="street" type="text" size="30" formControlName="street" maxlength="50" pInputText>
+                    <input id="street" type="text" size="30" formControlName="street" maxlength="100" pInputText>
                     <!-- <span class="error" *ngIf="signInForm.get('street').touched  && signInForm.hasError('required', 'street')" style="color:red"> Street is Required</span> -->
                     <label for="float-input" class="">Address Line 2 (Optional)</label>
                 </div>

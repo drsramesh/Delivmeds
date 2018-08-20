@@ -121,32 +121,7 @@ export class MyAccountComponent implements OnInit {
 		
 		//this.userdetails.setUser(res['user'])
 		this.weekdays= [
-		
-		
-		 
-		
-	// 	 {
-	// 	   'name':'Monday',
-	// 	   'dayOfWeek': 2
-	// 	 },
-	// 	 {
-	// 	   'name':'Tuesday',
-	// 	   'dayOfWeek': 3
-	// 	 },
-	// 	 {
-	// 	   'name':'Wednesday',
-	// 	   'dayOfWeek': 4
-	// 	  },
-	// 	  {
-	// 	   'name':'Thursday',
-	// 	   'dayOfWeek': 5
-	//    },
-	//    {
-	// 	   'name':'Friday',
-	// 	   'dayOfWeek': 6
-	//    },
-
-	   
+	
 	   {
 		   'name':'Weekdays',
 		   'dayOfWeek': 1
@@ -159,14 +134,7 @@ export class MyAccountComponent implements OnInit {
 		'name':'Sunday',
 		'dayOfWeek': 3
 		},
-	//    {
-	// 	   'name':'WeekEnds',
-	// 	   'dayOfWeek': 9
-	//    },
-	//    {
-	// 	   'name':'Complete Week',
-	// 	   'dayOfWeek': 10
-	//    },
+
 	   
 		]
 	} else {
@@ -191,7 +159,6 @@ export class MyAccountComponent implements OnInit {
  
  })
  }
- 
  
  })
 }
@@ -297,7 +264,7 @@ if(data['pharmacyBusinessHours']){
  
  if(data['pharmacyServices']){
  this.updatedInformation.push(data['pharmacyServices']);
- this.tempKeys = Object.values(this.updatedInformation[0]);
+//  this.tempKeys = Object.values(this.updatedInformation[0]);
  this.tempKeys = Object.keys(this.updatedInformation[0]).map(itm => this.updatedInformation[0][itm]);
  this.tempValues = Object.keys(this.updatedInformation[0]);
  let index = this.tempValues;
@@ -309,7 +276,8 @@ if(data['pharmacyBusinessHours']){
 
  if(data['pharmacyInsuranceProviders']){
  this.updateInsurances.push(data['pharmacyInsuranceProviders'])
- this.tempKeysInsurannce = Object.values(this.updateInsurances[0]);
+//  this.tempKeysInsurannce = Object.values(this.updateInsurances[0]);
+ this.tempKeysInsurannce = Object.keys(this.updateInsurances[0]).map(itm => this.updateInsurances[0][itm]);
  this.tempValues1 = Object.keys(this.updateInsurances[0])
  let index = this.tempValues1
  this.tempValues1.forEach(element => {
@@ -429,7 +397,8 @@ if(data['pharmacyBusinessHours']){
  timeValue1_ampm :any;
  pharmacyTiming = [];
  newPharmcay2 = [];
- addPharmacy(newPharmacy: string, newPharmacy1: string, newPharmacy2) {
+ newPharmacy: string = ""
+ addPharmacy(newPharmacy, newPharmacy1: string, newPharmacy2) {
  if(!((newPharmacy) && (newPharmacy1 ) && (newPharmacy2))){
 	this.msgs = [];
 	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please enter complete details in Pharmacy Timings.'});
@@ -500,8 +469,7 @@ if(-1< min && min<10){
 					closes: this.timeValue1.concat(" "+this.timeValue1_ampm)
 					}
 				this.updatePharmacy.push(pushingElement);
-				this.pharmacyTiming.push(obj)
-				
+				this.pharmacyTiming.push(obj)	
 		this.date7 =""
 		this.date8 =""
 		this.week = this.weekdays[8]	
@@ -589,9 +557,9 @@ showDialog(){
 }
 
  deleteUser1(user,index){
-	 console.log(user);
+	//  console.log(user);
 	 this.confirmService.confirm({
-		message: 'Are you sure that you want delete the user?',
+		message: 'Are you sure you want delete the user?',
 		accept: () => {
 			//Actual logic to perform a confirmation
 			const params = {
@@ -601,11 +569,14 @@ showDialog(){
 				 
 			this.http.delete(environment.host + 'pharmacy/user?id='+params.id).subscribe((res: any)=> {
 				this.userInformation.pharmacyUsers.splice(index,1)
-				console.log(index);
+				// console.log(index);
 				
 				this.display1 = false
 			   
 			});
+		},
+		reject: () => {
+			this.display1 = false
 		}
 	});
 	// let i = this.userInformation.pharmacyUsers.indexOf
@@ -642,6 +613,7 @@ showDialog(){
  
  //update complete details
  aboutPharmacy: string;
+ checked
  submitDetails(details) {
  let ids = this.selectedServices.map((e)=> {return e['id']})
  let insuranceIds = this.selectedInsuranceProviders.map((e) => {return e['id']})
@@ -737,7 +709,7 @@ if(this.tempKeysInsurannce.length>0 ){
  pharmacyBusinessHours: this.pharmacyTiming.concat(this.pharmacyarrays),
 pharmacyServices: id,
 pharmacyInsuranceProviders: insuranceId,
- delivery:this.userInformation.delivery,
+ delivery:true,
  pickup: this.userInformation.pickup,
  pharmacyUsers: this.users.concat(constantUsers)
 

@@ -70,7 +70,9 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { MessageService } from 'primeng/components/common/messageservice';
 import { SingleDotDirective } from './single-dot.directive';
 
+//thirdParty
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+// import { NKDatetimeModule } from 'ng2-datetime/ng2-datetime';
 
 
 import { InternationalPhoneNumberModule } from 'ngx-international-phone-number';
@@ -78,6 +80,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { FooterComponent } from './footer/footer.component';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ConfirmationService} from 'primeng/api';
+import { TimeDirective } from './time.directive';
 export function init_app(appLoadService: AppInitService, pb: PubnubService) {
 
   return () => appLoadService.initializeApp();
@@ -100,6 +103,7 @@ export function init_app(appLoadService: AppInitService, pb: PubnubService) {
     ChangePasswordComponent,
     SingleDotDirective,
     FooterComponent,
+    TimeDirective,
   ],
   imports: [
     BrowserModule,
@@ -138,6 +142,7 @@ export function init_app(appLoadService: AppInitService, pb: PubnubService) {
     InfiniteScrollModule,
     Ng2SearchPipeModule,
     ConfirmDialogModule,
+    // NKDatetimeModule  //Third party
     
     
  // AngularFireModule.initializeApp(config)

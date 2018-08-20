@@ -20,7 +20,7 @@ import { UserService } from '../services/user.service'
 })
 export class HeaderComponent implements OnInit {
   nav: MenuItem[];
-  msgs = [];
+  // msgs = [];
   showButton: boolean = false;
   userInformation : any = [];
   constructor(private router: Router,
@@ -66,8 +66,8 @@ export class HeaderComponent implements OnInit {
   logout(){
       // this.userService.logout().subscribe((res:any)=>{
         let pb = this.injector.get(PubnubService)
-        pb.unSubscribe("channel_"+ localStorage.getItem('pharmacyId'))
-        this.msgs = [];
+        pb.unSubscribe(environment.channel+ localStorage.getItem('pharmacyId'))
+        // this.msgs = [];
         this.router.navigate(["/login"])
      
         localStorage.clear();

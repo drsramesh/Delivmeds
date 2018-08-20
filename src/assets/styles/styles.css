@@ -568,6 +568,7 @@
         padding: 10px 0px;
         border-bottom: 1px solid #e0e0e0;
         background: #fff;
+        z-index: 999;
     }
     
     .header-logo .logo {
@@ -586,6 +587,18 @@
         font-weight: 300;
         padding: 15px 0 0 40px;
         color: #222222;
+    }
+    
+    input[type=password]::-ms-reveal,
+    input[type=password]::-ms-clear {
+        display: none;
+    }
+    
+    input[type=search]::-ms-reveal,
+    input[type=search]::-ms-clear {
+        display: none;
+        width: 0;
+        height: 0;
     }
     
     .header-nav {
@@ -1378,6 +1391,20 @@
     
     .pop-dailouge .ui-dialog .ui-dialog-content {
         overflow: inherit
+    }
+    
+    .note-comments {
+        color: #01a1a8;
+        font-weight: 500;
+    }
+    
+    .pop-dailouge .ui-button.btn-group-green,
+    .pop-dailouge .ui-button.ui-button-secondary.ui-state-default.btn-secondary-green {
+        height: 30px;
+    }
+    
+    .pop-dailouge .ui-dialog-footer {
+        padding: 8px 10px;
     }
     
     .search-results {
