@@ -17,6 +17,7 @@ import { Logs } from 'selenium-webdriver';
 import { PubNubAngular } from 'pubnub-angular2';
 import { LazyLoadEvent } from 'primeng/api';
 import { PubnubService } from '../pubnub.service';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 
 interface SortEvent {
@@ -50,7 +51,8 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private loader: PreloadService,
     private auth: DelivMedsAuthService,private pb: PubnubService,
-  private pubnub:PubNubAngular ) { }
+  private pubnub:PubNubAngular,
+  private messageService: MessageService) { }
 
   ngOnInit() {
   
@@ -99,9 +101,15 @@ OrderList() {
   
   this.loader.open();
   this.http.get(environment.host + 'order/pharmacy').subscribe((res: any) => {
-    if(res.statusCode === 401) {
+    if(res.statusCode === 401 && res.errors[0] ==="no orders found") {
       this.loader.close();
       console.log('No orders Found.');
+      }
+      else if( res.statusCode == 401 && res.errors[0] ==="Session Expired"){
+          this.msgs = [];
+           this.router.navigate(['/login']);
+           this.loader.close();
+           this.messageService.add({severity: 'error', summary: 'error', detail: 'Session got end, please Login.'});   
       } else {
            
          this.Orders = res['object']['orders'];
@@ -183,14 +191,33 @@ showDialog(Order){
    }
    console.log(params);
    
+  // this.auth.statusOrder(params).subscribe((res:any) => {
+  //   // console.log(params);
+  //   console.log(res);
+  //   Order.status = res.object.status;
+  //   this.display = false
+  //   //  this.OrderList();
+  //   Order.loading = false;
+  // });  
   this.auth.statusOrder(params).subscribe((res:any) => {
-    // console.log(params);
-    console.log(res);
-    Order.status = res.object.status;
-    this.display = false
-    //  this.OrderList();
-    Order.loading = false;
-  });  
+    if ( res.statusCode == 401 && res.errors[0] ==="Session Expired") {
+      this.display = false
+      Order.loading = false;
+     this.msgs = [];
+     this.router.navigate(['/login']);
+     this.messageService.add({severity: 'error', summary: 'error', detail: 'Session got end, please Login.'});
+   // console.log(params);
+  
+   }else if(res.code === 1) {
+    
+     console.log(res);
+     Order.status = res.object.status;
+     this.display = false
+     //  this.OrderList();
+     Order.loading = false;
+     
+   }
+  }); 
   
  }
 
@@ -207,6 +234,7 @@ showDialog(Order){
  }
 
  ReadyForPickup(Order){
+  
   Order.loading = true;
 
 
@@ -215,13 +243,24 @@ showDialog(Order){
      status: 6
    } 
   this.auth.statusOrder(params).subscribe((res:any) => {
-    // console.log(params);
-    Order.status = res.object.status;
+  if ( res.statusCode == 401 && res.errors[0] ==="Session Expired") {
     this.display1 = false
     Order.loading = false;
-    // this.OrderList();
+   this.msgs = [];
+   this.router.navigate(['/login']);
+   this.messageService.add({severity: 'error', summary: 'error', detail: 'Session got end, please Login.'});
+ // console.log(params);
+
+ }else if(res.code === 1) {
+  
+   console.log(res);
+   Order.status = res.object.status;
+   this.display1 = false
+   //  this.OrderList();
+   Order.loading = false;
    
-  });
+ }
+}); 
  }
 
 

@@ -20,6 +20,7 @@ import { MyAccountComponent } from './my-account/my-account.component';
 // Third party frameworks
 import { TextMaskModule } from 'angular2-text-mask';
 import { ImageViewerModule } from "ngx-image-viewer";
+// import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -144,12 +145,6 @@ import { TermsConditionsComponent } from './terms-conditions/terms-conditions.co
     InfiniteScrollModule,
     Ng2SearchPipeModule,
     ConfirmDialogModule,
-    // NKDatetimeModule  //Third party
-    
-    
- // AngularFireModule.initializeApp(config)
-  
-    // Ng4SpinnerModule// add it to the imports
     
   ],
 

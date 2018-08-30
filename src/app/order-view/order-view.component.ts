@@ -12,6 +12,7 @@ import { PreloadService } from '../services/preload.service'
 import { DelivMedsAuthService } from '../services/deliv-meds-auth.service';
 import { DISABLED } from '@angular/forms/src/model';
 import { element } from 'protractor';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 
 
@@ -57,7 +58,8 @@ deletedIndex:number;
  private router: Router,
  private loader: PreloadService,
  private auth: DelivMedsAuthService,
-private route: ActivatedRoute) { 
+private route: ActivatedRoute,
+private messageService: MessageService) { 
  this.images = [];
   // this.images.push({source:'assets/images/default.png', thumbnail: 'assets/images/default.png', title: 'Prescription'});
  }
@@ -419,29 +421,82 @@ showDialog2(){
 }
 
 
-ReadyForPickup(){
-  let id = this.route.snapshot.paramMap.get('id');
-  console.log(id);
+// ReadyForPickup(){
+//   let id = this.route.snapshot.paramMap.get('id');
+//   console.log(id);
   
-  let params = { 
+//   let params = { 
+//    orderId:id,
+//     status: 6
+//   }
+//   console.log(params);
+  
+//  this.auth.statusOrder(params).subscribe((res:any) => {
+//    console.log(params);
+//    console.log(res);
+//    this.display2 = false;
+//    this.router.navigate(['/orders']);
+//  });
+// }
+
+ReadyForPickup(){
+  let id = +this.route.snapshot.paramMap.get('id');
+  console.log(id);
+  let params = {
+
    orderId:id,
     status: 6
   }
   console.log(params);
+    
+  this.auth.statusOrder(params).subscribe((res:any) => {
+    if ( res.statusCode == 401 && res.errors[0] ==="Session Expired") {
+      this.display2 = false
+     this.msgs = [];
+     this.router.navigate(['/login']);
+     this.messageService.add({severity: 'error', summary: 'error', detail: 'Session got end, please Login.'});
+   // console.log(params);
   
- this.auth.statusOrder(params).subscribe((res:any) => {
-   console.log(params);
-   console.log(res);
-   this.display2 = false;
-   this.router.navigate(['/orders']);
- });
-}
+   }else if(res.code === 1) {
+    
+    console.log(params);
+    console.log(res);
+    this.display2 = false;
+    this.router.navigate(['/orders']);
+     
+   }
+  }); 
+  
+ }
+
+
 
 display3: boolean = false;
 car_one: any;
 showDialog3(){
  this.display3 = true;
 }
+
+// Delivered(){
+//   let id = +this.route.snapshot.paramMap.get('id');
+//   console.log(id);
+//   let params = {
+
+//    orderId:id,
+//     status: 7
+//   }
+//   console.log(params);
+  
+//  this.auth.statusOrder(params).subscribe((res:any) => {
+//    console.log(params);
+//    console.log(res);
+//    this.display3 = false;
+//    this.router.navigate(['/orders']);
+  
+//  });  
+
+ 
+// }
 
 Delivered(){
   let id = +this.route.snapshot.paramMap.get('id');
@@ -452,17 +507,26 @@ Delivered(){
     status: 7
   }
   console.log(params);
+    
+  this.auth.statusOrder(params).subscribe((res:any) => {
+    if ( res.statusCode == 401 && res.errors[0] ==="Session Expired") {
+      this.display3 = false
+     this.msgs = [];
+     this.router.navigate(['/login']);
+     this.messageService.add({severity: 'error', summary: 'error', detail: 'Session got end, please Login.'});
+   // console.log(params);
   
- this.auth.statusOrder(params).subscribe((res:any) => {
-   console.log(params);
-   console.log(res);
-   this.display3 = false;
-   this.router.navigate(['/orders']);
+   }else if(res.code === 1) {
+    
+    console.log(params);
+    console.log(res);
+    this.display3 = false;
+    this.router.navigate(['/orders']);
+     
+   }
+  }); 
   
- });  
-
- 
-}
+ }
 
  setFormTouched(form_obj: any) {
  Object.keys(form_obj.controls).forEach(field => {
@@ -482,7 +546,10 @@ showcopay: Boolean = false
  this.http.get(environment.host + 'order/pharmacy/' + id, {headers: header}).subscribe((res: any) => {
    
 
- if(res.statusCode === 401) {
+ if( res.statusCode == 401 && res.errors[0] ==="Session Expired") {
+    this.msgs = [];
+     this.router.navigate(['/login']);
+     this.messageService.add({severity: 'error', summary: 'error', detail: 'Session got end, please Login.'});   
  //alert('zipcode is not servicable')
  this.msgs = [];
  this.msgs.push({severity: 'error', summary: 'Error', detail: 'No Orders Found '});
@@ -518,9 +585,12 @@ showcopay: Boolean = false
   
   
  
+//  if(this.orderDetails.rxImage){
+//  this.imageSrc.push( "https://s3.amazonaws.com/deliv-meds-resources/" + this.orderDetails.rxImage)
+//  }
  if(this.orderDetails.rxImage){
- this.imageSrc.push( "https://s3.amazonaws.com/deliv-meds-resources/" + this.orderDetails.rxImage)
- }
+  this.imageSrc.push( "https://s3.amazonaws.com/deliv-meds-assets/" + this.orderDetails.rxImage)
+  }
  this.customerResponses= res.object.customerResponse;
  this.addRowWithValues(this.orderDetails.orderItems);
  this.loader.close();

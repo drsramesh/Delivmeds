@@ -4,7 +4,7 @@
         <img src="assets/images/Logo.png" alt="">
     </figure>
     <div class="sign-form">
-        <form [formGroup]="signInForm" (ngSubmit)="signUp(signInForm)">
+        <form [formGroup]="signInForm" (ngSubmit)="registerPopup(signInForm)">
             <div class="sign-pass">
                 <div class="ui-float-label form-control">
                     <input id="pharmacyName" type="text" size="30" pInputText formControlName="pharmacyName" maxlength="30" required>
@@ -36,7 +36,7 @@
                     <span>
                            
                             <p-radioButton name="group1" value="false" label="No" formControlName="deliveryType" (onClick) = "showDialog1()" ></p-radioButton>
-                            <p-dialog class="pop-dailouge" header="" [(visible)]="display" [modal]="true"  [width]="350" [minWidth]="200" [minY]="70"  [baseZIndex]="10000">
+                            <p-dialog class="pop-dailouge" header="Information" [(visible)]="display" [modal]="true"  [width]="350" [minWidth]="200" [minY]="70"  [baseZIndex]="10000">
     <span>We're sorry, But we are in the process of setting up DelivMeds Delivery Services. So, you can't able to Register</span>
                     <p-footer>
                         <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Ok"></button>
@@ -93,7 +93,7 @@
                     <label for="float-input" class=""> Address Line 1 *</label>
                 </div>
                 <div class="ui-float-label form-control">
-                    <input id="street" type="text" size="30" formControlName="street" maxlength="100" pInputText>
+                    <input id="street" type="text" size="30" formControlName="street" maxlength="15" pInputText>
                     <!-- <span class="error" *ngIf="signInForm.get('street').touched  && signInForm.hasError('required', 'street')" style="color:red"> Street is Required</span> -->
                     <label for="float-input" class="">Address Line 2 (Optional)</label>
                 </div>
@@ -135,3 +135,9 @@
         <p class="sign-up-account">Already have an account?<a routerLink="/login">LOGIN</a></p>
     </div>
 </div>
+
+<p-confirmDialog header="Your Account is Under Review" class="pop-dailouge" #cd>
+    <p-footer>
+        <button type="button" class="btn-group-green" pButton (click)="cd.accept()" label="Register"></button>
+    </p-footer>
+</p-confirmDialog>

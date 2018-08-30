@@ -16,6 +16,7 @@ import { finalize } from 'rxjs/operators';
 import { PreloadService } from '../services/preload.service'
 import { PubNubAngular } from 'pubnub-angular2';
 import { PubnubService } from '../pubnub.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -71,9 +72,7 @@ submitted: boolean;
           this.msgs = []; 
           this.messageService.add({severity: 'success', summary: 'Success', detail: 'Successfully logged in.'});
           localStorage.setItem('pharmacyId', res.pharmacyId)
-            this.pb.subscribe("channel_"+res.pharmacyId)
-
-             
+            this.pb.subscribe(environment.channel+res.pharmacyId)
            this.loader.close();
           this.tokenService.storeTokens(
             res['authentication_token']
@@ -95,12 +94,9 @@ submitted: boolean;
             res['authentication_token']
            // res['refresh_token'],
           );
-        
-      
-         
         } else if(res.statusCode === 401 && res.errors[0] ==="Please verify your email before you login"){
           this.msgs = [];
-          this.msgs.push({severity: 'error', summary: 'Error', detail: 'Delivmeds has sent a mail to your registered email id. Please verify your email ID and login.'});
+          this.msgs.push({severity: 'error', summary: 'error', detail: 'Delivmeds has sent a mail to your registered email id. Please verify your email ID and login.'});
            this.loader.close();
 
         }

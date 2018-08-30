@@ -10,8 +10,14 @@ export const environment = {
         //       channel: 'channel_dev_'
   
   //for QA
-            host: 'http://54.210.195.158/',
-            channel: 'channel_'
+            // host: 'http://54.210.195.158/',
+            // channel: 'channel_'
             
+
+  //for SandBox
+              host: 'https://sandbox-api.delivmeds.com/',
+              channel: 'channel_sandbox_'
+          
+
    
 };

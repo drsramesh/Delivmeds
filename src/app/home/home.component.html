@@ -55,17 +55,10 @@
             </td>
             <td style="width: 200px" routerLink="/order-view/{{Order.id}}">
                 {{Order.patientName}}
-                <!-- <div *ngIf="Order.customerResponse.customerMembers && Order.customerResponse.customerMembers.length>0; else patientData ">
-                    {{Order.customerResponse.customerMembers[0].firstName}}{{Order.customerResponse.customerMembers[0].lastName}}
-                </div>
-                <ng-template #patientData>
-                    <div> {{Order.customerResponse.firstName}} {{Order.customerResponse.lastName}}
-                    </div>
-                </ng-template> -->
 
             </td>
             <td style="width: 200px" routerLink="/order-view/{{Order.id}}">
-                {{Order.createdOn }}
+                {{Order.createdOn}}
             </td>
             <td style="width:450px" routerLink="/order-view/{{Order.id}}">
 
@@ -74,41 +67,33 @@
                 <label *ngIf="Order.status == 3"> Rejected</label>
                 <label *ngIf="Order.status == 4"> Rejected</label>
                 <label *ngIf="Order.status == 5"> Filling Pending</label>
-                <!-- <label *ngIf="Order.status == 5 && Order.deliveryType==2 "> Filling Pending</label> -->
+                <!-- <label *ngIf="Order.status == 5 && Order.deliveryType==2 "> In Transit</label> -->
                 <label *ngIf="Order.status == 6"> Awaiting for Pickup </label>
-                <!-- <label *ngIf="Order.status == 6  && Order.deliveryType==2"> Awaiting for Pickup</label> -->
+                <!-- <label *ngIf="Order.status == 6  && Order.deliveryType==2">  In Transit</label> -->
                 <label *ngIf="Order.status == 7">Delivered on {{Order.lastModifiedOn}}</label>
             </td>
-
-            <!-- <input type="hidden" [(ngModel)]="Order_one" /> {{Order_one}} -->
             <td style="width:150px">
 
                 &nbsp;
             </td>
-            <!-- {{Order.customerResponse.phone}} -->
-            <!-- {{Order| json}} -->
-            <td style="max-width:350px">
+            <td style="width:350px">
                 <p class="orders-loading" *ngIf="Order.loading"> <i class="fa fa-spinner fa-2x fa-spin"></i></p>
-                <div class="display-inline">
+                <div>
                     <div *ngIf="Order.status == 5 &&  Order.deliveryType==1 && Order.paymentDone ==false">
-
                         <button pButton type="button" (click)="ReadyForPickup(Order)" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
-
                     </div>
 
                     <div *ngIf="Order.status == 5 &&  Order.deliveryType==1 && Order.paymentDone ==true ">
-
                         <button pButton type="button" (click)="showDialog1(Order)" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
-
                     </div>
 
                     <div *ngIf="Order.status == 5 &&  Order.deliveryType==2 && Order.paymentDone ==true ">
                         <button pButton type="button" (click)="showDialog1(Order)" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
-
                     </div>
+                    <div class="clearfix"></div>
                 </div>
 
-                <div class="display-inline">
+                <div>
                     <div *ngIf="Order.status == 6 &&  Order.deliveryType==2 ">
                         <button pButton type="button" (click)="Delivered(Order)" label="Delivered" class="ui-button-secondary btn-secondary-green pull-right"></button>
                     </div>
@@ -119,22 +104,18 @@
 
                     <div *ngIf="Order.status == 6 && Order.deliveryType==1 && Order.paymentDone ==false">
                         <button pButton type="button" (click)="showDialog(Order)" label="Delivered" class="ui-button-secondary btn-secondary-green pull-right"></button>
-
                     </div>
+                    <div class="clearfix"></div>
                 </div>
             </td>
-            <!-- <td>
-
-            </td> -->
 
         </tr>
     </ng-template>
 
 
 </p-table>
-<!-- </div> -->
 
-<p-dialog header="Confirmation" class="pop-dailouge" [(visible)]="display" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+<p-dialog header="Payment Confirmation" class="pop-dailouge" [(visible)]="display" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
     <span>Patient choose to pay at Register. Had you received prescription amount?   </span>
     <p-footer>
         <input type="hidden" [(ngModel)]="Order_one" />
@@ -143,9 +124,8 @@
     </p-footer>
 </p-dialog>
 
-<p-dialog header="Confirmation" class="pop-dailouge" [(visible)]="display1" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+<p-dialog header="Payment Confirmation" class="pop-dailouge" [(visible)]="display1" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
     <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{Order_two?.customerResponse?.mobile_number | slice:0:3}}-{{Order_two?.customerResponse?.mobile_number | slice:3:6}}-{{Order_two?.customerResponse?.mobile_number | slice:6:10}} ?  </span>
-    <!-- <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{Order_two?.customerResponse?.mobile_number }} ?  </span> -->
     <p-footer>
         <!-- <input type="hidden" [(ngModel)]="Order_two" /> -->
         <button type="button" class="btn-group-green" pButton (click)="ReadyForPickup(Order_two)" label="Paid"></button>
@@ -153,9 +133,8 @@
     </p-footer>
 </p-dialog>
 
-<p-dialog header="Confirmation" class="pop-dailouge" [(visible)]="display1" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+<p-dialog header="Payment Confirmation" class="pop-dailouge" [(visible)]="display1" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
     <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{Order_two?.customerResponse?.mobile_number | slice:0:3}}-{{Order_two?.customerResponse?.mobile_number | slice:3:6}}-{{Order_two?.customerResponse?.mobile_number | slice:6:10}} ?  </span>
-    <!-- <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{Order_two?.customerResponse?.mobile_number }} ?  </span> -->
     <p-footer>
         <!-- <input type="hidden" [(ngModel)]="Order_two" /> -->
         <button type="button" class="btn-group-green" pButton (click)="ReadyForPickup(Order_two)" label="Paid"></button>

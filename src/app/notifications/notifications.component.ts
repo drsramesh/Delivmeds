@@ -44,32 +44,33 @@ export class NotificationsComponent implements OnInit {
         { name: 'Rejected Orders', value: 'Rejected' },
         { name: 'Completed Orders', value: 'Delivered' }
     ];
-    this.notifications = [
-      {
-        "label":'Waiting for Delevery',
-        "id": 1
-      },
-      {
-        "label":'Awating for payment confirmation',
-        "id": 2
-      },
-      {
-        "label":'Transit',
-        "id": 3
-      },
-      {
-        "label":'New',
-        "id": 4
-      },
-      {
-        "label":'Rejected',
-        "id": 5
-      },
-      {
-        "label":'Delivered',
-        "id": 6
-      }
-    ];
+    // this.notifications = [];
+    //  this.notifications = [
+    //   {
+    //     "label":'Waiting for Delevery',
+    //     "id": 1
+    //   },
+    //   {
+    //     "label":'Awating for payment confirmation',
+    //     "id": 2
+    //   },
+    //   {
+    //     "label":'Transit',
+    //     "id": 3
+    //   },
+    //   {
+    //     "label":'New',
+    //     "id": 4
+    //   },
+    //   {
+    //     "label":'Rejected',
+    //     "id": 5
+    //   },
+    //   {
+    //     "label":'Delivered',
+    //     "id": 6
+    //   }
+    // ];
     }
     else{
       this.router.navigate(['\login'])

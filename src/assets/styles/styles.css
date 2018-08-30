@@ -198,6 +198,7 @@
     .orders-table .ui-table .ui-table-tbody>tr>td:last-child {
         text-align: right;
         padding-right: 20px;
+        position: relative;
     }
     
     .orders-table .ui-table .ui-table-tbody>tr:hover {
@@ -606,14 +607,15 @@
     }
     
     .orders-loading {
-        position: relative;
+        position: absolute;
         display: inline-block;
-        top: -8px;
+        top: 10px;
+        left: 25px;
     }
     
     .footer {
         padding: 10px 0;
-        background: rgba(0, 0, 0, 1);
+        background: #57575a;
         text-align: center;
         position: fixed;
         bottom: 0;
@@ -622,8 +624,9 @@
     }
     
     .footer p {
-        font-size: 14px;
+        font-size: 12px;
         color: #fff;
+        letter-spacing: 1px;
     }
     
     .footer a {
@@ -632,6 +635,7 @@
         border-left: 1px solid #fff;
         margin-left: 10px;
         cursor: pointer;
+        color: #fff;
     }
     
     .footer a:hover {
@@ -1469,8 +1473,9 @@
         padding: 20px 0;
     }
     
-    .terms-conditions .terms-logo img {
-        width: 150px;
+    .terms-conditions h2 {
+        margin-bottom: 20px;
+        color: #e85c25;
     }
     
     .terms-list p {
@@ -1492,6 +1497,12 @@
     
     .null-text {
         display: block;
+    }
+    
+    .terms-logo {
+        width: 250px;
+        margin: 30px auto;
+        margin-top: -90px;
     }
     /* responsive----------------- */
     

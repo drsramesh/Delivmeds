@@ -54,6 +54,7 @@ export class MyAccountComponent implements OnInit {
  updateService: any = [];
  updateInsuranceProvider= [];
  updatePharmacy = [];
+ updateTime = [];
  addNewUser: any = [];
  //pharmacyDetailsTimingsArrayList : PharmacyDetails[];
  //pharmacyDeatilsTimings: PharmacyDetails;
@@ -61,6 +62,7 @@ export class MyAccountComponent implements OnInit {
  pharmacyname: string[];
  
  constructor(private fb: FormBuilder,
+	
 	private fb1: FormBuilder,
  private http: HttpClient,
  private auth: DelivMedsAuthService,
@@ -88,6 +90,7 @@ export class MyAccountComponent implements OnInit {
  selectedInsuranceProviders = [];
  fromTime: string[] =[];
  week: WeekDay;
+ week1: WeekDay;
  previousVal: any;
  currentVal: any;
  // toTime: [ ];
@@ -250,15 +253,25 @@ this.editForm.patchValue({city: "" ,state: ""});
  RegisteredDetailsService() {
  const header = {'authentication_token': localStorage.getItem('authentication_token')};
  this.loader.open();
- this.http.get(environment.host + 'pharmacy/profile', { headers: header} ).subscribe(data =>
+ this.http.get(environment.host + 'pharmacy/profile', { headers: header} ).subscribe((data:any) =>
  {
- 
+ if(data.statusCode == 401 && data.errors[0] ==="Session Expired"){
+	this.msgs = [];
+	this.router.navigate(['/login']);
+	this.messageService.add({severity: 'error', summary: 'error', detail: 'Session got end, please Login.'});
+ }
  this.userInformation = data;
 
  this.loader.close();
 if(data['pharmacyBusinessHours']){
     this.userInformation.pharmacyBusinessHours.forEach(element => {
       this.addPharmacyTimingsFromBackend(element);
+   })
+  }
+// deliveryHours
+  if(data['pharmacyDeliveryHours']){
+    this.userInformation.pharmacyDeliveryHours.forEach(element => {
+      this.addDeliveryTimingsFromBackend(element);
    })
   }
  
@@ -305,15 +318,25 @@ if(data['pharmacyBusinessHours']){
  serviceOfferingsService() {
  
  const header = {'authentication_token': localStorage.getItem('authentication_token')};
- this.http.get(environment.host + 'pharmacy/service_offerings', { headers: header} ).subscribe((data) =>
+ this.http.get(environment.host + 'pharmacy/service_offerings', { headers: header} ).subscribe((data:any) =>
+ 
  {
+
+	if(data.statusCode == 401 && data.errors[0] ==="Session Expired"){
+		this.msgs = [];
+     this.router.navigate(['/login']);
+     this.messageService.add({severity: 'error', summary: 'error', detail: 'Session got end, please Login.'});
+	}else {
  this.updateService.push(data['object'])
  // this.updateService = data
  this.servicesOffer.push(this.updateService[0].map((e) => { return { 'label': e.serviceName, 'value': {'name': e.serviceName,'id': e.serviceOfferingId } }
  }))
- this.servicesOffer = this.servicesOffer[0]
+ this.servicesOffer = this.servicesOffer[0];
+}
  });
- }
+}
+
+
 
  addUser(){
 	this.signInForm.reset()
@@ -401,7 +424,7 @@ if(data['pharmacyBusinessHours']){
  addPharmacy(newPharmacy, newPharmacy1: string, newPharmacy2) {
  if(!((newPharmacy) && (newPharmacy1 ) && (newPharmacy2))){
 	this.msgs = [];
-	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please enter complete details in Pharmacy Timings.'});
+	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please enter complete details in Business Hours.'});
  } 
  else {
  let week_time =this.weekdata
@@ -470,7 +493,11 @@ if(-1< min && min<10){
 					}
 				this.updatePharmacy.push(pushingElement);
 				this.pharmacyTiming.push(obj)	
+				console.log(newPharmacy);
+				
 		this.date7 =""
+		console.log(newPharmacy);
+		
 		this.date8 =""
 		this.week = this.weekdays[8]	
 		
@@ -511,6 +538,161 @@ this.date8 =""
  }
 }
  }
+
+
+// Delivery Hours
+pharmacyDeliveryTiming = [];
+
+ addTime(newTime, newTime1: string, newTime2) {
+	 
+	if(!((newTime) && (newTime1 ) && (newTime2))){
+	   this.msgs = [];
+	   this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please enter complete details in Delivery Hours.'});
+	} 
+	else {
+	let week_time =this.weekdata
+	let currentVal = newTime2
+	let hour = new Date(newTime).getHours(); 
+	let min = new Date(newTime).getMinutes();
+   let sHour = "", sHour1 = ''
+   
+   
+	let sMin = '',sMin1 = '';
+   if(-1< min && min<10){
+	   sMin = "0" +min;
+   }else {
+	   sMin = min + ''
+   }
+	var ampm = hour >= 12 ? 'PM' : 'AM';
+	hour = hour % 12;
+	hour = hour ? hour : 12; // the hour '0' should be '12'
+   
+	if(hour<10){
+	   sHour = "0" +hour;
+	   
+   }else {
+	   sHour = hour + '';
+   }
+   
+	this.timeValue = `${sHour}:${sMin}`; 
+	this.timeValue_ampm = ampm;
+   
+	//second field
+	let hour1 = new Date(newTime1).getHours();
+	let min1 = new Date(newTime1).getMinutes();
+   
+   
+	if(-1< min1 && min1<10){
+	   sMin1 = "0" +min1;
+   }else {
+	   sMin1 = min1 + ''
+   }
+	var ampm1 = hour1 >= 12 ? 'PM' : 'AM';
+	hour1 = hour1 % 12;
+	hour1 = hour1 ? hour1 : 12; // the hour '0' should be '12'
+	 if(hour1<10){
+	   sHour1 = "0" +hour1;	
+   }else {
+	   sHour1 = hour1 + '';
+   }
+	this.timeValue1 = `${sHour1}:${sMin1}`;
+	this.timeValue1_ampm = ampm1;
+		let pushingTime = this.timeValue.concat(" "+this.timeValue_ampm) + " to " + this.timeValue1.concat(" "+this.timeValue1_ampm) + " ; " + week_time;
+	   if(this.timeValue_ampm ==this.timeValue1_ampm){ 
+		   if(this.timeValue1 <= this.timeValue ){
+			   console.log(this.timeValue1 <= this.timeValue);
+			   this.msgs = [];
+			   // this.msgs.push({severity: 'error', summary: 'To Time is less than From Time', detail: ''});
+			   this.msgs.push({severity: 'error', summary: 'Error', detail: 'To Time must be greater than From Time.'});
+		   } 
+		   else{
+			   let index = this.updateTime.indexOf(pushingTime);
+			   if (index == -1)
+			   {
+				   let obj = {
+					dayOfWeek: this.weekvalue,
+					startHour: this.timeValue.concat(" "+this.timeValue_ampm),
+					endHour: this.timeValue1.concat(" "+this.timeValue1_ampm)
+					   }
+				   this.updateTime.push(pushingTime);
+				   this.pharmacyDeliveryTiming.push(obj)	
+				   console.log(newTime);
+				   
+		   this.time =""
+		   this.time1 =""
+		   this.week1 = this.weekdays[8]	
+		   
+			   }	 
+				  else {
+				   this.msgs = [];
+				   this.msgs.push({severity: 'error', summary: 'Error', detail: 'Time slot already exist.'});
+		   this.time =""
+		   this.time1 =""	
+			this.week1 = this.weekdays[8]
+			   }
+		   }
+	   }
+	   else {
+	   let index = this.updateTime.indexOf(pushingTime);
+	   if (index == -1)
+	   {
+		   let obj = {
+			   
+			dayOfWeek: this.weekvalue,
+			startHour: this.timeValue.concat(" "+this.timeValue_ampm),
+			endHour: this.timeValue1.concat(" "+this.timeValue1_ampm)
+			   }
+		   this.updateTime.push(pushingTime);
+		   this.pharmacyDeliveryTiming.push(obj)
+		   
+		   this.time =""
+		   this.time1 =""	
+			this.week1 = this.weekdays[8]	
+   
+	   }	 
+		  else {
+		   this.msgs = [];
+		   this.msgs.push({severity: 'error', summary: 'Error', detail: 'Time slot already exist.'});
+		   this.time =""
+		   this.time1 =""	
+			this.week1 = this.weekdays[8]
+	   }
+	}
+   }
+	}
+
+	// delivery hours end
+
+	// Delivery Hours From backend
+	addDeliveryTimingsFromBackend(input){
+	
+		let arr = this.weekdays.filter((e)=> {
+			if (e['dayOfWeek'] == input['dayOfWeek']) 
+			{
+	
+				return e['name']
+			} 		
+		 })
+			let obj = {
+				dayOfWeek: arr[0]["name"],
+				startHour: input['startHour'],
+				endHour: input['endHour']
+				// pharmacyDeliveryTiming
+			}	 
+			let pushingTime = obj.startHour + " to " + obj.endHour + " ; " + obj.dayOfWeek;
+			let index = this.updateTime.indexOf(pushingTime);
+			if (index == -1)
+			{
+				 this.updateTime.push(pushingTime);
+				 
+			}	else {
+				this.msgs = [];
+				this.msgs.push({severity: 'error', summary: 'Error', detail: 'Time slot already exist.'});
+				this.time =""
+				this.time1 =""	
+				 this.week1 = this.weekdays[8]
+			}	
+	 }
 
  addPharmacyTimingsFromBackend(input){
 	
@@ -601,6 +783,16 @@ showDialog(){
  this.pharmacyarrays.splice(index,1)
  }
 
+//  Delivery Hours
+deleteDeliveryTimings(index) {
+	let i = this.updateTime.indexOf
+	this.updateTime.splice(index,1)
+ this.userInformation.pharmacyDeliveryHours.splice(index,1)
+	 this.pharmacyDeliveryTiming.splice(index,1);
+	 this.pharmacyDeliveryHoursarrays.splice(index,1)
+	}
+   
+
  deletePharmacyTimings1(index) {
  let i = this.userInformation.pharmacyBusinessHours.indexOf
  // this.updatePharmacy.splice(index,1)
@@ -624,12 +816,15 @@ showDialog(){
  phoneNo : this.userInformation.phoneNo,
  bio: this.aboutPharmacy || '',
  pharmacyBusinessHours: this.pharmacyTiming,
+ pharmacyDeliveryHours: this.pharmacyDeliveryTiming || [],
  pharmacyServices: ids ,
  pharmacyInsuranceProviders: insuranceIds,
   delivery:this.userInformation.delivery,
  pickup: this.userInformation.pickup,
  pharmacyUsers: this.newUserDetails
  };
+ console.log(profilepageObj);
+ 
  if(this.userInformation.pickup == false && this.userInformation.delivery == false){
 	 this.msgs = [];
 	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Delivery type.'});
@@ -655,6 +850,13 @@ showDialog(){
  this.msgs.push({severity: 'error', summary: ' Please provide atleast one Service offered', detail: 'Update unsuccessful.'});
  this.loader.close(); 
  }
+ else if(res.statusCode == 401  && res.errors[0] ==="Session Expired"){
+	this.loader.close(); 
+	this.msgs = [];
+	this.router.navigate(['/login']);
+	this.messageService.add({severity: 'error', summary: 'error', detail: 'Session got end, please Login.'});
+
+ }
  }, (err) => {
  this.loader.close();
  this.msgs = [];
@@ -667,10 +869,18 @@ showDialog(){
 ids1 = [];
  pharmacyarrays= [];
  users =[];
+ pharmacyDeliveryHoursarrays= [];
 
  updateDetails() {
+console.log(this.pharmacyTiming);
+console.log(this.userInformation.pharmacyBusinessHours);
+//console.log((this.pharmacyTiming == [] && this.userInformation.pharmacyBusinessHours == undefined));
+//console.log((this.pharmacyTiming == [] && this.userInformation.pharmacyBusinessHours == undefined));
 
-	 if (this.pharmacyTiming == [] || this.userInformation.pharmacyBusinessHours == undefined) {
+
+
+
+	 if (this.pharmacyTiming == [] && this.userInformation.pharmacyBusinessHours == undefined) {
 		this.msgs = [];
 	  this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Pharmacy Timing details.'});
 	  }
@@ -679,6 +889,7 @@ ids1 = [];
 
  let constantbio = this.aboutPharmacy || ''
  let constantTimings = this.pharmacyTiming 
+let constantDeliveryHours = this.pharmacyDeliveryTiming || []
  let constantIds = id || []
  let constantsInsuranceIds = insuranceId || []
  let deliverychanged = this.checkboxvalue || ''
@@ -702,24 +913,27 @@ if(this.tempKeysInsurannce.length>0 ){
 
  this. users = this.userInformation.pharmacyUsers || ''
  this. pharmacyarrays = this.userInformation.pharmacyBusinessHours || [];
+ this.pharmacyDeliveryHoursarrays = this.userInformation.pharmacyDeliveryHours || [];
  let profilepageObj = {
  pharmacyName : this.userInformation.pharmacyName || this.editForm.value.pharmacyName,
  phoneNo : this.userInformation.phoneNo || this.editForm.value.phoneNo1,
  bio: constantbio,
- pharmacyBusinessHours: this.pharmacyTiming.concat(this.pharmacyarrays),
-pharmacyServices: id,
-pharmacyInsuranceProviders: insuranceId,
+  pharmacyBusinessHours: this.pharmacyTiming.concat(this.pharmacyarrays),
+ pharmacyDeliveryHours: this.pharmacyDeliveryTiming.concat(this.pharmacyDeliveryHoursarrays),
+ pharmacyServices: id,
+ pharmacyInsuranceProviders: insuranceId,
  delivery:true,
  pickup: this.userInformation.pickup,
  pharmacyUsers: this.users.concat(constantUsers)
 
  };
+ console.log(profilepageObj);
  
   if(this.userInformation.pickup === false && this.userInformation.delivery === false){
 	this.msgs = [];
 	 this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Delivery Type.'}); 
   }
-  else if (this.pharmacyTiming.length <1 && this.userInformation.pharmacyBusinessHours.length<1 ) {
+  else if (this.pharmacyTiming.length <1 && this.userInformation.pharmacyBusinessHours.length<1 && this.pharmacyTiming.length == undefined ) {
 		this.msgs = [];
   	this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please provide atleast one Pharmacy Timing details.'});
    } else {
@@ -774,7 +988,6 @@ pharmacyInsuranceProviders: insuranceId,
  deletedProvide = [];
 
  deleteProvider1(index) {
- 
  let i = this.tempKeysInsurannce.indexOf
  this.tempKeysInsurannce.splice(index,1);
  this.tempValues1.splice(index,1)
@@ -786,10 +999,9 @@ pharmacyInsuranceProviders: insuranceId,
 
  newUserDetails = [];
  addButtonclicked(signInForm) {
- 
  if (signInForm.valid) {
  const params = {
-email: this.userInformation.email,
+ email: this.userInformation.email,
  pharmacyUserEmail: signInForm.value.signinEmail,
  firstName: signInForm.value.firstName,
  lastName: signInForm.value.lastName

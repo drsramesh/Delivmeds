@@ -19,6 +19,8 @@ initializeApp(): Observable<any>{
   localStorage.getItem('pharmacyId')
   if(localStorage.getItem('authentication_token') !== null){ 
     let pb = this.injector.get(PubnubService)
+    // console.log(environment.channel);
+    
     pb.subscribe(environment.channel+ localStorage.getItem('pharmacyId'))
   if(window.location.pathname === '/order-view' || window.location.pathname === '/my-account' ||  window.location.pathname === 'order-view/:id' || window.location.pathname === '/notifications'  || window.location.pathname === '/change-password'){
   this.injector.get(Router).navigate(['/orders']);

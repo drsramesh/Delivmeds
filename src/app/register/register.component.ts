@@ -24,6 +24,7 @@ import {MessageService} from 'primeng/components/common/messageservice';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import { debounceTime } from 'rxjs/operator/debounceTime';
 import { Observable } from 'rxjs/Observable';
+import { ConfirmationService } from 'primeng/api';
 
 
 
@@ -63,6 +64,7 @@ export class RegisterComponent implements OnInit {
     private tokenService: TokenService,
     private router: Router,
     private loader: PreloadService,
+    private confirmService:ConfirmationService,
     private messageService: MessageService)
     {
       this.signInForm = this.fb.group({
@@ -155,7 +157,80 @@ zipcodeService(event) {
   })
   }
   
+  display1: boolean = false;
+  registerPopup(signInForm){
+     this.confirmService.confirm({
+      message: 'Thank you for registering! Your account is currently under review to ensure you are a valid pharmacy. This process should take a few minutes to complete. You will receive an email once your account is approved and capable of accepting orders.',
+      accept: () => { 
+        if (signInForm.valid) {
+          const params = {
+            pharmacyName: signInForm.value.pharmacyName,
+            deaNumber: signInForm.value.deaNumber,
+            phoneNo: signInForm.value.phoneNo,
+            email: signInForm.value.email,
+            password: signInForm.value.password,
+            address: signInForm.value.address,
+            street: signInForm.value.street || '',
+            zipcode: signInForm.value.zipcode,
+             city: signInForm.value.city
+          };
+          console.log(params);
+           this.loader.open();
+          this.auth.signUp(params).subscribe((res: any) => {
+            console.log(res);
+            if (res.statusCode == 200) {
+              console.log(res);
+              this.loader.close();
+              this.msgs = [];
+              this.router.navigate(['/login']);
+              this.messageService.add({severity: 'success', summary: 'Success', detail: 'Thank you for signing up with DelivMeds. You will receive a confirmation email shortly. If you do not see this email in your Inbox, please check your Spam / Junk folder.'});
+            } 
+            else if(res.statusCode == 401 && res.errors[0] === "Invalid Zipcode"){
+              this.msgs = [];
+              this.msgs.push({severity: 'error', summary: 'Error', detail: ' Please enter valid Zipcode.'});
+              this.loginFailed = true;
+              this.loader.close();
+            } else if(res.statusCode == 401 && res.errors[0] === "Enter valid address"){
+              this.msgs = [];
+              this.msgs.push({severity: 'error', summary: 'Error', detail: 'Please enter valid Address.'});
+              this.loginFailed = true;
+              this.loader.close();
+            } else if(res.statusCode == 401 && res.errors[0] === "Email already registered with a different Pharmacy"){
+              this.msgs = [];
+              this.msgs.push({severity: 'error', summary: 'Error', detail: 'Email already registered with a different Pharmacy.'});
+              this.loginFailed = true;
+              this.loader.close();
+            }  else if(res.statusCode == 401 && res.errors[0] === "Can't get geo locations for the given address"){
+              this.msgs = [];
+              this.msgs.push({severity: 'error', summary: 'Error', detail: ' Please enter valid Address.'});
+              this.loginFailed = true;
+              this.loader.close();
+            }
+            else {
+              this.msgs = [];
+              this.msgs.push({severity: 'error', summary: 'Error', detail: 'Registration unsuccesfull.'});
+              this.loginFailed = true;
+              this.loader.close();
+            }
+          }, (err) => {
+            this.loader.close();
+            this.msgs = [];
+            this.msgs.push({severity: 'error', summary: 'Error', detail: 'Server error.'});
+          }
+          );
+        } else {
+          this.setFormTouched(this.signInForm);
+        }     
+        this.display1 = false
+      },
+    });
     
+    
+    }  
+
+
+
+
 // sign in functionality
 signUp(signInForm) {
     if (signInForm.valid) {

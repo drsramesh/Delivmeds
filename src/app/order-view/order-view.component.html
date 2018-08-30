@@ -182,23 +182,17 @@
                 <div class="orders">
                     <h3 class="panel-head pull-left"><label>Order Id : </label>{{orderDetails.id}} <span class="new">
                     <label *ngIf = "orderDetails.status ==1"> New</label> 
-                    <!-- <button pButton type="button" [disabled]="!invoiceForm.valid" label="New" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-                    
                     <label *ngIf = "orderDetails.status ==2"> Awaiting Patient Order Confirmation </label> 
-                    <!-- <button pButton type="button" label="Waiting for Customer response" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-                    
                     <label *ngIf = "orderDetails.status ==3"> Rejected </label> 
-                    <label *ngIf = "orderDetails.status ==4"> Rejected </label> 
-                    <!-- <button pButton type="button" label="Rejected" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
-                    
-                    <label *ngIf = "orderDetails.status ==5">  Filling Pending </label> 
-                    <!-- <button pButton type="button" label="Accepted" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+                    <label *ngIf = "orderDetails.status ==4"> Rejected </label>  
+                    <label *ngIf = "orderDetails.status ==5"> Filling Pending </label> 
+                    <!-- <label *ngIf = "orderDetails.status ==5 && deliveryType ==2">  In Transit </label>  -->
                     <label *ngIf = "orderDetails.status ==6">Awaiting for Pickup</label> 
-                    <!-- <button pButton type="button" label="Accepted" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+                    <!-- <label *ngIf = "orderDetails.status ==6 && deliveryType ==2">  In Transit </label>  -->
                     <label *ngIf = "orderDetails.status ==7"> Delivered</label> 
-                    <!-- <button pButton type="button" label="Accepted" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
+                    
                     </span></h3>
-                    <div *ngIf="orderDetails.status ==2 || orderDetails.status ==3 || orderDetails.status ==4 || orderDetails.status ==7">
+                    <div *ngIf="orderDetails.status ==2 || orderDetails.status ==3 || orderDetails.status ==4">
                         <button [disabled]="true" pButton type="button" (click)="showDialog1()" label="Reject Order" class="ui-button-secondary btn-secondary-green pull-right btn-disabled"></button>
                     </div>
                     <div>
@@ -211,7 +205,7 @@
                         <div *ngIf="orderDetails.status == 5 &&  orderDetails.deliveryType==1 && orderDetails.paymentDone ==true ">
 
                             <button pButton type="button" (click)="showDialog2()" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
-                            <p-dialog header="Confirmation" class="pop-dailouge" [(visible)]="display2" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+                            <p-dialog header="Payment Confirmation" class="pop-dailouge" [(visible)]="display2" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
                                 <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{orderDetails.customerResponse.mobile_number | slice:0:3}}-{{orderDetails.customerResponse.mobile_number | slice:3:6}}-{{orderDetails.customerResponse.mobile_number | slice:6:10}}?  </span>
                                 <p-footer>
                                     <input type="hidden" [(ngModel)]="car_two" />
@@ -222,7 +216,7 @@
                         </div>
                         <div *ngIf="orderDetails.status == 5 &&  orderDetails.deliveryType==2 && orderDetails.paymentDone ==true ">
                             <button pButton type="button" (click)="showDialog2()" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button>
-                            <p-dialog header="Confirmation" class="pop-dailouge" [(visible)]="display2" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+                            <p-dialog header="Payment Confirmation" class="pop-dailouge" [(visible)]="display2" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
                                 <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{orderDetails.customerResponse.mobile_number | slice:0:3}}-{{orderDetails.customerResponse.mobile_number | slice:3:6}}-{{orderDetails.customerResponse.mobile_number | slice:6:10}}?  </span>
                                 <p-footer>
                                     <input type="hidden" [(ngModel)]="car_two" />
@@ -231,7 +225,6 @@
 
                                 </p-footer>
                             </p-dialog>
-                            <!-- <button pButton type="button" (click)="ReadyForPickup(car)" label="Ready For pickup" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
 
                         </div>
                     </div>
@@ -242,21 +235,11 @@
 
                         </div>
                         <div *ngIf="orderDetails.status == 6 && orderDetails.deliveryType==1  && orderDetails.paymentDone ==true">
-                            <!-- <button pButton type="button" (click)="showDialog(car)" label="Delivered" class="ui-button-secondary btn-secondary-green pull-right"></button> -->
                             <button pButton type="button" (click)="Delivered()" label="Delivered" class="ui-button-secondary btn-secondary-green pull-right"></button>
-                            <!-- <p-dialog header="" [(visible)]="display" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
-                        <span>Customer wish to pay with card. Had you received prescription amount? If not contact customer at {{car.customerResponse.phone}}? </span>
-
-                        <p-footer>
-                            <input type="hidden" [(ngModel)]="car_one" />
-                            <button type="button" pButton icon="pi pi-check" (click)="Delivered(car_one)" label="Ok"></button>
-                            <button type="button" pButton icon="pi pi-check" (click)="display=false" label="No"></button>
-                        </p-footer>
-                    </p-dialog> -->
                         </div>
                         <div *ngIf="orderDetails.status == 6 && orderDetails.deliveryType==1 && orderDetails.paymentDone ==false">
                             <button pButton type="button" (click)="showDialog3()" label="Delivered" class="ui-button-secondary btn-secondary-green pull-right"></button>
-                            <p-dialog class="pop-dailouge" header="Confirmation" [(visible)]="display3" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+                            <p-dialog class="pop-dailouge" header="Payment Confirmation" [(visible)]="display3" [modal]="true" [width]="350" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
                                 <span>Patient choose to pay at Register. Had you received prescription amount?  </span>
                                 <p-footer>
                                     <input type="hidden" [(ngModel)]="car_one" />
@@ -303,23 +286,24 @@
                         <p>Contact: {{doctor.doctorPhone | slice:0:3}}-{{doctor.doctorPhone | slice:3:6}}-{{doctor.doctorPhone | slice:6:10}}</p>
                     </div>
                 </div>
-                <!-- {{orderDetails.customerResponse.customerDoctors[0].doctorName}} -->
                 <div class="patient-details" *ngIf="orderDetails.customerResponse.customerMembers && orderDetails.customerResponse.customerMembers.length > 0">
-                    <!-- <div *ngFor="let doctor of orderDetails.customerResponses.customerMembers"> -->
                     <p *ngIf="orderDetails.customerResponse.customerMembers[0].doctorName">Doctor: {{orderDetails.customerResponse.customerMembers[0].doctorName}} </p>
                     <p *ngIf="orderDetails.customerResponse.customerMembers[0].doctorPhone">Doctor ContactNo: {{orderDetails.customerResponse.customerMembers[0].doctorPhone | slice:0:3}}-{{orderDetails.customerResponse.customerMembers[0].doctorPhone| slice:3:6}}-{{orderDetails.customerResponse.customerMembers[0].doctorPhone|
                         slice:6:10}}
                     </p>
-                    <!-- </div> -->
-                    <!-- <div *ngFor="let doctor of orderDetails.customerResponses.customerMembers"> -->
                     <p *ngIf="orderDetails.customerResponse.customerMembers[0].veterinaryOfficeName">Veterinary Doctor: {{orderDetails.customerResponse.customerMembers[0].veterinaryOfficeName}} </p>
                     <p *ngIf="orderDetails.customerResponse.customerMembers[0].veterinaryPhone">Veterinary Doctor ContactNo: {{orderDetails.customerResponse.customerMembers[0].veterinaryPhone | slice:0:3}}-{{orderDetails.customerResponse.customerMembers[0].veterinaryPhone| slice:3:6}}-{{orderDetails.customerResponse.customerMembers[0].veterinaryPhone
                         | slice:6:10}}</p>
-
-                    <!-- </div> -->
                 </div>
             </div>
 
+            <div class="noprint">
+                <div class="patient-details">
+                    <p *ngIf="orderDetails.DeliveryTimeSlot">Preferred Delivery Time: {{orderDetails.DeliveryTimeSlot}}</p>
+                    <p *ngIf="orderDetails.DeliveryNote">Delivery Note: {{orderDetails.DeliveryNote}} </p>
+
+                </div>
+            </div>
             <div class="noprint">
                 <div class="insurance-details ui-g ui-row" *ngIf="orderDetails.customerResponse.customerInsurances && orderDetails.customerResponse.customerInsurances.length > 0">
                     <div class="ui-g-7 ui-md-7">
@@ -388,7 +372,7 @@
                             </div>
                             <ng-template #patientData>
                                 <p>
-                                    {{orderDetails.address}} <br> {{orderDetails.street}} <br> {{orderDetails.city}}, {{orderDetails.state}} <br> {{orderDetails.zipCode}} <br>
+                                    {{orderDetails.address}} <br> <span *ngIf="orderDetails.street">{{orderDetails.street}} <br></span> {{orderDetails.city}}, {{orderDetails.state}} <br> {{orderDetails.zipCode}} <br>
                                 </p>
                             </ng-template>
                         </div>

@@ -24,7 +24,7 @@ import { EventEmitter } from 'events';
 export class AppComponent {
   message;
   title = 'app';
-  msgs = [];
+  msgs: any = [];
   userInformation = [];
   duplicateAlerts =[];
   constructor(
@@ -46,7 +46,13 @@ ngOnInit() {
     this.pb.init((message) => {
       console.log("App Component")
       console.log(message);
-      this.msgs.push({severity: 'info', summary:message['message']['map']['orderId'], detail: message['message']['map']['message'],isRoute:true,status:message['message']['map']['status']});
+      this.msgs.push({
+        severity: 'info', 
+        summary:message['message']['map']['orderId'], 
+        detail: message['message']['map']['message'],
+        isRoute:true,
+        status:message['message']['map']['status']});
+
       console.log(this.msgs)
            this.msgs.forEach((value,index)=>{
             console.log(index);

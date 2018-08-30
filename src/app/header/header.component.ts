@@ -12,6 +12,8 @@ import { PubNubAngular } from 'pubnub-angular2';
 import { Injectable,Injector,Inject } from '@angular/core';
 
 import { UserService } from '../services/user.service'
+import { TermsConditionsComponent } from '../terms-conditions/terms-conditions.component';
+
 
 @Component({
   selector: 'app-header',
@@ -33,9 +35,11 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     
     this.router.events.subscribe( (e) => {
+      
       // this.RegisteredDetailsService();
       if(e instanceof NavigationEnd) {
-        if ((e.url.split('/')[1] == 'login') || (e.url.split('/')[1] == 'register')  || (e.url == '/') ||  (e.url.split('/')[1] == 'confirm-mail')|| (e.url.split('/')[1] == 'forgot-password') || (e.url.split('/')[1] == 'change-password') ||  (e.url.split('/')[1] == 'confirm-mail?key')) {
+        
+        if ((e.url.split('/')[1] == 'login') || (e.url.split('/')[1] == 'register')  || (e.url == '/') ||  (e.url.split('/')[1] == 'confirm-mail')|| (e.url.split('/')[1] == 'forgot-password') || (e.url.split('/')[1] == 'change-password') || e.url.split('/')[1].startsWith('confirm-mail') ||  (e.url.split('/')[1] == 'terms-conditions') ) {
           this.nav = [];
           this.showButton = false;
          
