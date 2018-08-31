@@ -536,6 +536,40 @@ Delivered(){
  });
  }
 
+ initializeimageSrc(url){
+  this.imageSrc.push(url);
+ }
+ imageViewer(imageName){
+  console.log("image");
+   
+  const AWS = require('aws-sdk')
+  console.log(AWS);
+  
+  const spacesEndpoint = new AWS.Endpoint('s3.amazonaws.com');
+  const s3 = new AWS.S3({
+    endpoint: spacesEndpoint,
+    accessKeyId: 'AKIAJ5YDHYU5AVE45CQA',
+    secretAccessKey: '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',
+    signatureVersion: 'v4'
+  });
+  console.log(s3);
+  
+  var space = 'deliv-meds-encrypted-assets'
+   var key = imageName;
+  // var key = this.orderDetails.rxImage
+  var expireSeconds = 60*60
+
+  s3.getSignedUrl('getObject', {
+    Bucket: space,
+    Expires: expireSeconds,
+    Key: key
+  }, (err, url) => {
+    
+    this.initializeimageSrc(url);
+  });
+}
+
+
 showcopay: Boolean = false
 
  OrderList() {
@@ -582,15 +616,24 @@ showcopay: Boolean = false
    } 
   }
 
-  
-  
+
+  // For decrypted Image For sandbox
+  // if(this.orderDetails.rxImage){
+  // this.imageViewer(this.orderDetails.rxImage);
+  // }
+
  
+// For sandbox
 //  if(this.orderDetails.rxImage){
-//  this.imageSrc.push( "https://s3.amazonaws.com/deliv-meds-resources/" + this.orderDetails.rxImage)
-//  }
- if(this.orderDetails.rxImage){
-  this.imageSrc.push( "https://s3.amazonaws.com/deliv-meds-assets/" + this.orderDetails.rxImage)
-  }
+//   this.imageSrc.push( "https://s3.amazonaws.com/deliv-meds-assets/" + this.orderDetails.rxImage)  
+//   }
+
+
+// for QA
+if(this.orderDetails.rxImage){
+  this.imageSrc.push( "https://s3.amazonaws.com/deliv-meds-resources/" + this.orderDetails.rxImage)
+}
+
  this.customerResponses= res.object.customerResponse;
  this.addRowWithValues(this.orderDetails.orderItems);
  this.loader.close();

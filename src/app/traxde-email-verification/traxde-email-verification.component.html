@@ -1,0 +1,20 @@
+<div class="customer-email" *ngIf="showButton ==1">
+    <figure class="text-center terms-logo">
+        <img src="assets/images/Logo.png" alt="">
+    </figure>
+    <div class="member-email">
+        <h1 class="text-center mails-logo"> Verified Successfully! </h1>
+        <p class="text-center">Now the pharmacy available to Delivmeds Customers to place prescription orders </p>
+    </div>
+</div>
+
+<div class="customer-email" *ngIf="showButton ==401">
+
+    <figure class="text-center terms-logo">
+        <img src="assets/images/Logo.png" alt="">
+    </figure>
+    <div class="member-email" *ngIf="showButton == false">
+        <h1 class="text-center mails-logo"> Pharmacy Not Verified </h1>
+        <!-- <p class="text-center">Now the pharmacy available to Delivmeds Customers to place prescription orders </p> -->
+    </div>
+</div>

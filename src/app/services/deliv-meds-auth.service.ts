@@ -89,6 +89,25 @@ confirmEmail(params) {
  console.log(params)
 return this._http.get(environment.host + 'pharmacy/register/email_verify', {params:params});
 }
+//Customer member email verification
+customerEmail(params) {
+  console.log('customerEmail')
+  console.log(params)
+ return this._http.get(environment.host + 'customer/register/email_verify', {params:params});
+ }
+//Member email verification
+ memberEmail(params) {
+  console.log('memberEmail')
+  console.log(params)
+ return this._http.get(environment.host + 'customer/member/email_verify', {params:params});
+ }
+
+//  Traxde email verification
+ traxdeEmail(params) {
+  console.log('traxdeEmail')
+  console.log(params)
+ return this._http.get(environment.host + 'pharmacy/traxde/email_verify', {params:params});
+ }
 // Signup method
 signUp(params) {
 const header = {'authentication_token': localStorage.getItem ('authentication_token')};

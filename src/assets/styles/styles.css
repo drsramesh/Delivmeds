@@ -1596,6 +1596,33 @@
         }
     }
     
+    .mails-text {
+        color: #d9772d
+    }
+    
+    .customer-email {
+        padding-top: 120px;
+    }
+    
+    .customer-email .member-email {
+        border: 1px solid #ccc;
+        padding: 30px 0;
+        width: 70%;
+        margin: 0 auto;
+    }
+    
+    .customer-email .member-email .mails-logo {
+        color: #01a1a8;
+        font-size: 22px;
+        font-weight: 500;
+    }
+    
+    .customer-email .member-email p {
+        font-size: 14px;
+        font-weight: 400;
+        padding-top: 10px;
+    }
+    
     @media print {
         .noprint {
             display: none;

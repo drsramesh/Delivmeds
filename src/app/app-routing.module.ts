@@ -15,6 +15,9 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { AuthLoginGuardService } from './services/auth-login-guard.service';
 
 import { TermsConditionsComponent } from './terms-conditions/terms-conditions.component';
+import { CustomerEmailVerificationComponent } from './customer-email-verification/customer-email-verification.component';
+import { TraxdeEmailVerificationComponent } from './traxde-email-verification/traxde-email-verification.component';
+import { MemberEmailVerificationComponent } from './member-email-verification/member-email-verification.component';
 const routes: Routes = [
       { path: '', redirectTo: '/login', pathMatch: 'full' },
       // {path:'**', component: LoginComponent},
@@ -31,6 +34,10 @@ const routes: Routes = [
        {path: 'forgot-password', component: ForgotPasswordComponent},
        {path: 'change-password', component: ChangePasswordComponent},
        {path: 'order-view/:id', component: OrderViewComponent},
+       {path:'customer-mail', component: CustomerEmailVerificationComponent},
+       {path:'traxde-pharmacy-mail', component: TraxdeEmailVerificationComponent},
+       {path:'member-mail', component: MemberEmailVerificationComponent},
+       {path:'terms-conditions', component: TermsConditionsComponent},
       //  ,children:[
       //   {path: 'order-view/:id', component: OrderViewComponent}
       // ]},
@@ -47,6 +54,9 @@ const routes: Routes = [
     
       // { path: '**', redirectTo: 'auth' }
       {path:'confirm-mail/:key', component: EmailverificationComponent},
+      {path:'customer-mail/:key', component: CustomerEmailVerificationComponent},
+      {path:'trxade-pharmacy-mail/:key', component: TraxdeEmailVerificationComponent},
+      {path:'member-mail/:key', component: MemberEmailVerificationComponent},
       {path:'terms-conditions', component: TermsConditionsComponent},
 
 ];

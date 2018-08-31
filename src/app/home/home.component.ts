@@ -44,7 +44,7 @@ export class HomeComponent implements OnInit {
   filterableOrders = [];
   yearTimeout: any;
   loading:boolean = false
-
+some: Date;
   totalRecords: number;
   Order_two: any;
   constructor(  private http: HttpClient,
@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
   
-
+this.some = new Date();
     if (localStorage.getItem("authentication_token") !== null) {
       this.pb.init((message) => {
         // console.log("Home component")
@@ -124,6 +124,14 @@ OrderList() {
           }
           
          }) 
+
+        //  this.filterableOrders.forEach(function(order){
+        //   order.localDate = order.createdOn;
+        //   console.log(order.localDate);
+        //   order.createdOn= new Date(order.localDate)
+        //   console.log(order.createdOn);
+
+        //  })
        
          this.filterableOrders.forEach(function(order){
           //  console.log(order.customerResponse.phone);

@@ -39,7 +39,7 @@ export class HeaderComponent implements OnInit {
       // this.RegisteredDetailsService();
       if(e instanceof NavigationEnd) {
         
-        if ((e.url.split('/')[1] == 'login') || (e.url.split('/')[1] == 'register')  || (e.url == '/') ||  (e.url.split('/')[1] == 'confirm-mail')|| (e.url.split('/')[1] == 'forgot-password') || (e.url.split('/')[1] == 'change-password') || e.url.split('/')[1].startsWith('confirm-mail') ||  (e.url.split('/')[1] == 'terms-conditions') ) {
+        if ((e.url.split('/')[1] == 'login') || (e.url.split('/')[1] == 'register')  || (e.url == '/') ||  (e.url.split('/')[1] == 'confirm-mail')|| (e.url.split('/')[1] == 'forgot-password') || (e.url.split('/')[1] == 'change-password') || e.url.split('/')[1].startsWith('confirm-mail') ||  (e.url.split('/')[1] == 'terms-conditions') || e.url.split('/')[1].startsWith('customer-mail') || e.url.split('/')[1].startsWith('member-mail')  || e.url.split('/')[1].startsWith('trxade-pharmacy-mail')) {
           this.nav = [];
           this.showButton = false;
          

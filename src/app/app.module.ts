@@ -87,6 +87,9 @@ export function init_app(appLoadService: AppInitService, pb: PubnubService) {
   return () => appLoadService.initializeApp();
 }
 import { TermsConditionsComponent } from './terms-conditions/terms-conditions.component';
+import { CustomerEmailVerificationComponent } from './customer-email-verification/customer-email-verification.component';
+import { MemberEmailVerificationComponent } from './member-email-verification/member-email-verification.component';
+import { TraxdeEmailVerificationComponent } from './traxde-email-verification/traxde-email-verification.component';
 
 @NgModule({
   declarations: [
@@ -106,7 +109,10 @@ import { TermsConditionsComponent } from './terms-conditions/terms-conditions.co
     SingleDotDirective,
     FooterComponent,
     TimeDirective,
-    TermsConditionsComponent
+    TermsConditionsComponent,
+    CustomerEmailVerificationComponent,
+    MemberEmailVerificationComponent,
+    TraxdeEmailVerificationComponent
   ],
   imports: [
     BrowserModule,
@@ -177,5 +183,6 @@ import { TermsConditionsComponent } from './terms-conditions/terms-conditions.co
    
    ],
   bootstrap: [AppComponent]
+  //  bootstrap: [TraxdeEmailVerificationComponent]
 })
 export class AppModule { }
